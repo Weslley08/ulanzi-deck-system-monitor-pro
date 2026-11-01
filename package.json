@@ -1,0 +1,13 @@
+{
+  "name": "ulanzi-deck-system-monitor-pro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check src/core.js && node --check src/providers.js"
+  }
+}
