@@ -1,12 +1,9 @@
-# System Monitor Pro — Ulanzi
+# System Monitor Pro
 
-Follow the Ulanzi plugin skill. The Clima Pro repository is the source of truth for project conventions, CI, delivery, security and contribution flow.
+Follow the Ulanzi plugin skill and treat `Weslley08/ulanzi-deck-clima-pro` as authoritative for engineering conventions, workflows and release safety.
 
-- Source of truth: https://github.com/Weslley08/ulanzi-deck-clima-pro
-- Maintain work -> develop -> release/vX.Y.Z -> main.
-- Keep SDK verbatim and pinned; do not invent SDK API methods.
-- Measure CPU and RAM before each release; share collectors between actions.
-- Do not ship known vulnerabilities; perform periodic scans.
-- Do not claim untested plugin behavior, Store compliance or production readiness.
-- A release requires maintainer confirmation, real Studio and D200 testing and full packaging verification.
-- Current delivery workflow is intentionally non-publishing pending the checklist in docs/STANDARDIZATION.md.
+**Mandatory:** maintain full branch flow work -> develop -> release/vX.Y.Z -> main; Node 20.12.2; pinned unmodified SDK; deterministic packaging; cross-platform tests; performance measurements; periodic security scanning; review before release.
+
+**Project-specific:** hardware via LibreHardwareMonitor, frame metrics via PresentMon/RTSS where supported, network counters and ICMP ping with configurable hosts. Prefer a single shared collector and stable UI. Missing data must render N/D. Do not promise FPS readings for protected games or claim anti-cheat compatibility without evidence.
+
+**Current state:** prototype. See docs/STANDARDIZATION.md. Copied scripts may still reference Clima Pro-specific fixtures and MUST be adapted, tested and validated before use. NEVER claim package or CI readiness just because files exist. Auto-release disabled.
