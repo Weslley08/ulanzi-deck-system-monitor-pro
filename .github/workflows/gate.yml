@@ -91,3 +91,16 @@ jobs:
       - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
         with:
           fail-on-severity: low
+
+  release-readiness:
+    name: Release readiness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Require real SDK and installable plugin before merging
+        run: |
+          test -f sdk-lock.json || { echo "::error::SDK lock absent; read docs/STANDARDIZATION.md"; exit 1; }
+          test -f com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/ulanzi-api/index.js || { echo "::error::Official SDK runtime missing"; exit 1; }
+          test -f com.ulanzi.systemmonitorpro.ulanziPlugin/package.json || { echo "::error::Plugin package manifest missing"; exit 1; }
