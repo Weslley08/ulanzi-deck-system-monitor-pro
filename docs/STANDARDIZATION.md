@@ -1,9 +1,27 @@
-# Clima Pro parity checklist
+# Paridade com Clima Pro — status verificável
 
-Reference: Weslley08/ulanzi-deck-clima-pro (gate.yml, delivery.yml, scripts/flow.mjs, scripts/setup-github.mjs, CLAUDE.md).
+Referência: https://github.com/Weslley08/ulanzi-deck-clima-pro
 
-Implemented: gate workflow naming; branch-flow rules for PRs; 3-OS tests; weekly scans; actionlint; CodeQL; dependency review; Dependabot; Node 20.12.2; PR template; preliminary delivery workflow.
+## Já versionado nesta branch
+- Gate com testes 3 sistemas, actionlint, auditoria, CodeQL e dependency review.
+- Dependabot, templates de PR e issues, .nvmrc (Node 20.12.2), Apache-2.0.
+- Scripts do Clima Pro importados para versionamento, fluxo Git, empacotamento, segurança e medição.
+- Branch develop e PR em draft para revisão.
+- Checklist de verificação real em docs/VERIFY.md.
 
-**NOT YET PARITY / BLOCKERS**: Clima Pro's automatic PR progression, release branch creation, signed/versioned package, real SDK lock and hash validation, package smoke, secret scan, coverage floor, memory/CPU measurements, validation environment, AUTOMATION_TOKEN secret, protected main/develop/release branches, live hardware tests. Gate currently tests development code, not a verified installable artifact.
+## NÃO É PARIDADE FUNCIONAL
+Os scripts de Clima Pro trazem imports, fixtures, esquema de manifesto, dependências e convenções internas específicas de clima. O simples transporte dos arquivos NÃO os torna executáveis para System Monitor. Em particular, measure.mjs e verify-package.mjs requerem adaptação completa; package.mjs exige um plugin distribuível e SDK oficial local; scripts/flow.mjs requer versionamento, nota de release e GH_TOKEN.
 
-Keep auto-publication OFF. Do not declare release-ready or merge to main merely because checks pass. Implement equivalents of every missing Clima Pro gate before switching on delivery.
+Gate, delivery e GitHub branch protection não são idênticos em execução: delivery está intencionalmente sem autopublicação. Não há validação funcional do SDK, LHM ou FPS em hardware real.
+
+## Bloqueadores de release (obrigatórios)
+1. Adaptar código, bibliotecas e scripts do Clima Pro para o plugin System Monitor.
+2. Copiar SDK oficial integral sem edições e fixar hashes em sdk-lock.json.
+3. Prover manifest e assets PNG conforme schema e pacote que inicia de fato.
+4. Testes com mocks de sensores, rede e FPS, cobertura mínima, segurança e performance.
+5. Validar package e verify-package em CI Windows + macOS.
+6. Aplicar proteções de main/develop/release; configurar AUTOMATION_TOKEN; testar ciclo real work -> develop -> release -> main.
+7. Verificar Ulanzi Studio, D200, termos e licenças com evidências.
+8. Somente então ativar publicação automática de main.
+
+**Nunca marcar checklist como concluído sem resultados.**
