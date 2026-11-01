@@ -1,0 +1,13 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  validate-scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON configuration
+        run: python -m json.tool config/defaults.json > /dev/null
+      - name: Scaffold status
+        run: echo 'Scaffold validation only; integration and security checks are required before release.'
