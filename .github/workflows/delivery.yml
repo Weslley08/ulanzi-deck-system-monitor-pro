@@ -1,0 +1,31 @@
+name: Delivery
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'feat/**'
+      - 'fix/**'
+      - 'chore/**'
+      - 'docs/**'
+      - 'refactor/**'
+      - 'test/**'
+      - 'ci/**'
+      - 'build/**'
+      - 'perf/**'
+      - develop
+      - main
+      - 'release/v*'
+permissions:
+  contents: read
+jobs:
+  readiness:
+    name: Delivery readiness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Do not auto-publish an unverified prototype
+        run: |
+          echo "Release automation intentionally disabled until official SDK packaging, smoke tests, performance measurements and branch protections pass."
+          echo "Target flow: work -> develop -> release/vX.Y.Z -> main."
