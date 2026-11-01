@@ -1,0 +1,341 @@
+{
+  "Author": "Weslley08",
+  "Name": "System Monitor Pro",
+  "Description": "System monitor for Ulanzi Studio",
+  "Icon": "resources/action.svg",
+  "Version": "0.1.0",
+  "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro",
+  "Type": "JavaScript",
+  "CodePath": "plugin/app.js",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinVersion": "3.3.0"
+  },
+  "Actions": [
+    {
+      "Name": "cpu.usage",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.cpuusage",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "cpu.temperature",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.cputemperature",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "cpu.clock",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.cpuclock",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "cpu.power",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.cpupower",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "gpu.usage",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.gpuusage",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "gpu.temperature",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.gputemperature",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "gpu.clock",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.gpuclock",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "gpu.power",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.gpupower",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "gpu.vram.used",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.gpuvramused",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "gpu.vram.total",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.gpuvramtotal",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "ram.used",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.ramused",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "ram.total",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.ramtotal",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "ram.usage",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.ramusage",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "fps.current",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.fpscurrent",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "fps.frametime",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.fpsframetime",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "network.ping",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.networkping",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "network.jitter",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.networkjitter",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "network.loss",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.networkloss",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "network.download",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.networkdownload",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    },
+    {
+      "Name": "network.upload",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.ulanzistudio.systemmonitorpro.networkupload",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/action.svg"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    }
+  ]
+}
