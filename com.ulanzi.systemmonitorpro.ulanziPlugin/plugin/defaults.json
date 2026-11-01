@@ -1,0 +1,46 @@
+{
+  "sampleIntervalsMs": {
+    "hardware": 1000,
+    "fps": 500,
+    "network": 1000,
+    "ping": 2000
+  },
+  "ping": {
+    "targets": [
+      "1.1.1.1"
+    ],
+    "timeoutMs": 1500,
+    "windowSize": 20
+  },
+  "thresholds": {
+    "cpu.temperatureC": {
+      "warning": 80,
+      "critical": 90
+    },
+    "gpu.temperatureC": {
+      "warning": 80,
+      "critical": 88
+    },
+    "cpu.usagePercent": {
+      "warning": 85,
+      "critical": 95
+    },
+    "memory.usagePercent": {
+      "warning": 85,
+      "critical": 95
+    },
+    "network.pingMs": {
+      "warning": 80,
+      "critical": 150
+    },
+    "network.lossPercent": {
+      "warning": 2,
+      "critical": 5
+    }
+  },
+  "display": {
+    "staleAfterMs": 5000,
+    "minUpdateMs": 500,
+    "hysteresisPercent": 3
+  }
+}
