@@ -1,0 +1,25 @@
+.field-note {
+  margin-top: -4px;
+}
+
+.field-note-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-note-body .tip {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.note {
+  margin: 0 16px 6px;
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--uspi-unitcolor);
+  overflow-wrap: anywhere;
+}
+
+.note:empty {
+  display: none;
+}
