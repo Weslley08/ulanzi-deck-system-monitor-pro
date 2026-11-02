@@ -1,6 +1,6 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "Veja CPU, GPU, memória, disco e rede do seu PC nas teclas: um número, uma barra e um gráfico dos últimos dois minutos em cada uma. Só Windows. Sem vínculo com a Ulanzi.",
+  "Description": "Veja CPU, GPU, memória, disco e rede do seu PC nas teclas: um número, uma barra e um gráfico dos últimos dois minutos em cada uma. Precisa do LibreHardwareMonitor. Só Windows. Sem vínculo com a Ulanzi.",
   "Actions": [
     {
       "Name": "Uso da CPU",
@@ -8,19 +8,19 @@
     },
     {
       "Name": "Temperatura da CPU",
-      "Tooltip": "Mostra a temperatura do processador. Precisa do LibreHardwareMonitor."
+      "Tooltip": "Mostra a temperatura do processador."
     },
     {
       "Name": "Uso da GPU",
-      "Tooltip": "Mostra quanto da placa de vídeo está em uso, em porcentagem. Só NVIDIA."
+      "Tooltip": "Mostra quanto da placa de vídeo está em uso, em porcentagem."
     },
     {
       "Name": "Temperatura da GPU",
-      "Tooltip": "Mostra a temperatura da placa de vídeo. Só NVIDIA."
+      "Tooltip": "Mostra a temperatura da placa de vídeo."
     },
     {
       "Name": "Uso da memória de vídeo",
-      "Tooltip": "Mostra quanta memória de vídeo está em uso, em porcentagem. Só NVIDIA."
+      "Tooltip": "Mostra quanta memória de vídeo está em uso, em porcentagem."
     },
     {
       "Name": "Uso da memória",
@@ -36,11 +36,11 @@
     },
     {
       "Name": "Uso do disco",
-      "Tooltip": "Mostra o quanto os discos estão ocupados, em porcentagem."
+      "Tooltip": "Mostra o quanto o disco mais ocupado está ocupado, em porcentagem."
     },
     {
       "Name": "Temperatura do disco",
-      "Tooltip": "Mostra o disco mais quente. Precisa do LibreHardwareMonitor."
+      "Tooltip": "Mostra o disco mais quente."
     }
   ],
   "Localization": {
@@ -52,8 +52,6 @@
     "LHM closed": "LHM fechado",
     "No reading": "Sem leitura",
     "Not set up": "Não configurado",
-    "Windows only": "Só Windows",
-    "No NVIDIA": "Sem NVIDIA",
     "No sensor": "Sem sensor",
     "No data": "Sem dados",
     "Measuring": "Medindo",
@@ -71,14 +69,9 @@
     "Show the graph": "Mostrar o gráfico",
     "Reading.": "Lendo normalmente.",
     "Waiting for the first reading.": "Esperando a primeira leitura.",
-    "lhm.offline": "O LibreHardwareMonitor não responde. Esta leitura depende dele, e ele é opcional: carrega um driver que alguns anticheats bloqueiam, então feche-o antes de jogar um desses. Para usar, abra-o e ligue Options > Remote Web Server > Run.",
+    "lhm.offline": "O LibreHardwareMonitor não responde. Abra-o como administrador e ligue Options > Remote Web Server > Run. Ele carrega um driver que alguns anticheats bloqueiam, então feche-o antes de jogar um desses.",
     "lhm.unconfigured": "O endereço do LibreHardwareMonitor está desligado nas variáveis de ambiente do plugin.",
-    "nvidia.missing": "O nvidia-smi não foi encontrado. Ele acompanha o driver da NVIDIA, e estas leituras só funcionam com placa NVIDIA.",
-    "nvidia.offline": "O nvidia-smi parou de responder. Ele é iniciado de novo em instantes.",
-    "windows.offline": "Não foi possível ler os contadores do disco.",
     "ping.offline": "O ping falhou.",
-    "os.offline": "Não foi possível ler o processador e a memória.",
-    "unsupported": "Esta leitura só existe no Windows.",
     "The readings stay on this computer. Nothing is sent over the internet.": "As leituras ficam neste computador. Nada é enviado pela internet."
   }
 }

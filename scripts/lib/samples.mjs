@@ -13,5 +13,5 @@ export const SAMPLE_FACES = [
   { group: 'Disk', sub: 'Usage', accent: 'orange', state: 'normal', value: '12%', bar: 6, graph: wave(3, 3) },
   { group: 'Disk', sub: 'Temp', accent: 'orange', state: 'normal', value: '46', unit: '°C', bar: 23, graph: wave(9, 1) },
   { group: 'CPU', sub: 'Temp', accent: 'cyan', state: 'unavailable', value: 'N/D', note: 'LHM closed' },
-  { group: 'GPU', sub: 'Usage', accent: 'green', state: 'unavailable', value: 'N/D', note: 'No NVIDIA' },
+  { group: 'GPU', sub: 'Usage', accent: 'green', state: 'unavailable', value: 'N/D', note: 'No sensor' },
 ];

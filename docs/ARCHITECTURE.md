@@ -2,7 +2,7 @@
 
 ```text
 LibreHardwareMonitor ─┐
-nvidia-smi ─────────────┼──> Providers -> Normalizer -> Cache TTL -> Threshold Engine -> Ulanzi Renderer
+ICMP ping ──────────────┼──> Providers -> Normalizer -> Cache TTL -> Threshold Engine -> Ulanzi Renderer
 Windows Network APIs ─┤                                          └──> Alerts
 ICMP/TCP probes ───────┘
 ```
@@ -25,9 +25,9 @@ ICMP/TCP probes ───────┘
 - Limiares de atenção/crítico por métrica, histerese e debounce.
 - Descoberta dos sensores por hardware, sem assumir rótulos iguais em todos os PCs.
 - Cache global de métricas para múltiplos botões, em vez de um coletor por ação.
-- Nada que carregue driver por padrão: o jogador usa anticheats de kernel. As temperaturas da CPU e do disco dependem do LibreHardwareMonitor e são opcionais.
+- O LibreHardwareMonitor carrega um driver que alguns anticheats de kernel bloqueiam. A escolha de depender dele é do mantenedor, e o plugin avisa.
 - Ping configurável: destino público não representa necessariamente o servidor do jogo.
-- Degradação segura quando o LHM ou o nvidia-smi estiverem ausentes.
+- Degradação segura quando o LHM estiver ausente.
 
 ## Fases
 
@@ -40,4 +40,4 @@ ICMP/TCP probes ───────┘
 
 ## Limitações atuais
 
-As fases 1, 2 (com sensores lidos do código do LibreHardwareMonitor, não de uma máquina real), 4 e a parte do Property Inspector da fase 5 existem e têm testes. A GPU lê o `nvidia-smi`, que não foi usado numa máquina real. Nada foi validado no Ulanzi Studio nem em um dispositivo. Veja `docs/IMPLEMENTATION.md` e `docs/VERIFY.md`.
+As fases 1, 2 (com sensores lidos do código do LibreHardwareMonitor, não de uma máquina real), 4 e a parte do Property Inspector da fase 5 existem e têm testes. Nada foi lido de um LibreHardwareMonitor real. Nada foi validado no Ulanzi Studio nem em um dispositivo. Veja `docs/IMPLEMENTATION.md` e `docs/VERIFY.md`.

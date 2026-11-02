@@ -16,8 +16,8 @@
   "notes": {
     "install": "Download `{zip}`, not the **Source code** archives, which will not start, and follow the [README]({blob}/README.md).",
     "aboutHeading": "About",
-    "about": "Readings stay on this computer, and the plugin sends no telemetry. Processor and disk temperatures only come from the optional LibreHardwareMonitor, which loads a driver that some game anti-cheats block. Graphics card readings come from nvidia-smi and work with NVIDIA cards only. This project is not affiliated with Ulanzi, NVIDIA or LibreHardwareMonitor.",
-    "checks": "The automated checks passed on Windows, macOS and Linux, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows and macOS against a fake host. No test ran against a real LibreHardwareMonitor, a real NVIDIA card or a real deck.",
-    "measuredAgainst": "a fake host, a fake LibreHardwareMonitor and a program standing in for nvidia-smi"
+    "about": "Readings stay on this computer, and the plugin sends no telemetry. Every reading except ping and packet loss comes from LibreHardwareMonitor, which you run yourself, as administrator. It loads a driver that some game anti-cheats block, so close it before such a game. This project is not affiliated with Ulanzi or LibreHardwareMonitor.",
+    "checks": "The automated checks passed on Windows, macOS and Linux, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows and macOS against a fake host. No test ran against a real LibreHardwareMonitor or a real deck.",
+    "measuredAgainst": "a fake host and a fake LibreHardwareMonitor"
   }
 }

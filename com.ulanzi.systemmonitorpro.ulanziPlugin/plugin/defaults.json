@@ -1,8 +1,7 @@
 {
   "sampleIntervalsMs": {
     "hardware": 1000,
-    "ping": 2000,
-    "disk": 2000
+    "ping": 2000
   },
   "ping": {
     "targets": [

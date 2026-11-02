@@ -6,20 +6,20 @@ const def = (group, label, unit, source, extra = {}) => Object.freeze({ group, l
  * below 10 and none above. The order here is the order of the actions in the manifest.
  */
 export const METRICS = Object.freeze({
-  'cpu.usage': def('cpu', 'Usage', '%', 'os', { max: 100 }),
+  'cpu.usage': def('cpu', 'Usage', '%', 'lhm', { max: 100 }),
   'cpu.temperature': def('cpu', 'Temp', '°C', 'lhm', { max: 100 }),
-  'gpu.usage': def('gpu', 'Usage', '%', 'nvidia', { max: 100 }),
-  'gpu.temperature': def('gpu', 'Temp', '°C', 'nvidia', { max: 100 }),
-  'gpu.vram.usage': def('gpu', 'VRAM', '%', 'nvidia', { max: 100 }),
-  'ram.usage': def('ram', 'Usage', '%', 'os', { max: 100 }),
+  'gpu.usage': def('gpu', 'Usage', '%', 'lhm', { max: 100 }),
+  'gpu.temperature': def('gpu', 'Temp', '°C', 'lhm', { max: 100 }),
+  'gpu.vram.usage': def('gpu', 'VRAM', '%', 'lhm', { max: 100 }),
+  'ram.usage': def('ram', 'Usage', '%', 'lhm', { max: 100 }),
   'network.ping': def('network', 'Ping', 'ms', 'ping', { max: 200, auto: true }),
   'network.loss': def('network', 'Loss', '%', 'ping', { max: 100, decimals: 1 }),
-  'disk.usage': def('disk', 'Usage', '%', 'windows', { max: 100 }),
+  'disk.usage': def('disk', 'Usage', '%', 'lhm', { max: 100 }),
   'disk.temperature': def('disk', 'Temp', '°C', 'lhm', { max: 100 }),
 });
 
 export const GROUPS = Object.freeze({ cpu: 'CPU', gpu: 'GPU', ram: 'RAM', network: 'Net', disk: 'Disk' });
-export const SOURCES = Object.freeze(['os', 'lhm', 'nvidia', 'ping', 'windows']);
+export const SOURCES = Object.freeze(['lhm', 'ping']);
 
 export function sample(id, value, source = 'unknown', at = Date.now()) {
   const ok = Number.isFinite(value);

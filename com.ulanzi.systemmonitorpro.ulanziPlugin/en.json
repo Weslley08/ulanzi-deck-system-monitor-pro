@@ -1,6 +1,6 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Needs LibreHardwareMonitor. Windows only. Not affiliated with Ulanzi.",
   "Actions": [
     {
       "Name": "CPU usage",
@@ -8,19 +8,19 @@
     },
     {
       "Name": "CPU temperature",
-      "Tooltip": "Shows the processor temperature. Needs LibreHardwareMonitor."
+      "Tooltip": "Shows the processor temperature."
     },
     {
       "Name": "GPU usage",
-      "Tooltip": "Shows how much of the graphics card is in use, in percent. NVIDIA only."
+      "Tooltip": "Shows how much of the graphics card is in use, in percent."
     },
     {
       "Name": "GPU temperature",
-      "Tooltip": "Shows the graphics card temperature. NVIDIA only."
+      "Tooltip": "Shows the graphics card temperature."
     },
     {
       "Name": "Video memory usage",
-      "Tooltip": "Shows how much video memory is in use, in percent. NVIDIA only."
+      "Tooltip": "Shows how much video memory is in use, in percent."
     },
     {
       "Name": "Memory usage",
@@ -36,22 +36,17 @@
     },
     {
       "Name": "Disk usage",
-      "Tooltip": "Shows how busy the disks are, in percent."
+      "Tooltip": "Shows how busy the busiest disk is, in percent."
     },
     {
       "Name": "Disk temperature",
-      "Tooltip": "Shows the hottest disk. Needs LibreHardwareMonitor."
+      "Tooltip": "Shows the hottest disk."
     }
   ],
   "Localization": {
     "Reading.": "Reading normally.",
-    "lhm.offline": "LibreHardwareMonitor does not answer. This reading needs it, and it is optional: it loads a driver that some game anti-cheats block, so close it before such a game. To use it, open it and turn on Options > Remote Web Server > Run.",
+    "lhm.offline": "LibreHardwareMonitor does not answer. Open it as administrator, then turn on Options > Remote Web Server > Run. It loads a driver that some game anti-cheats block, so close it before such a game.",
     "lhm.unconfigured": "The LibreHardwareMonitor address is turned off in the plugin's environment variables.",
-    "nvidia.missing": "nvidia-smi was not found. It ships with the NVIDIA driver, and these readings only work with an NVIDIA card.",
-    "nvidia.offline": "nvidia-smi stopped answering. It is started again shortly.",
-    "windows.offline": "The disk counters could not be read.",
-    "ping.offline": "The ping failed.",
-    "os.offline": "The processor and memory could not be read.",
-    "unsupported": "This reading only exists on Windows."
+    "ping.offline": "The ping failed."
   }
 }

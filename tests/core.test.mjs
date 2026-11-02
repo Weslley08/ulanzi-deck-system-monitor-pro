@@ -34,7 +34,7 @@ test('there are the ten readings that were asked for, and every usage is a perce
 });
 
 test('every metric has a name, a unit, a scale and a source the monitor knows', () => {
-  const sources = new Set(['os', 'lhm', 'nvidia', 'ping', 'windows']);
+  const sources = new Set(['lhm', 'ping']);
   for (const [id, metric] of Object.entries(METRICS)) {
     assert.ok(metric.label && metric.unit && metric.group, id);
     assert.ok(sources.has(metric.source), id);
@@ -82,9 +82,9 @@ test('the store keeps two minutes of graph, one point every few seconds', () => 
 
 test('a provider that failed takes its readings and graphs with it, and no one else’s', () => {
   const store = new Store(60_000);
-  store.put([sample('cpu.temperature', 5, 'LHM'), sample('ram.usage', 50, 'os')]);
+  store.put([sample('cpu.temperature', 5, 'LHM'), sample('network.ping', 50, 'ping')]);
   store.invalidate('lhm');
   assert.equal(store.get('cpu.temperature').quality, 'unavailable');
   assert.deepEqual(store.history('cpu.temperature'), []);
-  assert.equal(store.get('ram.usage').quality, 'ok');
+  assert.equal(store.get('network.ping').quality, 'ok');
 });

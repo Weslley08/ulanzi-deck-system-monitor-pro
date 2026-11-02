@@ -1,7 +1,7 @@
 {
   "Author": "Weslley08",
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Needs LibreHardwareMonitor. Windows only. Not affiliated with Ulanzi.",
   "Icon": "resources/plugin-icon.png",
   "Version": "0.1.0",
   "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin",
@@ -52,7 +52,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the processor temperature. Needs LibreHardwareMonitor.",
+      "Tooltip": "Shows the processor temperature.",
       "SupportedInMultiActions": false
     },
     {
@@ -71,7 +71,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how much of the graphics card is in use, in percent. NVIDIA only.",
+      "Tooltip": "Shows how much of the graphics card is in use, in percent.",
       "SupportedInMultiActions": false
     },
     {
@@ -90,7 +90,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the graphics card temperature. NVIDIA only.",
+      "Tooltip": "Shows the graphics card temperature.",
       "SupportedInMultiActions": false
     },
     {
@@ -109,7 +109,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how much video memory is in use, in percent. NVIDIA only.",
+      "Tooltip": "Shows how much video memory is in use, in percent.",
       "SupportedInMultiActions": false
     },
     {
@@ -185,7 +185,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how busy the disks are, in percent.",
+      "Tooltip": "Shows how busy the busiest disk is, in percent.",
       "SupportedInMultiActions": false
     },
     {
@@ -204,11 +204,11 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the hottest disk. Needs LibreHardwareMonitor.",
+      "Tooltip": "Shows the hottest disk.",
       "SupportedInMultiActions": false
     }
   ],
-  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, disk and network readings need nothing else. The graphics card readings come from nvidia-smi, which ships with NVIDIA's driver. The processor and disk temperatures can only come from LibreHardwareMonitor, which is optional and loads a driver that some game anti-cheats block. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the only network traffic is a ping to the server you choose. Windows only. Not affiliated with Ulanzi, NVIDIA or LibreHardwareMonitor.",
+  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Every reading except ping and packet loss comes from LibreHardwareMonitor, which you run yourself, as administrator, with its web server turned on. It loads a driver that some game anti-cheats block, so close it before such a game. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the plugin only talks to LibreHardwareMonitor on your own computer and pings the server you choose. Windows only. Not affiliated with Ulanzi or LibreHardwareMonitor.",
   "Category": "System Monitor Pro",
   "CategoryIcon": "resources/category.svg",
   "Banner": [

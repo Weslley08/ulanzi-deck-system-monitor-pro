@@ -21,11 +21,8 @@ const api = new HostConnection();
 const store = new Store(config.display.staleAfterMs);
 const reported = new Map();
 const MESSAGES = {
-  lhm: 'LibreHardwareMonitor does not answer; the CPU and disk temperature keys read N/D until it does. It is optional.',
-  nvidia: 'nvidia-smi stopped; the GPU keys read N/D, and it is started again shortly.',
-  windows: 'The disk reader failed; the disk usage key reads N/D.',
-  ping: 'Ping failed; the network keys read N/D.',
-  os: 'The processor and memory reader failed.',
+  lhm: 'LibreHardwareMonitor does not answer. Open it as administrator and turn on Options > Remote Web Server > Run; every key but ping and loss reads N/D until then.',
+  ping: 'Ping failed; the ping and loss keys read N/D.',
 };
 
 function report(source) {

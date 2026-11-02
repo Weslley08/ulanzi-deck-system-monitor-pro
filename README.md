@@ -2,11 +2,11 @@
 
 Plugin open source planejado para Ulanzi D200 / Ulanzi Studio: dez leituras de CPU, GPU, memória, disco e rede, com alertas por cor.
 
-> **Status atual:** protótipo funcional, ainda sem uso no Ulanzi Studio nem em um dispositivo. As teclas, o painel e os leitores (processador e memória, `nvidia-smi`, disco, ping e LibreHardwareMonitor) existem e são testados contra hosts e programas que imitam os reais. Nada foi visto num D200, e nem o `nvidia-smi` nem o LibreHardwareMonitor foram lidos de verdade. [docs/VERIFY.md](docs/VERIFY.md) é o roteiro da primeira execução real.
+> **Status atual:** protótipo funcional, ainda sem uso no Ulanzi Studio nem em um dispositivo. As teclas, o painel e os leitores (LibreHardwareMonitor e ping) existem e são testados contra hosts e sensores simulados. Nada foi visto num D200, e o LibreHardwareMonitor nunca foi lido de verdade. [docs/VERIFY.md](docs/VERIFY.md) é o roteiro da primeira execução real.
 
 ![Teclas em cada estado: normal, aviso, crítico e sem leitura](docs/keys.png)
 
-**Leituras (todo uso é porcentagem):** uso da CPU, da GPU, da memória de vídeo, da RAM e do disco, ping, perda de pacotes e as temperaturas da GPU, da CPU e do disco. CPU, RAM, ping e perda não precisam de nada. A GPU vem do `nvidia-smi` (só placas NVIDIA). As temperaturas da CPU e do disco só vêm do [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), que é opcional e carrega um driver que alguns anticheats bloqueiam: sem ele, essas duas teclas dizem "LHM fechado". Cada leitura que falta diz o motivo na própria tecla.
+**Leituras (todo uso é porcentagem):** uso da CPU, da GPU, da memória de vídeo, da RAM e do disco, ping, perda de pacotes e as temperaturas da CPU, da GPU e do disco. Tudo, menos ping e perda, vem do [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), que você abre como administrador com *Options > Remote Web Server > Run*. **Atenção:** ele carrega um driver que alguns anticheats de jogos bloqueiam, então feche-o antes de jogar um desses. Sem ele, as teclas dizem "LHM fechado". Cada leitura que falta diz o motivo na própria tecla.
 
 ## Objetivos
 - Hardware: sensores disponibilizados pelo LibreHardwareMonitor, com detecção de indisponibilidade.
