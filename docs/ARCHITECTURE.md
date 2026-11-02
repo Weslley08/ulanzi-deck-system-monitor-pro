@@ -2,7 +2,7 @@
 
 ```text
 LibreHardwareMonitor ─┐
-RTSS / PresentMon ─────┼──> Providers -> Normalizer -> Cache TTL -> Threshold Engine -> Ulanzi Renderer
+nvidia-smi ─────────────┼──> Providers -> Normalizer -> Cache TTL -> Threshold Engine -> Ulanzi Renderer
 Windows Network APIs ─┤                                          └──> Alerts
 ICMP/TCP probes ───────┘
 ```

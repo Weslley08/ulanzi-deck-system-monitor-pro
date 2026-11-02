@@ -1,10 +1,19 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
+import { dirname, join } from 'node:path';
 import test from 'node:test';
-import { NetworkCounter, NetworkSampler, PingWindow, flattenSensors, numeric, parsePing, readLhm, readPresentMonCsv, readRam, sensorsToSamples } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/providers.js';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { CpuMeter, DiskSampler, NvidiaReader, PingWindow, flattenSensors, numeric, parseNvidiaLine, parsePing, readLhm, readRam, sensorsToSamples } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/providers.js';
+
+const FAKE_NVIDIA = join(dirname(fileURLToPath(import.meta.url)), 'support', 'fake-nvidia.mjs');
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const until = async (condition, ms = 5000) => {
+  const end = Date.now() + ms;
+  while (!condition()) {
+    if (Date.now() > end) throw new Error('timed out');
+    await sleep(20);
+  }
+};
 
 const sensor = (hardware, name, type, value, raw) => ({ Text: name, Value: value, RawValue: raw, Type: type, SensorId: `${hardware}/${name}` });
 const hardware = (id, ...Children) => ({ HardwareId: id, Text: id, Children });
@@ -12,41 +21,26 @@ const hardware = (id, ...Children) => ({ HardwareId: id, Text: id, Children });
 const TREE = { Children: [
   hardware('/intelcpu/0',
     sensor('/intelcpu/0', 'CPU Total', 'Load', '37,5 %', 37.5),
-    sensor('/intelcpu/0', 'CPU Package', 'Temperature', '61,0 °C', 61),
-    sensor('/intelcpu/0', 'CPU Core #1', 'Clock', '4300 MHz', 4300),
-    sensor('/intelcpu/0', 'CPU Core #2', 'Clock', '4500 MHz', 4500),
-    sensor('/intelcpu/0', 'CPU Package', 'Power', '55,2 W', 55.2)),
-  hardware('/gpu-intel/0', sensor('/gpu-intel/0', 'GPU Core', 'Load', '3 %', 3)),
-  hardware('/gpu-nvidia/0',
-    sensor('/gpu-nvidia/0', 'GPU Core', 'Load', '91 %', 91),
-    sensor('/gpu-nvidia/0', 'GPU Core', 'Temperature', '72 °C', 72),
-    sensor('/gpu-nvidia/0', 'GPU Core', 'Clock', '1900 MHz', 1900),
-    sensor('/gpu-nvidia/0', 'GPU Package', 'Power', '210 W', 210),
-    sensor('/gpu-nvidia/0', 'GPU Memory Used', 'SmallData', '6144 MB', 6144),
-    sensor('/gpu-nvidia/0', 'GPU Memory Total', 'SmallData', '12288 MB', 12288)),
+    sensor('/intelcpu/0', 'CPU Package', 'Temperature', '61,0 °C', 61)),
+  hardware('/nvme/0', sensor('/nvme/0', 'Temperature', 'Temperature', '44 °C', 44)),
+  hardware('/hdd/0', sensor('/hdd/0', 'Temperature', 'Temperature', '51 °C', 51)),
+  hardware('/gpu-nvidia/0', sensor('/gpu-nvidia/0', 'GPU Core', 'Temperature', '72 °C', 72)),
 ] };
 
 const byId = (samples) => Object.fromEntries(samples.map((s) => [s.id, s.value]));
 
-test('sensors are found by their hardware and type, and the discrete card wins over the integrated one', () => {
-  const found = byId(sensorsToSamples(TREE));
-  assert.deepEqual(found, {
-    'cpu.usage': 37.5, 'cpu.temperature': 61, 'cpu.clock': 4400, 'cpu.power': 55.2,
-    'gpu.usage': 91, 'gpu.temperature': 72, 'gpu.clock': 1900, 'gpu.power': 210, 'gpu.vram.used': 6, 'gpu.vram.total': 12,
-  });
+test('the two temperatures LibreHardwareMonitor gives are found by hardware and type, the hottest disk winning', () => {
+  assert.deepEqual(byId(sensorsToSamples(TREE)), { 'cpu.temperature': 61, 'disk.temperature': 51 });
 });
 
-test('a processor that names its clock and temperature the AMD way is read too', () => {
-  const tree = { Children: [hardware('/amdcpu/0',
-    sensor('/amdcpu/0', 'Core (Tctl/Tdie)', 'Temperature', '55 °C', 55),
-    sensor('/amdcpu/0', 'Cores (Average)', 'Clock', '3900 MHz', 3900),
-    sensor('/amdcpu/0', 'Package', 'Power', '88 W', 88))] };
-  assert.deepEqual(byId(sensorsToSamples(tree)), { 'cpu.temperature': 55, 'cpu.clock': 3900, 'cpu.power': 88 });
+test('a processor that names its temperature the AMD way is read too', () => {
+  const tree = { Children: [hardware('/amdcpu/0', sensor('/amdcpu/0', 'Core (Tctl/Tdie)', 'Temperature', '55 °C', 55))] };
+  assert.deepEqual(byId(sensorsToSamples(tree)), { 'cpu.temperature': 55 });
 });
 
 test('a sensor that is not there is left out, never made up as zero', () => {
   assert.deepEqual(sensorsToSamples({ Children: [] }), []);
-  assert.deepEqual(sensorsToSamples({ Children: [hardware('/intelcpu/0', sensor('/intelcpu/0', 'CPU Total', 'Load', '-', null))] }), []);
+  assert.deepEqual(sensorsToSamples({ Children: [hardware('/intelcpu/0', sensor('/intelcpu/0', 'CPU Package', 'Temperature', '-', null))] }), []);
 });
 
 test('numbers are read in either decimal style', () => {
@@ -64,7 +58,7 @@ function lhm(handler) {
 test('LibreHardwareMonitor is read over loopback', async () => {
   const { server, url } = await lhm((req, res) => res.end(JSON.stringify(TREE)));
   try {
-    assert.equal(byId(await readLhm(url))['cpu.usage'], 37.5);
+    assert.equal(byId(await readLhm(url))['cpu.temperature'], 61);
   } finally {
     server.close();
   }
@@ -104,22 +98,84 @@ test('an answer too large to be sensor data is refused', async () => {
   }
 });
 
-test('memory is read from the system', () => {
-  const [total, used, usage] = readRam();
-  assert.ok(total.value > 0 && used.value > 0 && usage.value > 0 && usage.value <= 100);
+test('memory is read from the system, as a share of use', () => {
+  const [usage] = readRam();
+  assert.equal(usage.id, 'ram.usage');
+  assert.ok(usage.value > 0 && usage.value <= 100);
 });
 
-test('throughput in Mbps, and a change of adapters starts over instead of spiking', () => {
-  const counter = new NetworkCounter();
-  assert.deepEqual(counter.update({ rx: 0, tx: 0, at: 1000, adapters: 1 }), []);
-  const [down, up] = counter.update({ rx: 1_000_000, tx: 500_000, at: 2000, adapters: 1 });
-  assert.equal(down.value, 8);
-  assert.equal(up.value, 4);
-  assert.deepEqual(counter.update({ rx: 900_000_000, tx: 500_000, at: 3000, adapters: 2 }), [], 'a new adapter brings its whole history');
-  assert.equal(counter.update({ rx: 901_000_000, tx: 600_000, at: 4000, adapters: 2 }).length, 2);
-  assert.deepEqual(counter.update({ rx: 5, tx: 5, at: 5000, adapters: 2 }), [], 'counters that restart');
-  counter.reset();
-  assert.deepEqual(counter.update({ rx: 10, tx: 10, at: 6000, adapters: 2 }), []);
+test('the processor share is the time spent busy since the last reading, over every core', () => {
+  let ticks = { idle: 0, user: 0 };
+  const meter = new CpuMeter(() => [{ times: { ...ticks, nice: 0, sys: 0, irq: 0 } }, { times: { idle: ticks.idle, user: ticks.user, nice: 0, sys: 0, irq: 0 } }]);
+  assert.deepEqual(meter.update(), [], 'it needs two readings');
+  ticks = { idle: 750, user: 250 };
+  assert.equal(meter.update()[0].value, 25);
+  ticks = { idle: 750, user: 1250 };
+  assert.equal(meter.update()[0].value, 100);
+  assert.deepEqual(meter.update(), [], 'no time has passed, so there is nothing to divide');
+});
+
+test('a line of nvidia-smi is a card, and anything else is not', () => {
+  assert.deepEqual(parseNvidiaLine('1, 91, 72, 6144, 12288'), { index: 1, usage: 91, temperature: 72, used: 6144, total: 12288 });
+  const missing = parseNvidiaLine('0, [N/A], [N/A], [N/A], [N/A]');
+  assert.equal(missing.index, 0);
+  assert.ok([missing.usage, missing.temperature, missing.used, missing.total].every(Number.isNaN), 'a missing value is not zero');
+  assert.equal(parseNvidiaLine('NVIDIA-SMI has failed because it could not communicate with the NVIDIA driver.'), null);
+  assert.equal(parseNvidiaLine(''), null);
+});
+
+function reader(mode) {
+  process.env.FAKE_NVIDIA_MODE = mode;
+  const found = [];
+  const errors = [];
+  const instance = new NvidiaReader({ command: process.execPath, args: [FAKE_NVIDIA] });
+  instance.start({ onSamples: (values) => found.push(values), onError: (error) => errors.push(error) });
+  return { instance, found, errors };
+}
+
+test('the card with the most memory is the one shown, and the memory is a share of use', async () => {
+  const { instance, found } = reader('normal');
+  try {
+    await until(() => found.length > 0);
+    assert.deepEqual(byId(found.at(-1)), { 'gpu.usage': 91, 'gpu.temperature': 72, 'gpu.vram.usage': 50 });
+  } finally {
+    instance.stop();
+  }
+});
+
+test('a card with no sensors gives missing readings, not zeros', async () => {
+  const { instance, found } = reader('na');
+  try {
+    await until(() => found.length > 0);
+    assert.ok(found.at(-1).every((s) => s.quality === 'unavailable'));
+  } finally {
+    instance.stop();
+  }
+});
+
+test('when nvidia-smi stops, the reader says so once', async () => {
+  const { instance, errors } = reader('exit');
+  await until(() => errors.length > 0);
+  await sleep(200);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0].message, /stopped/);
+  instance.stop();
+});
+
+test('an error message printed in place of readings is not a reading', async () => {
+  const { instance, found } = reader('text');
+  await sleep(500);
+  instance.stop();
+  assert.deepEqual(found, []);
+});
+
+test('with no nvidia-smi installed, the error says so by its code, and stopping later changes nothing', async () => {
+  const errors = [];
+  const missing = new NvidiaReader({ command: join(dirname(FAKE_NVIDIA), 'there-is-no-such-program') });
+  missing.start({ onSamples: () => {}, onError: (error) => errors.push(error) });
+  await until(() => errors.length > 0);
+  assert.equal(errors[0].code, 'ENOENT');
+  missing.stop();
 });
 
 test('ping is read in any language of Windows, and a failure is not a time', () => {
@@ -131,51 +187,32 @@ test('ping is read in any language of Windows, and a failure is not a time', () 
   assert.equal(parsePing('Resposta de 192.168.0.9: Host de destino inacessível.'), null);
 });
 
-test('ping, jitter and loss over a window', () => {
+test('ping and the share of pings with no answer, over a window', () => {
   const ping = new PingWindow(3);
   ping.update(20);
   ping.update(null);
-  const [average, jitter, loss] = ping.update(40);
+  const [average, loss] = ping.update(40);
   assert.equal(average.value, 30);
-  assert.equal(jitter.value, 20);
   assert.ok(Math.abs(loss.value - 100 / 3) < 1e-9);
   const lost = new PingWindow(2);
   lost.update(null);
   assert.equal(lost.update(null)[0].quality, 'unavailable');
 });
 
-test('the frame rate comes from the last line of the PresentMon file', async () => {
-  const dir = mkdtempSync(join(tmpdir(), 'monitor-csv-'));
+test('the disk reader answers from a running PowerShell, as a share of busy time, and leaves when stopped', { skip: process.platform !== 'win32' }, async () => {
+  const sampler = new DiskSampler();
   try {
-    const file = join(dir, 'frames.csv');
-    writeFileSync(file, 'Application,MsBetweenPresents\ngame.exe,8\ngame.exe,6.25\n');
-    const [frame, fps] = await readPresentMonCsv(file);
-    assert.equal(frame.value, 6.25);
-    assert.equal(fps.value, 160);
-    writeFileSync(file, 'Application,MsBetweenPresents\n');
-    assert.deepEqual(await readPresentMonCsv(file), []);
-    assert.deepEqual(await readPresentMonCsv(''), []);
-    await assert.rejects(readPresentMonCsv(join(dir, 'missing.csv')));
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
-  }
-});
-
-test('the network reader answers a reading from a running PowerShell, and leaves when stopped', { skip: process.platform !== 'win32' }, async () => {
-  const sampler = new NetworkSampler();
-  try {
-    const first = await sampler.sample();
-    assert.ok(first.rx >= 0 && first.tx >= 0 && first.adapters >= 0);
+    const first = await sampler.usage();
+    assert.ok(first >= 0 && first <= 100);
     const started = performance.now();
-    const second = await sampler.sample();
-    assert.ok(second.rx >= first.rx);
-    assert.ok(performance.now() - started < 500, 'a reading from a running reader is fast');
-    await assert.rejects(Promise.all([sampler.sample(), sampler.sample()]), /already waiting/);
+    const second = await sampler.usage();
+    assert.ok(second >= 0 && second <= 100);
+    assert.ok(performance.now() - started < 2500, 'a reading from a running reader does not start another');
   } finally {
     sampler.stop();
   }
 });
 
-test('the network reader says so on a system without it', { skip: process.platform === 'win32' }, async () => {
-  await assert.rejects(new NetworkSampler().sample(), /Windows/);
+test('the disk reader says so on a system without it', { skip: process.platform === 'win32' }, async () => {
+  await assert.rejects(new DiskSampler().usage(), /Windows/);
 });

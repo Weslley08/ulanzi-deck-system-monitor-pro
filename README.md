@@ -1,17 +1,16 @@
 # Ulanzi Deck System Monitor Pro
 
-Plugin open source planejado para Ulanzi D200 / Ulanzi Studio: métricas de CPU, GPU, RAM, VRAM, FPS e rede, com alertas configuráveis.
+Plugin open source planejado para Ulanzi D200 / Ulanzi Studio: dez leituras de CPU, GPU, memória, disco e rede, com alertas por cor.
 
-> **Status atual:** protótipo funcional, ainda sem uso no Ulanzi Studio nem em um dispositivo. As teclas, o painel e os leitores (memória, LibreHardwareMonitor, rede, ping e FPS por CSV) existem e são testados contra hosts e sensores simulados. Nada foi visto num D200, e os sensores nunca foram lidos de um LibreHardwareMonitor real. [docs/VERIFY.md](docs/VERIFY.md) é o roteiro da primeira execução real.
+> **Status atual:** protótipo funcional, ainda sem uso no Ulanzi Studio nem em um dispositivo. As teclas, o painel e os leitores (processador e memória, `nvidia-smi`, disco, ping e LibreHardwareMonitor) existem e são testados contra hosts e programas que imitam os reais. Nada foi visto num D200, e nem o `nvidia-smi` nem o LibreHardwareMonitor foram lidos de verdade. [docs/VERIFY.md](docs/VERIFY.md) é o roteiro da primeira execução real.
 
 ![Teclas em cada estado: normal, aviso, crítico e sem leitura](docs/keys.png)
 
-**Para ver CPU e GPU** o [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) precisa estar aberto, com *Options > Remote Web Server > Run* ligado. Memória, velocidade da rede e ping não precisam de mais nada. Cada leitura que falta diz o motivo na própria tecla.
+**Leituras (todo uso é porcentagem):** uso da CPU, da GPU, da memória de vídeo, da RAM e do disco, ping, perda de pacotes e as temperaturas da GPU, da CPU e do disco. CPU, RAM, ping e perda não precisam de nada. A GPU vem do `nvidia-smi` (só placas NVIDIA). As temperaturas da CPU e do disco só vêm do [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), que é opcional e carrega um driver que alguns anticheats bloqueiam: sem ele, essas duas teclas dizem "LHM fechado". Cada leitura que falta diz o motivo na própria tecla.
 
 ## Objetivos
 - Hardware: sensores disponibilizados pelo LibreHardwareMonitor, com detecção de indisponibilidade.
-- FPS: adaptador RTSS ou PresentMon condicionado à verificação das interfaces e limitações reais.
-- Rede: upload/download por interface, RTT/ping, jitter e perda em janelas explícitas.
+- Rede: ping e perda de pacotes em janelas explícitas.
 - UI: cores dinâmicas, thresholds configuráveis, histerese e alertas sem flicker.
 - Privacidade: medições locais e destinos de ping configuráveis, sem telemetria enviada a servidor do produto.
 

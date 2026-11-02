@@ -1,98 +1,57 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, FPS and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
   "Actions": [
     {
       "Name": "CPU usage",
-      "Tooltip": "Shows how busy the processor is."
+      "Tooltip": "Shows how much of the processor is in use, in percent."
     },
     {
       "Name": "CPU temperature",
-      "Tooltip": "Shows the processor temperature."
-    },
-    {
-      "Name": "CPU clock",
-      "Tooltip": "Shows the processor speed."
-    },
-    {
-      "Name": "CPU power",
-      "Tooltip": "Shows the power the processor draws."
+      "Tooltip": "Shows the processor temperature. Needs LibreHardwareMonitor."
     },
     {
       "Name": "GPU usage",
-      "Tooltip": "Shows how busy the graphics card is."
+      "Tooltip": "Shows how much of the graphics card is in use, in percent. NVIDIA only."
     },
     {
       "Name": "GPU temperature",
-      "Tooltip": "Shows the graphics card temperature."
+      "Tooltip": "Shows the graphics card temperature. NVIDIA only."
     },
     {
-      "Name": "GPU clock",
-      "Tooltip": "Shows the graphics card speed."
-    },
-    {
-      "Name": "GPU power",
-      "Tooltip": "Shows the power the graphics card draws."
-    },
-    {
-      "Name": "Video memory used",
-      "Tooltip": "Shows the graphics card memory in use."
-    },
-    {
-      "Name": "Video memory total",
-      "Tooltip": "Shows how much memory the graphics card has."
-    },
-    {
-      "Name": "Memory used",
-      "Tooltip": "Shows the memory in use."
-    },
-    {
-      "Name": "Memory total",
-      "Tooltip": "Shows how much memory the PC has."
+      "Name": "Video memory usage",
+      "Tooltip": "Shows how much video memory is in use, in percent. NVIDIA only."
     },
     {
       "Name": "Memory usage",
-      "Tooltip": "Shows the share of memory in use."
-    },
-    {
-      "Name": "Frame rate",
-      "Tooltip": "Shows frames per second. Needs PresentMon."
-    },
-    {
-      "Name": "Frame time",
-      "Tooltip": "Shows the time between frames. Needs PresentMon."
+      "Tooltip": "Shows how much memory is in use, in percent."
     },
     {
       "Name": "Ping",
       "Tooltip": "Shows the round trip to a server."
     },
     {
-      "Name": "Jitter",
-      "Tooltip": "Shows how much the ping varies."
-    },
-    {
       "Name": "Packet loss",
       "Tooltip": "Shows the share of pings that got no answer."
     },
     {
-      "Name": "Download speed",
-      "Tooltip": "Shows what the PC is receiving now."
+      "Name": "Disk usage",
+      "Tooltip": "Shows how busy the disks are, in percent."
     },
     {
-      "Name": "Upload speed",
-      "Tooltip": "Shows what the PC is sending now."
+      "Name": "Disk temperature",
+      "Tooltip": "Shows the hottest disk. Needs LibreHardwareMonitor."
     }
   ],
   "Localization": {
     "Reading.": "Reading normally.",
-    "lhm.offline": "LibreHardwareMonitor does not answer. Open it, then turn on Options > Remote Web Server > Run.",
+    "lhm.offline": "LibreHardwareMonitor does not answer. This reading needs it, and it is optional: it loads a driver that some game anti-cheats block, so close it before such a game. To use it, open it and turn on Options > Remote Web Server > Run.",
     "lhm.unconfigured": "The LibreHardwareMonitor address is turned off in the plugin's environment variables.",
-    "fps.unconfigured": "Frame rate needs PresentMon writing a CSV file. Set PRESENTMON_CSV to its path, then restart Studio.",
-    "fps.idle": "Waiting for a game: the PresentMon file has no frames yet.",
-    "fps.offline": "The PresentMon file could not be read.",
-    "network.offline": "The network counters could not be read.",
+    "nvidia.missing": "nvidia-smi was not found. It ships with the NVIDIA driver, and these readings only work with an NVIDIA card.",
+    "nvidia.offline": "nvidia-smi stopped answering. It is started again shortly.",
+    "windows.offline": "The disk counters could not be read.",
     "ping.offline": "The ping failed.",
-    "os.offline": "The memory could not be read.",
+    "os.offline": "The processor and memory could not be read.",
     "unsupported": "This reading only exists on Windows."
   }
 }

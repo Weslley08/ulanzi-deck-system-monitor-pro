@@ -35,7 +35,7 @@ for(const [name,data]of zip){const path=resolve(dir,name);if(!path.startsWith(re
 host=new WebSocketServer({host:'127.0.0.1',port:0});await once(host,'listening');
 const port=host.address().port;
 const connected=new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('plugin did not connect to host')),10000);host.once('connection',socket=>{socket.once('message',data=>{try{const m=JSON.parse(String(data));if(m.cmd!=='connected')throw Error('unexpected first message '+m.cmd);clearTimeout(timer);resolve();}catch(e){reject(e);}})});});
-child=spawn(process.execPath,[join(dir,PLUGIN_FOLDER,manifest.CodePath),'127.0.0.1',String(port),'en'],{cwd:join(dir,PLUGIN_FOLDER),stdio:'ignore',env:{...process.env,LHM_JSON_URL:'',PRESENTMON_CSV:'',PING_TARGET:'127.0.0.1'}});
+child=spawn(process.execPath,[join(dir,PLUGIN_FOLDER,manifest.CodePath),'127.0.0.1',String(port),'en'],{cwd:join(dir,PLUGIN_FOLDER),stdio:'ignore',env:{...process.env,LHM_JSON_URL:'',PING_TARGET:'127.0.0.1'}});
 child.once('error',e=>{});
 await connected;
 console.log('Package verified: ZIP contents, dependencies, licensing, manifest, secrets and host connection');

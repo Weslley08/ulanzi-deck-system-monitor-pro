@@ -1,8 +1,8 @@
 // Measures what the plugin costs the user's machine. Run before each release and put the numbers in the notes:
 //   node scripts/measure.mjs [idleSeconds]
-// It runs the real plugin against a fake Ulanzi host and a fake LibreHardwareMonitor on loopback, with real
-// memory, ping and (on Windows) network counters. So it measures the plugin and its network reader, and not
-// Ulanzi Studio, a real LibreHardwareMonitor, PresentMon or a deck.
+// It runs the real plugin against a fake Ulanzi host, a fake LibreHardwareMonitor on loopback and a program that
+// prints what nvidia-smi prints, with real processor, memory, ping and (on Windows) disk counters. So it measures
+// the plugin and its disk reader, and not Ulanzi Studio, a real LibreHardwareMonitor, nvidia-smi or a deck.
 import { execFileSync, fork } from 'node:child_process';
 import { once } from 'node:events';
 import { readFileSync } from 'node:fs';
@@ -16,26 +16,17 @@ import { pluginDir, root } from './lib/project.mjs';
 const IDLE_SECONDS = Number(process.argv[2] ?? 60);
 const manifest = JSON.parse(readFileSync(join(pluginDir, 'manifest.json'), 'utf8'));
 const metricsPreload = pathToFileURL(join(root, 'tests', 'support', 'metrics.mjs')).href;
-const KEYS = ['cpu.usage', 'cpu.temperature', 'cpu.clock', 'gpu.usage', 'gpu.temperature', 'gpu.vram.used', 'ram.used', 'ram.usage', 'network.ping', 'network.loss', 'network.download', 'network.upload'];
+const KEYS = ['cpu.usage', 'cpu.temperature', 'gpu.usage', 'gpu.temperature', 'gpu.vram.usage', 'ram.usage', 'network.ping', 'network.loss', 'disk.usage', 'disk.temperature'];
 
-// A hardware tree that moves on every request, the worst case for redrawing.
+// The two temperatures only LibreHardwareMonitor gives, moving on every request, the worst case for redrawing.
 let tick = 0;
-const sensor = (hardware, name, type, value, unit) => ({ Text: name, Value: `${value.toFixed(1)} ${unit}`, RawValue: value, Type: type, SensorId: `${hardware}/${name}` });
+const sensor = (hardware, name, value) => ({ Text: name, Value: `${value.toFixed(1)} °C`, RawValue: value, Type: 'Temperature', SensorId: `${hardware}/${name}` });
 const lhm = createServer((request, response) => {
   tick += 1;
   const wave = (base, spread) => base + Math.sin(tick / 3) * spread;
   const tree = { Children: [
-    { HardwareId: '/intelcpu/0', Text: 'CPU', Children: [
-      sensor('/intelcpu/0', 'CPU Total', 'Load', wave(40, 25), '%'),
-      sensor('/intelcpu/0', 'CPU Package', 'Temperature', wave(62, 12), '°C'),
-      sensor('/intelcpu/0', 'Cores (Average)', 'Clock', wave(4300, 300), 'MHz'),
-    ] },
-    { HardwareId: '/gpu-nvidia/0', Text: 'GPU', Children: [
-      sensor('/gpu-nvidia/0', 'GPU Core', 'Load', wave(55, 30), '%'),
-      sensor('/gpu-nvidia/0', 'GPU Core', 'Temperature', wave(60, 10), '°C'),
-      sensor('/gpu-nvidia/0', 'GPU Memory Used', 'Data', wave(6, 1), 'GB'),
-      sensor('/gpu-nvidia/0', 'GPU Memory Total', 'Data', 12, 'GB'),
-    ] },
+    { HardwareId: '/intelcpu/0', Text: 'CPU', Children: [sensor('/intelcpu/0', 'CPU Package', wave(62, 12))] },
+    { HardwareId: '/nvme/0', Text: 'Disk', Children: [sensor('/nvme/0', 'Temperature', wave(45, 6))] },
   ] };
   response.setHeader('Content-Type', 'application/json');
   response.end(JSON.stringify(tree));
@@ -68,7 +59,14 @@ const send = (message) => socket.send(JSON.stringify(message));
 const plugin = fork(join(pluginDir, 'plugin', 'app.js'), ['127.0.0.1', String(server.address().port), 'en'], {
   execArgv: ['--import', metricsPreload],
   stdio: ['ignore', 'ignore', 'ignore', 'ipc'],
-  env: { ...process.env, LHM_JSON_URL: `http://127.0.0.1:${lhm.address().port}/data.json`, PING_TARGET: '127.0.0.1' },
+  env: {
+    ...process.env,
+    LHM_JSON_URL: `http://127.0.0.1:${lhm.address().port}/data.json`,
+    PING_TARGET: '127.0.0.1',
+    // A program that prints what nvidia-smi prints, because a build machine has no NVIDIA card.
+    NVIDIA_SMI: process.execPath,
+    NVIDIA_SMI_ARGS: JSON.stringify([join(root, 'tests', 'support', 'fake-nvidia.mjs')]),
+  },
 });
 const metrics = async () => {
   plugin.send('metrics');
@@ -76,7 +74,7 @@ const metrics = async () => {
   return reply;
 };
 
-/** The network reader is a separate PowerShell process: its memory and CPU belong to the plugin's cost. */
+/** The disk reader is a separate PowerShell process: its memory and CPU belong to the plugin's cost. */
 function helper() {
   if (process.platform !== 'win32') return { memory: 0, cpuMs: 0 };
   try {
@@ -112,7 +110,7 @@ const startedAt = performance.now();
 for (const [i, metric] of KEYS.entries()) {
   send({ cmd: 'add', uuid: `${manifest.UUID}.${metric.replaceAll('.', '')}`, key: `${i}_0`, actionid: `k${i}`, param: {} });
 }
-// The first readings take a moment, and the network ones need two. Wait for the numbers, not for the first N/D.
+// The first readings take a moment, and the processor and disk ones need two. Wait for the numbers, not for the first N/D.
 await sleep(6000);
 await settled();
 const firstPaint = firstImageAt - startedAt;
@@ -127,7 +125,7 @@ const helperAfterIdle = helper();
 const imagesWhileIdle = images - imagesAtRender;
 const imageBytes = (bytes - bytesAtRender) / Math.max(1, imagesWhileIdle);
 
-// Taking every key off the deck must stop the providers and the reader.
+// Taking every key off the deck must stop the providers and the readers.
 send({ cmd: 'clear', param: KEYS.map((metric, i) => ({ uuid: `${manifest.UUID}.${metric.replaceAll('.', '')}`, key: `${i}_0`, actionid: `k${i}` })) });
 await sleep(2500);
 const afterClear = await metrics();
@@ -150,7 +148,7 @@ console.log(`First key image             ${firstPaint.toFixed(0)} ms after the k
 console.log(`Drawing in the first 6 s    ${(afterRender.cpuMs - atStart.cpuMs).toFixed(0)} ms of CPU, ${imagesAtRender} images`);
 console.log(`Image sent per key          ${(imageBytes / 1024).toFixed(1)} KB`);
 if (process.platform === 'win32') {
-  console.log(`Network reader memory       ${MB(helperAfterIdle.memory)} in a separate PowerShell process`);
-  console.log(`Network reader CPU          ${helperPercent(helperAfterRender, helperAfterIdle, idleMs)}% of one core`);
+  console.log(`Disk reader memory       ${MB(helperAfterIdle.memory)} in a separate PowerShell process`);
+  console.log(`Disk reader CPU          ${helperPercent(helperAfterRender, helperAfterIdle, idleMs)}% of one core`);
   console.log(`After keys left             reader ${helperAfterClear.memory ? MB(helperAfterClear.memory) : 'closed'}`);
 }

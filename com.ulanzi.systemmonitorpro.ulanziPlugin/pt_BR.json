@@ -1,109 +1,59 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "Veja CPU, GPU, memória, FPS e rede do seu PC nas teclas: um número, uma barra e um gráfico dos últimos dois minutos em cada uma. Só Windows. Sem vínculo com a Ulanzi.",
+  "Description": "Veja CPU, GPU, memória, disco e rede do seu PC nas teclas: um número, uma barra e um gráfico dos últimos dois minutos em cada uma. Só Windows. Sem vínculo com a Ulanzi.",
   "Actions": [
     {
       "Name": "Uso da CPU",
-      "Tooltip": "Mostra o quanto o processador está ocupado."
+      "Tooltip": "Mostra quanto do processador está em uso, em porcentagem."
     },
     {
       "Name": "Temperatura da CPU",
-      "Tooltip": "Mostra a temperatura do processador."
-    },
-    {
-      "Name": "Clock da CPU",
-      "Tooltip": "Mostra a velocidade do processador."
-    },
-    {
-      "Name": "Consumo da CPU",
-      "Tooltip": "Mostra a energia que o processador consome."
+      "Tooltip": "Mostra a temperatura do processador. Precisa do LibreHardwareMonitor."
     },
     {
       "Name": "Uso da GPU",
-      "Tooltip": "Mostra o quanto a placa de vídeo está ocupada."
+      "Tooltip": "Mostra quanto da placa de vídeo está em uso, em porcentagem. Só NVIDIA."
     },
     {
       "Name": "Temperatura da GPU",
-      "Tooltip": "Mostra a temperatura da placa de vídeo."
+      "Tooltip": "Mostra a temperatura da placa de vídeo. Só NVIDIA."
     },
     {
-      "Name": "Clock da GPU",
-      "Tooltip": "Mostra a velocidade da placa de vídeo."
-    },
-    {
-      "Name": "Consumo da GPU",
-      "Tooltip": "Mostra a energia que a placa de vídeo consome."
-    },
-    {
-      "Name": "Memória de vídeo usada",
-      "Tooltip": "Mostra a memória da placa de vídeo em uso."
-    },
-    {
-      "Name": "Memória de vídeo total",
-      "Tooltip": "Mostra a memória total da placa de vídeo."
-    },
-    {
-      "Name": "Memória usada",
-      "Tooltip": "Mostra a memória em uso."
-    },
-    {
-      "Name": "Memória total",
-      "Tooltip": "Mostra a memória total do PC."
+      "Name": "Uso da memória de vídeo",
+      "Tooltip": "Mostra quanta memória de vídeo está em uso, em porcentagem. Só NVIDIA."
     },
     {
       "Name": "Uso da memória",
-      "Tooltip": "Mostra a parte da memória em uso."
-    },
-    {
-      "Name": "Quadros por segundo",
-      "Tooltip": "Mostra os quadros por segundo. Precisa do PresentMon."
-    },
-    {
-      "Name": "Tempo de quadro",
-      "Tooltip": "Mostra o tempo entre quadros. Precisa do PresentMon."
+      "Tooltip": "Mostra quanta memória está em uso, em porcentagem."
     },
     {
       "Name": "Ping",
       "Tooltip": "Mostra o tempo de ida e volta até um servidor."
     },
     {
-      "Name": "Jitter",
-      "Tooltip": "Mostra o quanto o ping varia."
-    },
-    {
       "Name": "Perda de pacotes",
       "Tooltip": "Mostra a parte dos pings sem resposta."
     },
     {
-      "Name": "Velocidade de download",
-      "Tooltip": "Mostra o que o PC está recebendo agora."
+      "Name": "Uso do disco",
+      "Tooltip": "Mostra o quanto os discos estão ocupados, em porcentagem."
     },
     {
-      "Name": "Velocidade de upload",
-      "Tooltip": "Mostra o que o PC está enviando agora."
+      "Name": "Temperatura do disco",
+      "Tooltip": "Mostra o disco mais quente. Precisa do LibreHardwareMonitor."
     }
   ],
   "Localization": {
     "Usage": "Uso",
     "Temp": "Temp",
-    "Clock": "Clock",
-    "Power": "Consumo",
-    "VRAM used": "VRAM usada",
-    "VRAM total": "VRAM total",
-    "Used": "Usada",
-    "Total": "Total",
-    "Current": "Atual",
-    "Frame time": "Tempo de quadro",
+    "VRAM": "VRAM",
     "Ping": "Ping",
-    "Jitter": "Jitter",
     "Loss": "Perda",
-    "Download": "Download",
-    "Upload": "Upload",
     "LHM closed": "LHM fechado",
-    "Offline": "Sem conexão",
+    "No reading": "Sem leitura",
     "Not set up": "Não configurado",
     "Windows only": "Só Windows",
-    "No game": "Sem jogo",
+    "No NVIDIA": "Sem NVIDIA",
     "No sensor": "Sem sensor",
     "No data": "Sem dados",
     "Measuring": "Medindo",
@@ -121,16 +71,14 @@
     "Show the graph": "Mostrar o gráfico",
     "Reading.": "Lendo normalmente.",
     "Waiting for the first reading.": "Esperando a primeira leitura.",
-    "lhm.offline": "O LibreHardwareMonitor não responde. Abra-o e, em Options, ligue Remote Web Server > Run.",
+    "lhm.offline": "O LibreHardwareMonitor não responde. Esta leitura depende dele, e ele é opcional: carrega um driver que alguns anticheats bloqueiam, então feche-o antes de jogar um desses. Para usar, abra-o e ligue Options > Remote Web Server > Run.",
     "lhm.unconfigured": "O endereço do LibreHardwareMonitor está desligado nas variáveis de ambiente do plugin.",
-    "fps.unconfigured": "Os quadros por segundo precisam do PresentMon gravando um arquivo CSV. Defina PRESENTMON_CSV com o caminho dele e reinicie o Studio.",
-    "fps.idle": "Esperando um jogo: o arquivo do PresentMon ainda não tem quadros.",
-    "fps.offline": "Não foi possível ler o arquivo do PresentMon.",
-    "network.offline": "Não foi possível ler os contadores de rede.",
+    "nvidia.missing": "O nvidia-smi não foi encontrado. Ele acompanha o driver da NVIDIA, e estas leituras só funcionam com placa NVIDIA.",
+    "nvidia.offline": "O nvidia-smi parou de responder. Ele é iniciado de novo em instantes.",
+    "windows.offline": "Não foi possível ler os contadores do disco.",
     "ping.offline": "O ping falhou.",
-    "os.offline": "Não foi possível ler a memória.",
+    "os.offline": "Não foi possível ler o processador e a memória.",
     "unsupported": "Esta leitura só existe no Windows.",
-    "Help": "Ajuda",
     "The readings stay on this computer. Nothing is sent over the internet.": "As leituras ficam neste computador. Nada é enviado pela internet."
   }
 }

@@ -1,9 +1,8 @@
 {
   "sampleIntervalsMs": {
     "hardware": 1000,
-    "fps": 500,
-    "network": 1000,
-    "ping": 2000
+    "ping": 2000,
+    "disk": 2000
   },
   "ping": {
     "targets": [
@@ -13,12 +12,14 @@
     "windowSize": 20
   },
   "thresholds": {
+    "cpu.usage": { "warning": 85, "critical": 95 },
     "cpu.temperature": { "warning": 80, "critical": 90 },
     "gpu.temperature": { "warning": 80, "critical": 88 },
-    "cpu.usage": { "warning": 85, "critical": 95 },
+    "gpu.vram.usage": { "warning": 90, "critical": 97 },
     "ram.usage": { "warning": 85, "critical": 95 },
     "network.ping": { "warning": 80, "critical": 150 },
-    "network.loss": { "warning": 2, "critical": 5 }
+    "network.loss": { "warning": 2, "critical": 5 },
+    "disk.temperature": { "warning": 70, "critical": 80 }
   },
   "display": {
     "staleAfterMs": 5000,

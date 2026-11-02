@@ -21,11 +21,11 @@ const api = new HostConnection();
 const store = new Store(config.display.staleAfterMs);
 const reported = new Map();
 const MESSAGES = {
-  lhm: 'LibreHardwareMonitor does not answer. Open it and turn on Options > Remote Web Server > Run; CPU and GPU keys read N/D until then.',
-  network: 'The network reader failed; the network keys read N/D.',
+  lhm: 'LibreHardwareMonitor does not answer; the CPU and disk temperature keys read N/D until it does. It is optional.',
+  nvidia: 'nvidia-smi stopped; the GPU keys read N/D, and it is started again shortly.',
+  windows: 'The disk reader failed; the disk usage key reads N/D.',
   ping: 'Ping failed; the network keys read N/D.',
-  fps: 'The PresentMon file could not be read; the FPS keys read N/D.',
-  os: 'The memory reader failed.',
+  os: 'The processor and memory reader failed.',
 };
 
 function report(source) {

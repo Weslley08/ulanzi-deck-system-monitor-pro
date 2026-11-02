@@ -2,34 +2,24 @@
 const def = (group, label, unit, source, extra = {}) => Object.freeze({ group, label, unit, source, ...extra });
 
 /**
- * `max` scales the bar and the graph. `maxFrom` takes it from another metric (a card's own VRAM, the PC's RAM).
- * `decimals` is fixed, and `auto` shows one decimal below 10 and none above.
+ * Every usage is a percentage of use. `max` scales the bar and the graph, and `auto` shows one decimal
+ * below 10 and none above. The order here is the order of the actions in the manifest.
  */
 export const METRICS = Object.freeze({
-  'cpu.usage': def('cpu', 'Usage', '%', 'lhm', { max: 100 }),
+  'cpu.usage': def('cpu', 'Usage', '%', 'os', { max: 100 }),
   'cpu.temperature': def('cpu', 'Temp', '°C', 'lhm', { max: 100 }),
-  'cpu.clock': def('cpu', 'Clock', 'MHz', 'lhm', { max: 6000 }),
-  'cpu.power': def('cpu', 'Power', 'W', 'lhm', { max: 250 }),
-  'gpu.usage': def('gpu', 'Usage', '%', 'lhm', { max: 100 }),
-  'gpu.temperature': def('gpu', 'Temp', '°C', 'lhm', { max: 100 }),
-  'gpu.clock': def('gpu', 'Clock', 'MHz', 'lhm', { max: 3000 }),
-  'gpu.power': def('gpu', 'Power', 'W', 'lhm', { max: 450 }),
-  'gpu.vram.used': def('gpu', 'VRAM used', 'GB', 'lhm', { decimals: 1, maxFrom: 'gpu.vram.total' }),
-  'gpu.vram.total': def('gpu', 'VRAM total', 'GB', 'lhm', { decimals: 1 }),
-  'ram.used': def('ram', 'Used', 'GB', 'os', { decimals: 1, maxFrom: 'ram.total' }),
-  'ram.total': def('ram', 'Total', 'GB', 'os', { decimals: 1 }),
+  'gpu.usage': def('gpu', 'Usage', '%', 'nvidia', { max: 100 }),
+  'gpu.temperature': def('gpu', 'Temp', '°C', 'nvidia', { max: 100 }),
+  'gpu.vram.usage': def('gpu', 'VRAM', '%', 'nvidia', { max: 100 }),
   'ram.usage': def('ram', 'Usage', '%', 'os', { max: 100 }),
-  'fps.current': def('fps', 'Current', 'FPS', 'fps', { max: 240 }),
-  'fps.frametime': def('fps', 'Frame time', 'ms', 'fps', { max: 50, decimals: 1 }),
   'network.ping': def('network', 'Ping', 'ms', 'ping', { max: 200, auto: true }),
-  'network.jitter': def('network', 'Jitter', 'ms', 'ping', { max: 50, decimals: 1 }),
   'network.loss': def('network', 'Loss', '%', 'ping', { max: 100, decimals: 1 }),
-  'network.download': def('network', 'Download', 'Mbps', 'network', { auto: true }),
-  'network.upload': def('network', 'Upload', 'Mbps', 'network', { auto: true }),
+  'disk.usage': def('disk', 'Usage', '%', 'windows', { max: 100 }),
+  'disk.temperature': def('disk', 'Temp', '°C', 'lhm', { max: 100 }),
 });
 
-export const GROUPS = Object.freeze({ cpu: 'CPU', gpu: 'GPU', ram: 'RAM', fps: 'FPS', network: 'Net' });
-export const SOURCES = Object.freeze(['os', 'lhm', 'network', 'ping', 'fps']);
+export const GROUPS = Object.freeze({ cpu: 'CPU', gpu: 'GPU', ram: 'RAM', network: 'Net', disk: 'Disk' });
+export const SOURCES = Object.freeze(['os', 'lhm', 'nvidia', 'ping', 'windows']);
 
 export function sample(id, value, source = 'unknown', at = Date.now()) {
   const ok = Number.isFinite(value);
@@ -55,7 +45,6 @@ export function classify(s, limits = {}, previous = 'normal', hysteresis = 0) {
 export function format(id, value) {
   const metric = METRICS[id];
   if (!metric || !Number.isFinite(value)) return { text: 'N/D', unit: '' };
-  if (metric.unit === 'MHz' && value >= 1000) return { text: (value / 1000).toFixed(1), unit: 'GHz' };
   const decimals = metric.auto ? (Math.abs(value) < 10 ? 1 : 0) : (metric.decimals ?? 0);
   const text = decimals ? value.toFixed(decimals) : String(Math.round(value));
   return metric.unit === '%' ? { text: `${text}%`, unit: '' } : { text, unit: metric.unit };
@@ -113,11 +102,8 @@ export class Store {
     }
   }
 
-  /** The most this metric can reach, for its bar and graph, or null when it has no scale. */
+  /** The most this metric can reach, for its bar and graph. */
   maxOf(id) {
-    const metric = METRICS[id];
-    if (metric?.max) return metric.max;
-    const other = metric?.maxFrom ? this.get(metric.maxFrom) : null;
-    return other?.quality === 'ok' && other.value > 0 ? other.value : null;
+    return METRICS[id]?.max ?? null;
   }
 }

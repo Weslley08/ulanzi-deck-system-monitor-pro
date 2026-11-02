@@ -1,7 +1,7 @@
 {
   "Author": "Weslley08",
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, FPS and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
   "Icon": "resources/plugin-icon.png",
   "Version": "0.1.0",
   "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin",
@@ -33,7 +33,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how busy the processor is.",
+      "Tooltip": "Shows how much of the processor is in use, in percent.",
       "SupportedInMultiActions": false
     },
     {
@@ -52,45 +52,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the processor temperature.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "CPU clock",
-      "Icon": "resources/action-cpu.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cpuclock",
-      "States": [
-        {
-          "Name": "CPU clock",
-          "Image": "resources/key-cpu.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the processor speed.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "CPU power",
-      "Icon": "resources/action-cpu.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cpupower",
-      "States": [
-        {
-          "Name": "CPU power",
-          "Image": "resources/key-cpu.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the power the processor draws.",
+      "Tooltip": "Shows the processor temperature. Needs LibreHardwareMonitor.",
       "SupportedInMultiActions": false
     },
     {
@@ -109,7 +71,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how busy the graphics card is.",
+      "Tooltip": "Shows how much of the graphics card is in use, in percent. NVIDIA only.",
       "SupportedInMultiActions": false
     },
     {
@@ -128,16 +90,16 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the graphics card temperature.",
+      "Tooltip": "Shows the graphics card temperature. NVIDIA only.",
       "SupportedInMultiActions": false
     },
     {
-      "Name": "GPU clock",
+      "Name": "Video memory usage",
       "Icon": "resources/action-gpu.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuclock",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuvramusage",
       "States": [
         {
-          "Name": "GPU clock",
+          "Name": "Video memory usage",
           "Image": "resources/key-gpu.png"
         }
       ],
@@ -147,102 +109,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the graphics card speed.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "GPU power",
-      "Icon": "resources/action-gpu.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpupower",
-      "States": [
-        {
-          "Name": "GPU power",
-          "Image": "resources/key-gpu.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the power the graphics card draws.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Video memory used",
-      "Icon": "resources/action-gpu.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuvramused",
-      "States": [
-        {
-          "Name": "Video memory used",
-          "Image": "resources/key-gpu.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the graphics card memory in use.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Video memory total",
-      "Icon": "resources/action-gpu.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuvramtotal",
-      "States": [
-        {
-          "Name": "Video memory total",
-          "Image": "resources/key-gpu.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how much memory the graphics card has.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Memory used",
-      "Icon": "resources/action-ram.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.ramused",
-      "States": [
-        {
-          "Name": "Memory used",
-          "Image": "resources/key-ram.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the memory in use.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Memory total",
-      "Icon": "resources/action-ram.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.ramtotal",
-      "States": [
-        {
-          "Name": "Memory total",
-          "Image": "resources/key-ram.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how much memory the PC has.",
+      "Tooltip": "Shows how much video memory is in use, in percent. NVIDIA only.",
       "SupportedInMultiActions": false
     },
     {
@@ -261,45 +128,7 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the share of memory in use.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Frame rate",
-      "Icon": "resources/action-fps.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.fpscurrent",
-      "States": [
-        {
-          "Name": "Frame rate",
-          "Image": "resources/key-fps.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows frames per second. Needs PresentMon.",
-      "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Frame time",
-      "Icon": "resources/action-fps.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.fpsframetime",
-      "States": [
-        {
-          "Name": "Frame time",
-          "Image": "resources/key-fps.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the time between frames. Needs PresentMon.",
+      "Tooltip": "Shows how much memory is in use, in percent.",
       "SupportedInMultiActions": false
     },
     {
@@ -322,25 +151,6 @@
       "SupportedInMultiActions": false
     },
     {
-      "Name": "Jitter",
-      "Icon": "resources/action-network.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkjitter",
-      "States": [
-        {
-          "Name": "Jitter",
-          "Image": "resources/key-network.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows how much the ping varies.",
-      "SupportedInMultiActions": false
-    },
-    {
       "Name": "Packet loss",
       "Icon": "resources/action-network.svg",
       "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkloss",
@@ -360,13 +170,13 @@
       "SupportedInMultiActions": false
     },
     {
-      "Name": "Download speed",
-      "Icon": "resources/action-network.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkdownload",
+      "Name": "Disk usage",
+      "Icon": "resources/action-disk.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.diskusage",
       "States": [
         {
-          "Name": "Download speed",
-          "Image": "resources/key-network.png"
+          "Name": "Disk usage",
+          "Image": "resources/key-disk.png"
         }
       ],
       "DisableAutomaticStates": true,
@@ -375,17 +185,17 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows what the PC is receiving now.",
+      "Tooltip": "Shows how busy the disks are, in percent.",
       "SupportedInMultiActions": false
     },
     {
-      "Name": "Upload speed",
-      "Icon": "resources/action-network.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkupload",
+      "Name": "Disk temperature",
+      "Icon": "resources/action-disk.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.disktemperature",
       "States": [
         {
-          "Name": "Upload speed",
-          "Image": "resources/key-network.png"
+          "Name": "Disk temperature",
+          "Image": "resources/key-disk.png"
         }
       ],
       "DisableAutomaticStates": true,
@@ -394,11 +204,11 @@
       ],
       "Devices": [],
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows what the PC is sending now.",
+      "Tooltip": "Shows the hottest disk. Needs LibreHardwareMonitor.",
       "SupportedInMultiActions": false
     }
   ],
-  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. CPU and GPU readings come from LibreHardwareMonitor, which has to be running with its web server on. Memory, network speed and ping need nothing else. Frame rate needs PresentMon. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the only network traffic is a ping to the server you choose. Windows only. Not affiliated with Ulanzi, LibreHardwareMonitor or PresentMon.",
+  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, disk and network readings need nothing else. The graphics card readings come from nvidia-smi, which ships with NVIDIA's driver. The processor and disk temperatures can only come from LibreHardwareMonitor, which is optional and loads a driver that some game anti-cheats block. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the only network traffic is a ping to the server you choose. Windows only. Not affiliated with Ulanzi, NVIDIA or LibreHardwareMonitor.",
   "Category": "System Monitor Pro",
   "CategoryIcon": "resources/category.svg",
   "Banner": [

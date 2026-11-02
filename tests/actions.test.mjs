@@ -31,8 +31,8 @@ const settle = () => new Promise((resolve) => setImmediate(resolve));
 
 test('an action UUID stands for one metric, and anything else for none', () => {
   assert.equal(metricOfAction(action('cpuusage')), 'cpu.usage');
-  assert.equal(metricOfAction(action('gpuvramused')), 'gpu.vram.used');
-  assert.equal(metricOfAction(action('networkdownload')), 'network.download');
+  assert.equal(metricOfAction(action('gpuvramusage')), 'gpu.vram.usage');
+  assert.equal(metricOfAction(action('diskusage')), 'disk.usage');
   assert.equal(metricOfAction(action('nothing')), null);
   assert.equal(metricOfAction('com.other.plugin.cpuusage'), null);
   assert.equal(metricOfAction(undefined), null);
@@ -112,13 +112,13 @@ test('the graph follows the history, scaled to the metric, and can be turned off
   assert.equal(views.filter((view) => !view.graph).length, 1);
 });
 
-test('a metric with no scale of its own graphs against its own highest point', async () => {
+test('the graph of a metric is scaled to the most it can reach', async () => {
   const { actions, store, views } = setup();
-  for (const value of [10, 20, 40]) store.put([sample('network.download', value)]);
-  actions.upsert({ uuid: action('networkdownload'), context: 'a', param: {} });
+  for (const value of [10, 20, 40]) store.put([sample('network.ping', value)]);
+  actions.upsert({ uuid: action('networkping'), context: 'a', param: {} });
   await settle();
-  assert.equal(views[0].bar, null);
-  assert.deepEqual(views[0].graph, [5, 10, 20]);
+  assert.equal(views[0].bar, 10, '20 ms of 200');
+  assert.deepEqual(views[0].graph, [1, 2, 4]);
 });
 
 test('the sources in use follow the keys that are active', () => {
