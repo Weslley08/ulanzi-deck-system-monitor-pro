@@ -178,7 +178,7 @@ function draftRelease() {
     '-f', `tag_name=${tag}`, '-f', `target_commitish=${commit}`, ...(previous ? ['-f', `previous_tag_name=v${previous}`] : []),
   );
   const notes = draftNotes({ repository, version, changes, measure: readFileSync(join(workDir, 'measure', 'measure.txt'), 'utf8') });
-  const title = `Clima Pro ${version}`;
+  const title = `System Monitor Pro ${version}`;
   const assets = [join('dist', `${PLUGIN_FOLDER}.zip`), join('dist', 'SHA256SUMS.txt')];
 
   if (findDraft(tag)) {
