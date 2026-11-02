@@ -48,11 +48,11 @@ test('settings from the panel are checked, with the graph on unless it was turne
 });
 
 test('a key is drawn at once, as N/D with the reason, and again when its reading arrives', async () => {
-  const { actions, store, sent, views } = setup({ noteFor: () => 'LHM closed', t: (key) => `t:${key}` });
+  const { actions, store, sent, views } = setup({ noteFor: () => 'Needs LHM', t: (key) => `t:${key}` });
   actions.upsert({ uuid: action('cpuusage'), context: 'a', param: {} });
   await settle();
   assert.equal(views[0].state, 'unavailable');
-  assert.equal(views[0].note, 't:LHM closed');
+  assert.equal(views[0].note, 't:Needs LHM');
   assert.equal(views[0].sub, 't:Usage');
   assert.match(sent[0].icon, /^data:image\/png;base64,/, 'a full data URI');
 
@@ -218,4 +218,18 @@ test('the panel is told every card and drive there is', () => {
   const now = Date.now();
   store.put([sample('gpu.usage', 1, 'nvidia', now, 'RTX'), sample('disk.usage', 1, 'node', now, 'C:'), sample('disk.usage', 1, 'node', now, 'D:')]);
   assert.deepEqual(actions.choices(), { gpus: ['RTX'], drives: ['C:', 'D:'] });
+});
+
+test('a drive key says which drive it reads, and a key with no reading yet still says what it measures', async () => {
+  const { actions, store, views } = setup();
+  const now = Date.now();
+  actions.upsert({ uuid: action('diskusage'), context: 'early', param: {} });
+  await settle();
+  assert.equal(views[0].sub, 'Used', 'no drive is known yet');
+  store.put([sample('disk.usage', 43, 'node', now, 'C:'), sample('disk.usage', 91, 'node', now, 'D:')]);
+  actions.upsert({ uuid: action('diskusage'), context: 'system', param: {} });
+  actions.upsert({ uuid: action('diskusage'), context: 'data', param: { drive: 'D:' } });
+  await settle();
+  assert.deepEqual(views.slice(1).map((view) => view.sub).sort(), ['C:', 'D:']);
+  assert.equal(views.find((view) => view.sub === 'D:').group, 'Disk');
 });

@@ -185,7 +185,7 @@ export class Monitor {
   noteFor(metric) {
     const { source, state } = this.describe(metric);
     switch (state) {
-      case 'offline': return source === 'lhm' ? 'LHM closed' : 'No reading';
+      case 'offline': return source === 'lhm' ? 'Needs LHM' : 'No reading';
       case 'missing': return source === 'nvidia' ? 'No NVIDIA' : 'No sensor';
       case 'unconfigured': return 'Not set up';
       case 'ok': return 'No data';
