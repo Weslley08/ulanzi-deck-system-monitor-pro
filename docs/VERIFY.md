@@ -4,9 +4,9 @@ Do not check off tests you did not run.
 
 - [ ] Confirm manifest schema against official Ulanzi SDK.
 - [ ] Load packaged plugin in Ulanzi Studio on Windows.
-- [ ] The 10 actions are listed with their names, in English and in Portuguese, and each one's default key image shows.
+- [ ] The 9 actions are listed with their names, in English and in Portuguese, and each one's default key image shows.
 - [ ] Open LibreHardwareMonitor as administrator, turn on Options > Remote Web Server > Run, and open `http://127.0.0.1:8085/data.json` in a browser: it lists sensors.
-- [ ] With LHM running, each key agrees with LHM's own window: CPU usage and temperature, GPU usage and temperature, video memory, memory, disk usage and temperature. Note any key that says "No sensor", and send the names in `/data.json`. Memory is the sensor most likely to need a name.
+- [ ] With LHM running, each key agrees with LHM's own window: CPU usage and temperature, GPU usage and temperature, video memory, memory and disk usage. Note any key that says "No sensor", and send the names in `/data.json`. Memory is the sensor most likely to need a name.
 - [ ] Disk usage agrees with Task Manager's "Active time" for the busiest disk, and is not how full the disk is.
 - [ ] With LHM closed, every key but ping and loss says "LHM closed", and ping and loss keep working.
 - [ ] Open LHM again: the keys come back by themselves within about 15 seconds.

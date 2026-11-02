@@ -19,14 +19,14 @@ test('readings read the way a person would say them', () => {
   assert.deepEqual(format('network.ping', 4.2), { text: '4.2', unit: 'ms' });
   assert.deepEqual(format('network.ping', 18.4), { text: '18', unit: 'ms' });
   assert.deepEqual(format('network.loss', 0), { text: '0.0%', unit: '' });
-  assert.deepEqual(format('disk.temperature', 45.6), { text: '46', unit: '°C' });
+  assert.deepEqual(format('gpu.temperature', 45.6), { text: '46', unit: '°C' });
   assert.deepEqual(format('cpu.usage', null), { text: 'N/D', unit: '' });
 });
 
-test('there are the ten readings that were asked for, and every usage is a percentage', () => {
+test('there are the nine readings that were asked for, and every usage is a percentage', () => {
   assert.deepEqual(Object.keys(METRICS), [
     'cpu.usage', 'cpu.temperature', 'gpu.usage', 'gpu.temperature', 'gpu.vram.usage',
-    'ram.usage', 'network.ping', 'network.loss', 'disk.usage', 'disk.temperature',
+    'ram.usage', 'network.ping', 'network.loss', 'disk.usage',
   ]);
   for (const [id, metric] of Object.entries(METRICS)) {
     if (id.endsWith('.usage')) assert.equal(metric.unit, '%', id);

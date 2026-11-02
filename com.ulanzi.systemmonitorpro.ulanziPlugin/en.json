@@ -37,10 +37,6 @@
     {
       "Name": "Disk usage",
       "Tooltip": "Shows how busy the busiest disk is, in percent."
-    },
-    {
-      "Name": "Disk temperature",
-      "Tooltip": "Shows the hottest disk."
     }
   ],
   "Localization": {

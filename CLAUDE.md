@@ -4,7 +4,7 @@ Follow the Ulanzi plugin skill and treat `Weslley08/ulanzi-deck-clima-pro` as au
 
 **Mandatory:** maintain full branch flow work -> develop -> release/vX.Y.Z -> main; Node 20.12.2; pinned unmodified SDK; deterministic packaging; cross-platform tests; performance measurements; periodic security scanning; review before release.
 
-**Project-specific:** exactly ten readings, chosen by the maintainer, and every usage is a percentage: CPU, GPU and video memory, memory, ping, packet loss, disk usage, and the CPU and disk temperatures. No frame rate, clock, power or network speed. Every reading but ping and loss comes from LibreHardwareMonitor, by the maintainer's choice, although it loads a driver that some game anti-cheats block and the maintainer plays with such games: say so wherever the plugin is described, and never claim anti-cheat compatibility without evidence. Missing data must render N/D with the reason.
+**Project-specific:** exactly nine readings, chosen by the maintainer, and every usage is a percentage: CPU, GPU and video memory, memory, ping, packet loss, disk usage, and the CPU and GPU temperatures. No frame rate, clock, power or network speed. Every reading but ping and loss comes from LibreHardwareMonitor, by the maintainer's choice, although it loads a driver that some game anti-cheats block and the maintainer plays with such games: say so wherever the plugin is described, and never claim anti-cheat compatibility without evidence. Missing data must render N/D with the reason.
 
 **Current state:** working prototype, never run in Studio or on a deck. See docs/STANDARDIZATION.md, docs/IMPLEMENTATION.md and docs/VERIFY.md. NEVER claim package or CI readiness just because files exist. Auto-release disabled.
 

@@ -129,7 +129,7 @@ test('a source with data but no sensor for a metric says so', async () => {
   const { monitor } = make({ lhm: async () => [sample('cpu.usage', 1, 'LHM')] });
   monitor.setDemand(['lhm']);
   await until(() => monitor.statusOf('lhm') === 'ok');
-  assert.equal(monitor.noteFor('disk.temperature'), 'No sensor');
+  assert.equal(monitor.noteFor('disk.usage'), 'No sensor');
   assert.deepEqual(monitor.snapshot(), { lhm: 'ok', ping: 'unused' });
   monitor.dispose();
 });

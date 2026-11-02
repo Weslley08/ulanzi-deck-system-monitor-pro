@@ -11,7 +11,6 @@ export const ACTIONS = [
   { id: 'network.ping', en: ['Ping', 'Shows the round trip to a server.'], pt: ['Ping', 'Mostra o tempo de ida e volta até um servidor.'] },
   { id: 'network.loss', en: ['Packet loss', 'Shows the share of pings that got no answer.'], pt: ['Perda de pacotes', 'Mostra a parte dos pings sem resposta.'] },
   { id: 'disk.usage', en: ['Disk usage', 'Shows how busy the busiest disk is, in percent.'], pt: ['Uso do disco', 'Mostra o quanto o disco mais ocupado está ocupado, em porcentagem.'] },
-  { id: 'disk.temperature', en: ['Disk temperature', 'Shows the hottest disk.'], pt: ['Temperatura do disco', 'Mostra o disco mais quente.'] },
 ];
 
 export const PLUGIN_TEXT = {

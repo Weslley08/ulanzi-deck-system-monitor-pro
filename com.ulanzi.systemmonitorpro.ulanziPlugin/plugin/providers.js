@@ -80,15 +80,11 @@ export function sensorsToSamples(tree) {
 
   add('ram.usage', pick(sensors.filter(isMemory), 'Load', ['Memory']));
 
-  // The busiest disk and the hottest one, because those are the ones worth knowing about.
+  // The busiest disk, because that is the one worth knowing about.
   const disks = new Map();
   for (const s of sensors.filter(isDisk)) disks.set(s.hardware, [...(disks.get(s.hardware) ?? []), s]);
   const activity = [...disks.values()].map((list) => pick(list, 'Load', ['Total Activity'])).filter(Boolean).map(reading);
   if (activity.length) out.push(sample('disk.usage', Math.min(100, Math.max(...activity)), 'LHM'));
-  const temperatures = [...disks.values()]
-    .map((list) => pick(list, 'Temperature', ['Temperature']) ?? list.find((s) => s.type === 'Temperature'))
-    .filter(Boolean).map(reading).filter(Number.isFinite);
-  if (temperatures.length) out.push(sample('disk.temperature', Math.max(...temperatures), 'LHM'));
   return out;
 }
 

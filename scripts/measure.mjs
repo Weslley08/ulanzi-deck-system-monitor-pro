@@ -16,7 +16,7 @@ import { pluginDir, root } from './lib/project.mjs';
 const IDLE_SECONDS = Number(process.argv[2] ?? 60);
 const manifest = JSON.parse(readFileSync(join(pluginDir, 'manifest.json'), 'utf8'));
 const metricsPreload = pathToFileURL(join(root, 'tests', 'support', 'metrics.mjs')).href;
-const KEYS = ['cpu.usage', 'cpu.temperature', 'gpu.usage', 'gpu.temperature', 'gpu.vram.usage', 'ram.usage', 'network.ping', 'network.loss', 'disk.usage', 'disk.temperature'];
+const KEYS = ['cpu.usage', 'cpu.temperature', 'gpu.usage', 'gpu.temperature', 'gpu.vram.usage', 'ram.usage', 'network.ping', 'network.loss', 'disk.usage'];
 
 let tick = 0;
 const sensor = (hardware, name, type, value, unit) => ({ Text: name, Value: `${value.toFixed(1)} ${unit}`, RawValue: value, Type: type, SensorId: `${hardware}/${name}` });
@@ -34,10 +34,7 @@ const lhm = createServer((request, response) => {
       sensor('/gpu-nvidia/0', 'GPU Memory', 'Load', wave(50, 20), '%'),
     ] },
     { HardwareId: '/ram', Text: 'Memory', Children: [sensor('/ram', 'Memory', 'Load', wave(55, 10), '%')] },
-    { HardwareId: '/nvme/0', Text: 'Disk', Children: [
-      sensor('/nvme/0', 'Total Activity', 'Load', wave(20, 15), '%'),
-      sensor('/nvme/0', 'Temperature', 'Temperature', wave(45, 6), '°C'),
-    ] },
+    { HardwareId: '/nvme/0', Text: 'Disk', Children: [sensor('/nvme/0', 'Total Activity', 'Load', wave(20, 15), '%')] },
   ] };
   response.setHeader('Content-Type', 'application/json');
   response.end(JSON.stringify(tree));

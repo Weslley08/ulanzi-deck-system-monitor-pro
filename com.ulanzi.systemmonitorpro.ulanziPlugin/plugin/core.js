@@ -15,7 +15,6 @@ export const METRICS = Object.freeze({
   'network.ping': def('network', 'Ping', 'ms', 'ping', { max: 200, auto: true }),
   'network.loss': def('network', 'Loss', '%', 'ping', { max: 100, decimals: 1 }),
   'disk.usage': def('disk', 'Usage', '%', 'lhm', { max: 100 }),
-  'disk.temperature': def('disk', 'Temp', '°C', 'lhm', { max: 100 }),
 });
 
 export const GROUPS = Object.freeze({ cpu: 'CPU', gpu: 'GPU', ram: 'RAM', network: 'Net', disk: 'Disk' });

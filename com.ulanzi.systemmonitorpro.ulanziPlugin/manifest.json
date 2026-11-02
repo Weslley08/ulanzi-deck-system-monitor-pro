@@ -187,25 +187,6 @@
       "PropertyInspectorPath": "property-inspector/metric/inspector.html",
       "Tooltip": "Shows how busy the busiest disk is, in percent.",
       "SupportedInMultiActions": false
-    },
-    {
-      "Name": "Disk temperature",
-      "Icon": "resources/action-disk.svg",
-      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.disktemperature",
-      "States": [
-        {
-          "Name": "Disk temperature",
-          "Image": "resources/key-disk.png"
-        }
-      ],
-      "DisableAutomaticStates": true,
-      "Controllers": [
-        "Keypad"
-      ],
-      "Devices": [],
-      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
-      "Tooltip": "Shows the hottest disk.",
-      "SupportedInMultiActions": false
     }
   ],
   "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Every reading except ping and packet loss comes from LibreHardwareMonitor, which you run yourself, as administrator, with its web server turned on. It loads a driver that some game anti-cheats block, so close it before such a game. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the plugin only talks to LibreHardwareMonitor on your own computer and pings the server you choose. Windows only. Not affiliated with Ulanzi or LibreHardwareMonitor.",

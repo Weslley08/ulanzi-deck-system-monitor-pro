@@ -27,12 +27,12 @@ const TREE = { Children: [
 
 const byId = (samples) => Object.fromEntries(samples.map((s) => [s.id, s.value]));
 
-test('every reading is found by its hardware, type and name, the discrete card and the busiest and hottest disk winning', () => {
+test('every reading is found by its hardware, type and name, the discrete card and the busiest disk winning', () => {
   assert.deepEqual(byId(sensorsToSamples(TREE)), {
     'cpu.usage': 37.5, 'cpu.temperature': 61,
     'gpu.usage': 91, 'gpu.temperature': 72, 'gpu.vram.usage': 50,
     'ram.usage': 58.2,
-    'disk.usage': 35, 'disk.temperature': 51,
+    'disk.usage': 35,
   });
 });
 

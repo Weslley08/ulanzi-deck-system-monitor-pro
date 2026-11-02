@@ -2,7 +2,7 @@
 
 ## What a key is
 
-Ten readings, and only these. Every usage is a percentage of use. Each key shows one: the group and what it measures on top, the number big in the middle, a bar below it, and a faint graph of the last two minutes behind. At a warning or critical level (usage and temperatures, video memory, ping, loss) the ring and the number turn yellow or red and a mark appears, so color is never the only sign. A reading that is missing says N/D and why on the key ("LHM closed", "No sensor", "Measuring"), and is never drawn as zero. The panel lets a key choose its color and hide the graph, and says what the key is waiting for.
+Nine readings, and only these. Every usage is a percentage of use. Each key shows one: the group and what it measures on top, the number big in the middle, a bar below it, and a faint graph of the last two minutes behind. At a warning or critical level (usage and temperatures, video memory, ping, loss) the ring and the number turn yellow or red and a mark appears, so color is never the only sign. A reading that is missing says N/D and why on the key ("LHM closed", "No sensor", "Measuring"), and is never drawn as zero. The panel lets a key choose its color and hide the graph, and says what the key is waiting for.
 
 `docs/keys.png` shows every state. It is made by `npm run build:assets` from the same code the keys use, with made-up readings.
 
@@ -18,7 +18,6 @@ Every reading except ping and packet loss comes from **LibreHardwareMonitor**, w
 | Video memory usage | Load "GPU Memory", else "GPU Memory Used" over "GPU Memory Total" |
 | Memory usage | `/ram`, Load "Memory" |
 | Disk usage | Storage, Load "Total Activity", the busiest disk. "Used Space" is how full the disk is, and is not used |
-| Disk temperature | Storage, Temperature, the hottest disk |
 
 The names were read from LibreHardwareMonitor's source and are tested against trees written by hand in `tests/providers.test.mjs`. The sensor for memory could not be confirmed in the source, and nothing has run against a real LibreHardwareMonitor. A sensor that is not there gives "No sensor".
 

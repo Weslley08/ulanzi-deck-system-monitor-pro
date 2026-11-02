@@ -17,8 +17,7 @@
     "gpu.vram.usage": { "warning": 90, "critical": 97 },
     "ram.usage": { "warning": 85, "critical": 95 },
     "network.ping": { "warning": 80, "critical": 150 },
-    "network.loss": { "warning": 2, "critical": 5 },
-    "disk.temperature": { "warning": 70, "critical": 80 }
+    "network.loss": { "warning": 2, "critical": 5 }
   },
   "display": {
     "staleAfterMs": 5000,

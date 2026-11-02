@@ -37,10 +37,6 @@
     {
       "Name": "Uso do disco",
       "Tooltip": "Mostra o quanto o disco mais ocupado está ocupado, em porcentagem."
-    },
-    {
-      "Name": "Temperatura do disco",
-      "Tooltip": "Mostra o disco mais quente."
     }
   ],
   "Localization": {
