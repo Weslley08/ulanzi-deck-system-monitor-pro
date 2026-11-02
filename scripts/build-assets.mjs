@@ -61,13 +61,13 @@ const LIST_ICONS = {
   cpu: 'M7 7h10v10H7zM10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4',
   gpu: 'M3 8h18v8H3zM6 16v3M9.5 12a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M18 11v2',
   ram: 'M3 8h18v8H3zM7 11v2M11 11v2M15 11v2M7 16v2M12 16v2M17 16v2',
-  fps: 'M4.5 17a8 8 0 1 1 15 0M12 17l4-5',
   network: 'M5 18v-3M10 18v-6M15 18v-9M20 18V6',
+  disk: 'M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3',
 };
 const listIcon = (path, color) => `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg>\n`;
 
 const KEY_FACE = {
-  cpu: SAMPLE_FACES[0], gpu: SAMPLE_FACES[2], ram: SAMPLE_FACES[4], fps: SAMPLE_FACES[5], network: SAMPLE_FACES[6],
+  cpu: SAMPLE_FACES[0], gpu: SAMPLE_FACES[2], ram: SAMPLE_FACES[5], network: SAMPLE_FACES[6], disk: SAMPLE_FACES[8],
 };
 
 async function icons() {
