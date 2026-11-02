@@ -1,7 +1,7 @@
 // The SDK writes every message to the console, including the settings of the key.
 for (const method of ['log', 'info', 'debug', 'warn', 'error']) console[method] = () => {};
 
-const DEFAULTS = { accent: 'auto', graph: true };
+const DEFAULTS = { accent: 'auto', graph: true, gpu: 'auto', drive: 'auto' };
 const SAVE_DELAY_MS = 300;
 
 const $ = (selector) => document.querySelector(selector);
@@ -28,6 +28,15 @@ const save = Utils.debounce(() => {
   for (const el of fields()) settings[el.dataset.field] = el.type === 'checkbox' ? el.checked : el.value;
   $UD.sendParamFromPlugin({ ...settings });
 }, SAVE_DELAY_MS);
+
+/** The choices the plugin found, with the one already saved kept even when it is not there now. */
+function fillChoices(select, found) {
+  const saved = settings[select.dataset.field];
+  const options = [...new Set([...found, ...(saved && saved !== 'auto' ? [saved] : [])])];
+  const keep = select.querySelector('option[value="auto"]');
+  select.replaceChildren(keep, ...options.map((name) => Object.assign(document.createElement('option'), { value: name, textContent: name })));
+  select.value = saved ?? 'auto';
+}
 
 function load(message) {
   if (!message?.param) return;
@@ -57,5 +66,9 @@ $UD.onSendToPropertyInspector((message) => {
   const payload = message?.payload;
   if (payload?.type !== 'status') return;
   showStatus(payload);
+  $('#gpuRow').classList.toggle('hidden', payload.group !== 'gpu');
+  $('#driveRow').classList.toggle('hidden', payload.group !== 'disk');
+  if (payload.group === 'gpu') fillChoices($('#gpu'), payload.gpus ?? []);
+  if (payload.group === 'disk') fillChoices($('#drive'), payload.drives ?? []);
   if (payload.version) $('#version').textContent = `System Monitor Pro v${payload.version}`;
 });

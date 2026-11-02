@@ -10,7 +10,7 @@ export const SAMPLE_FACES = [
   { group: 'RAM', sub: 'Usage', accent: 'violet', state: 'normal', value: '58%', bar: 29, graph: wave(11, 1) },
   { group: 'Net', sub: 'Ping', accent: 'blue', state: 'normal', value: '18', unit: 'ms', bar: 5, graph: wave(3, 1) },
   { group: 'Net', sub: 'Loss', accent: 'blue', state: 'critical', value: '9.5%', bar: 5, graph: wave(6, 4) },
-  { group: 'Disk', sub: 'Usage', accent: 'orange', state: 'normal', value: '12%', bar: 6, graph: wave(3, 3) },
+  { group: 'Disk', sub: 'Used', accent: 'orange', state: 'normal', value: '12%', bar: 6, graph: wave(3, 3) },
   { group: 'CPU', sub: 'Temp', accent: 'cyan', state: 'unavailable', value: 'N/D', note: 'LHM closed' },
   { group: 'GPU', sub: 'Usage', accent: 'green', state: 'unavailable', value: 'N/D', note: 'No sensor' },
 ];

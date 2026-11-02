@@ -4,20 +4,20 @@
   "merging": "Once published it cannot be taken back: from then on it is what people download.",
   "validation": {
     "steps": [
-      "The zip is built once, and it must start and connect to a fake host on Windows and macOS",
+      "The zip is built once, and it must start and connect to a fake host on Windows",
       "The tests run again on Windows, with no real sensors",
       "`npm run measure` runs, on synthetic data"
     ],
     "done": [
       "Tests, coverage and the security checks",
-      "The zip started and connected to a fake host on Windows and macOS"
+      "The zip started and connected to a fake host on Windows"
     ]
   },
   "notes": {
     "install": "Download `{zip}`, not the **Source code** archives, which will not start, and follow the [README]({blob}/README.md).",
     "aboutHeading": "About",
-    "about": "Readings stay on this computer, and the plugin sends no telemetry. Every reading except ping and packet loss comes from LibreHardwareMonitor, which you run yourself, as administrator. It loads a driver that some game anti-cheats block, so close it before such a game. This project is not affiliated with Ulanzi or LibreHardwareMonitor.",
-    "checks": "The automated tests passed on Windows and macOS, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows and macOS against a fake host. No test ran against a real LibreHardwareMonitor or a real deck.",
-    "measuredAgainst": "a fake host and a fake LibreHardwareMonitor"
+    "about": "Readings stay on this computer, and the plugin sends no telemetry. An AMD card, and a PC with no thermal zone, are read from LibreHardwareMonitor, which you run yourself, as administrator. It loads a driver that some game anti-cheats block, so close it before such a game. This project is not affiliated with Ulanzi, NVIDIA, AMD or LibreHardwareMonitor.",
+    "checks": "The automated tests passed on Windows, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows against a fake host. No test ran against a real LibreHardwareMonitor, a real NVIDIA or AMD card or a real deck.",
+    "measuredAgainst": "a fake host and a program standing in for nvidia-smi"
   }
 }

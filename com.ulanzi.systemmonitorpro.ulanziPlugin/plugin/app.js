@@ -21,7 +21,10 @@ const api = new HostConnection();
 const store = new Store(config.display.staleAfterMs);
 const reported = new Map();
 const MESSAGES = {
-  lhm: 'LibreHardwareMonitor does not answer. Open it as administrator and turn on Options > Remote Web Server > Run; every key but ping and loss reads N/D until then.',
+  node: 'The processor, memory and drive reader failed; those keys read N/D.',
+  nvidia: 'nvidia-smi stopped; the NVIDIA card keys read N/D, and it is started again shortly.',
+  windows: 'The thermal zone reader failed; the processor temperature key reads N/D.',
+  lhm: 'LibreHardwareMonitor does not answer. It is only the reserve for AMD cards and for a PC with no thermal zone; open it as administrator and turn on Options > Remote Web Server > Run to use it.',
   ping: 'Ping failed; the ping and loss keys read N/D.',
 };
 
@@ -55,7 +58,7 @@ let reconnectTimer = null;
 
 /** Providers run, and keys are checked for changes, only while a key on the deck needs them. */
 function reconcile() {
-  monitor.setDemand(actions.activeMetrics().map((id) => METRICS[id].source));
+  monitor.setDemand(actions.activeMetrics());
   if (actions.hasActive() && !ticker) ticker = setInterval(() => actions.renderAll(), TICK_MS);
   if (!actions.hasActive() && ticker) {
     clearInterval(ticker);
@@ -67,9 +70,10 @@ function reconcile() {
 
 /** The panel only exists while its key is selected, and the host drops messages for the others. */
 function pushStatus() {
+  const choices = actions.choices();
   for (const [context, instance] of actions.instances) {
-    const source = METRICS[instance.metric].source;
-    api.sendToPropertyInspector({ type: 'status', metric: instance.metric, source, state: monitor.statusOf(source), version: VERSION }, context);
+    const { source, state } = monitor.describe(instance.metric);
+    api.sendToPropertyInspector({ type: 'status', metric: instance.metric, group: METRICS[instance.metric].group, source, state, version: VERSION, ...choices }, context);
   }
   actions.renderAll();
 }

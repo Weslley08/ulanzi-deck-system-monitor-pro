@@ -1,6 +1,6 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Needs LibreHardwareMonitor. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
   "Actions": [
     {
       "Name": "CPU usage",
@@ -12,7 +12,7 @@
     },
     {
       "Name": "GPU usage",
-      "Tooltip": "Shows how much of the graphics card is in use, in percent."
+      "Tooltip": "Shows how much of a graphics card is in use, in percent. NVIDIA or AMD."
     },
     {
       "Name": "GPU temperature",
@@ -36,12 +36,17 @@
     },
     {
       "Name": "Disk usage",
-      "Tooltip": "Shows how busy the busiest disk is, in percent."
+      "Tooltip": "Shows how full a drive is, in percent."
     }
   ],
   "Localization": {
     "Reading.": "Reading normally.",
-    "lhm.offline": "LibreHardwareMonitor does not answer. Open it as administrator, then turn on Options > Remote Web Server > Run. It loads a driver that some game anti-cheats block, so close it before such a game.",
+    "lhm.offline": "LibreHardwareMonitor does not answer. It is only needed for an AMD card, or for a PC with no thermal zone. Open it as administrator, then turn on Options > Remote Web Server > Run. It loads a driver that some game anti-cheats block, so close it before such a game.",
+    "nvidia.missing": "nvidia-smi was not found, so there is no NVIDIA card to read.",
+    "nvidia.offline": "nvidia-smi stopped answering. It is started again shortly.",
+    "windows.missing": "This PC has no thermal zone for Windows to read.",
+    "windows.offline": "The thermal zone could not be read.",
+    "node.offline": "The processor, memory or drive could not be read.",
     "lhm.unconfigured": "The LibreHardwareMonitor address is turned off in the plugin's environment variables.",
     "ping.offline": "The ping failed."
   }
