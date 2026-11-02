@@ -103,7 +103,9 @@ export class MonitorActions {
     const state = classify(reading, this.limits, instance.level, this.hysteresis);
     instance.level = state;
     const accent = instance.settings.accent === 'auto' ? GROUP_ACCENT[metric.group] : instance.settings.accent;
-    const view = { group: GROUPS[metric.group], sub: this.t(metric.label), accent, state, value: 'N/D' };
+    // A drive key says which drive it reads, in place of what it measures, which its percentage already shows.
+    const sub = metric.group === 'disk' && scope ? scope : this.t(metric.label);
+    const view = { group: GROUPS[metric.group], sub, accent, state, value: 'N/D' };
     if (state === 'unavailable') return { ...view, note: this.t(this.noteFor(instance.metric)) };
 
     const { text, unit } = format(instance.metric, reading.value);

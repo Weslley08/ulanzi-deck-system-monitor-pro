@@ -2,7 +2,7 @@
 
 ## What a key is
 
-Nine readings, and only these. Every usage is a percentage of use. Each key shows one: the group and what it measures on top, the number big in the middle, a bar below it, and a faint graph of the last two minutes behind. At a warning or critical level (usage and temperatures, video memory, ping, loss) the ring and the number turn yellow or red and a mark appears, so color is never the only sign. A reading that is missing says N/D and why on the key ("LHM closed", "No NVIDIA", "Measuring"), and is never drawn as zero. The panel lets a key choose its color, hide the graph, and, for the graphics card keys and the drive key, choose which card or drive it reads. It also says what the key is waiting for.
+Nine readings, and only these. Every usage is a percentage of use. Each key shows one: the group and what it measures on top, the number big in the middle, a bar below it, and a faint graph of the last two minutes behind. At a warning or critical level (usage and temperatures, video memory, ping, loss) the ring and the number turn yellow or red and a mark appears, so color is never the only sign. A reading that is missing says N/D and why on the key ("Needs LHM", "No NVIDIA", "Measuring"), and is never drawn as zero. The panel lets a key choose its color, hide the graph, and, for the graphics card keys and the drive key, choose which card or drive it reads. It also says what the key is waiting for.
 
 The plugin is **Windows only** for now, by the maintainer's choice, and reads **NVIDIA and AMD** cards.
 

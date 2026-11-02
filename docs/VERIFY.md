@@ -11,7 +11,7 @@ Do not check off tests you did not run.
 - [ ] On a desktop, check that the thermal zone exists at all. If it does not, the key says so and falls back on LibreHardwareMonitor.
 - [ ] On a PC with an NVIDIA card: GPU usage, GPU temperature and video memory usage agree with `nvidia-smi` and Task Manager. Note where `nvidia-smi.exe` lives: the plugin looks in `System32`, in `NVIDIA Corporation\NVSMI` and in the PATH.
 - [ ] On a PC with two cards (an integrated one and an NVIDIA or AMD one): the panel lists both, "Automatic" picks the discrete one, and each key can be set to either.
-- [ ] On a PC with an AMD card: with LibreHardwareMonitor closed the GPU keys say "LHM closed". With it open as administrator, with Options > Remote Web Server > Run, they show numbers within about 15 seconds. Note any key that says "No sensor", and send the names in `/data.json`.
+- [ ] On a PC with an AMD card: with LibreHardwareMonitor closed the GPU keys say "Needs LHM". With it open as administrator, with Options > Remote Web Server > Run, they show numbers within about 15 seconds. Note any key that says "No sensor", and send the names in `/data.json`.
 - [ ] Ping and loss: unplug the network, and loss climbs to 100% and ping says N/D.
 - [ ] Take every processor temperature key off the deck: its PowerShell process leaves within a few seconds. Do the same with the NVIDIA keys and nvidia-smi.
 - [ ] Start a game with an anti-cheat that blocks drivers, with LibreHardwareMonitor closed, and confirm the plugin alone causes no complaint. Check the game's own rules before ever running it together with LibreHardwareMonitor.
