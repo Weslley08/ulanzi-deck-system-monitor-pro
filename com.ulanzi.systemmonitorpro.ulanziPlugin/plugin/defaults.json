@@ -13,34 +13,16 @@
     "windowSize": 20
   },
   "thresholds": {
-    "cpu.temperatureC": {
-      "warning": 80,
-      "critical": 90
-    },
-    "gpu.temperatureC": {
-      "warning": 80,
-      "critical": 88
-    },
-    "cpu.usagePercent": {
-      "warning": 85,
-      "critical": 95
-    },
-    "memory.usagePercent": {
-      "warning": 85,
-      "critical": 95
-    },
-    "network.pingMs": {
-      "warning": 80,
-      "critical": 150
-    },
-    "network.lossPercent": {
-      "warning": 2,
-      "critical": 5
-    }
+    "cpu.temperature": { "warning": 80, "critical": 90 },
+    "gpu.temperature": { "warning": 80, "critical": 88 },
+    "cpu.usage": { "warning": 85, "critical": 95 },
+    "ram.usage": { "warning": 85, "critical": 95 },
+    "network.ping": { "warning": 80, "critical": 150 },
+    "network.loss": { "warning": 2, "critical": 5 }
   },
   "display": {
     "staleAfterMs": 5000,
-    "minUpdateMs": 500,
+    "minUpdateMs": 1000,
     "hysteresisPercent": 3
   }
 }

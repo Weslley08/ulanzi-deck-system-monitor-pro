@@ -1,1 +1,51 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>System Monitor Pro</title><link rel="stylesheet" href="../../libs/css/uspi.css"></head><body><main><h2>System Monitor Pro</h2><p>Configure provider addresses through environment variables until the settings panel is implemented.</p><p>Metrics are local. Missing sensors show N/D.</p></main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>System Monitor Pro</title>
+  <link rel="stylesheet" href="../../libs/css/uspi.css">
+  <link rel="stylesheet" href="./inspector.css">
+</head>
+<body>
+  <div class="uspi-wrapper hidden">
+    <div class="uspi-heading" data-localize>Status</div>
+    <div class="uspi-item field-note">
+      <div class="uspi-item-label empty"></div>
+      <div class="field-note-body">
+        <p class="tip info" id="status" role="status" data-localize>Waiting for the first reading.</p>
+      </div>
+    </div>
+
+    <form id="property-inspector">
+      <div class="uspi-heading" data-localize>Appearance</div>
+      <div class="uspi-item">
+        <label class="uspi-item-label" for="accent" data-localize>Color</label>
+        <select class="uspi-item-value select" id="accent" data-field="accent">
+          <option value="auto" data-localize>Automatic</option>
+          <option value="cyan" data-localize>Cyan</option>
+          <option value="green" data-localize>Green</option>
+          <option value="violet" data-localize>Violet</option>
+          <option value="orange" data-localize>Orange</option>
+          <option value="pink" data-localize>Pink</option>
+          <option value="blue" data-localize>Blue</option>
+          <option value="white" data-localize>White</option>
+        </select>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label empty"></div>
+        <div class="uspi-item-value"><input type="checkbox" id="graph" data-field="graph"><label for="graph" data-localize>Show the graph</label></div>
+      </div>
+    </form>
+
+    <p class="note" data-localize>The readings stay on this computer. Nothing is sent over the internet.</p>
+    <p class="note" id="version"></p>
+  </div>
+  <script src="../../libs/js/constants.js"></script>
+  <script src="../../libs/js/eventEmitter.js"></script>
+  <script src="../../libs/js/timers.js"></script>
+  <script src="../../libs/js/utils.js"></script>
+  <script src="../../libs/js/ulanziApi.js"></script>
+  <script src="./inspector.js"></script>
+</body>
+</html>

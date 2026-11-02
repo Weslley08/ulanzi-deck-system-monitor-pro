@@ -2,7 +2,11 @@
 
 Plugin open source planejado para Ulanzi D200 / Ulanzi Studio: métricas de CPU, GPU, RAM, VRAM, FPS e rede, com alertas configuráveis.
 
-> **Status atual:** scaffold de arquitetura. A integração com sensores, FPS, SDK Ulanzi e testes no dispositivo ainda não foi implementada.
+> **Status atual:** protótipo funcional, ainda sem uso no Ulanzi Studio nem em um dispositivo. As teclas, o painel e os leitores (memória, LibreHardwareMonitor, rede, ping e FPS por CSV) existem e são testados contra hosts e sensores simulados. Nada foi visto num D200, e os sensores nunca foram lidos de um LibreHardwareMonitor real. [docs/VERIFY.md](docs/VERIFY.md) é o roteiro da primeira execução real.
+
+![Teclas em cada estado: normal, aviso, crítico e sem leitura](docs/keys.png)
+
+**Para ver CPU e GPU** o [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) precisa estar aberto, com *Options > Remote Web Server > Run* ligado. Memória, velocidade da rede e ping não precisam de mais nada. Cada leitura que falta diz o motivo na própria tecla.
 
 ## Objetivos
 - Hardware: sensores disponibilizados pelo LibreHardwareMonitor, com detecção de indisponibilidade.
@@ -19,7 +23,8 @@ Plugin open source planejado para Ulanzi D200 / Ulanzi Studio: métricas de CPU,
 
 ## Estrutura
 - `docs/ARCHITECTURE.md`: arquitetura, contratos e fases
-- `config/defaults.json`: limites e intervalos propostos
+- `docs/IMPLEMENTATION.md`: de onde vem cada leitura, o que cada tecla mostra e o que ainda falta
+- `com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/defaults.json`: limites e intervalos
 - `.github/workflows/ci.yml`: validação básica do scaffold (não é teste do plugin)
 
 ## Desenvolvimento

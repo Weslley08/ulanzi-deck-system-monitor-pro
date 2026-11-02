@@ -1,86 +1,98 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "System monitor for Ulanzi Studio",
+  "Description": "See your PC's CPU, GPU, memory, FPS and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
   "Actions": [
     {
-      "Name": "cpu.usage",
-      "Tooltip": "Show cpu.usage"
+      "Name": "CPU usage",
+      "Tooltip": "Shows how busy the processor is."
     },
     {
-      "Name": "cpu.temperature",
-      "Tooltip": "Show cpu.temperature"
+      "Name": "CPU temperature",
+      "Tooltip": "Shows the processor temperature."
     },
     {
-      "Name": "cpu.clock",
-      "Tooltip": "Show cpu.clock"
+      "Name": "CPU clock",
+      "Tooltip": "Shows the processor speed."
     },
     {
-      "Name": "cpu.power",
-      "Tooltip": "Show cpu.power"
+      "Name": "CPU power",
+      "Tooltip": "Shows the power the processor draws."
     },
     {
-      "Name": "gpu.usage",
-      "Tooltip": "Show gpu.usage"
+      "Name": "GPU usage",
+      "Tooltip": "Shows how busy the graphics card is."
     },
     {
-      "Name": "gpu.temperature",
-      "Tooltip": "Show gpu.temperature"
+      "Name": "GPU temperature",
+      "Tooltip": "Shows the graphics card temperature."
     },
     {
-      "Name": "gpu.clock",
-      "Tooltip": "Show gpu.clock"
+      "Name": "GPU clock",
+      "Tooltip": "Shows the graphics card speed."
     },
     {
-      "Name": "gpu.power",
-      "Tooltip": "Show gpu.power"
+      "Name": "GPU power",
+      "Tooltip": "Shows the power the graphics card draws."
     },
     {
-      "Name": "gpu.vram.used",
-      "Tooltip": "Show gpu.vram.used"
+      "Name": "Video memory used",
+      "Tooltip": "Shows the graphics card memory in use."
     },
     {
-      "Name": "gpu.vram.total",
-      "Tooltip": "Show gpu.vram.total"
+      "Name": "Video memory total",
+      "Tooltip": "Shows how much memory the graphics card has."
     },
     {
-      "Name": "ram.used",
-      "Tooltip": "Show ram.used"
+      "Name": "Memory used",
+      "Tooltip": "Shows the memory in use."
     },
     {
-      "Name": "ram.total",
-      "Tooltip": "Show ram.total"
+      "Name": "Memory total",
+      "Tooltip": "Shows how much memory the PC has."
     },
     {
-      "Name": "ram.usage",
-      "Tooltip": "Show ram.usage"
+      "Name": "Memory usage",
+      "Tooltip": "Shows the share of memory in use."
     },
     {
-      "Name": "fps.current",
-      "Tooltip": "Show fps.current"
+      "Name": "Frame rate",
+      "Tooltip": "Shows frames per second. Needs PresentMon."
     },
     {
-      "Name": "fps.frametime",
-      "Tooltip": "Show fps.frametime"
+      "Name": "Frame time",
+      "Tooltip": "Shows the time between frames. Needs PresentMon."
     },
     {
-      "Name": "network.ping",
-      "Tooltip": "Show network.ping"
+      "Name": "Ping",
+      "Tooltip": "Shows the round trip to a server."
     },
     {
-      "Name": "network.jitter",
-      "Tooltip": "Show network.jitter"
+      "Name": "Jitter",
+      "Tooltip": "Shows how much the ping varies."
     },
     {
-      "Name": "network.loss",
-      "Tooltip": "Show network.loss"
+      "Name": "Packet loss",
+      "Tooltip": "Shows the share of pings that got no answer."
     },
     {
-      "Name": "network.download",
-      "Tooltip": "Show network.download"
+      "Name": "Download speed",
+      "Tooltip": "Shows what the PC is receiving now."
     },
     {
-      "Name": "network.upload",
-      "Tooltip": "Show network.upload"
+      "Name": "Upload speed",
+      "Tooltip": "Shows what the PC is sending now."
     }
-  ]
+  ],
+  "Localization": {
+    "Reading.": "Reading normally.",
+    "lhm.offline": "LibreHardwareMonitor does not answer. Open it, then turn on Options > Remote Web Server > Run.",
+    "lhm.unconfigured": "The LibreHardwareMonitor address is turned off in the plugin's environment variables.",
+    "fps.unconfigured": "Frame rate needs PresentMon writing a CSV file. Set PRESENTMON_CSV to its path, then restart Studio.",
+    "fps.idle": "Waiting for a game: the PresentMon file has no frames yet.",
+    "fps.offline": "The PresentMon file could not be read.",
+    "network.offline": "The network counters could not be read.",
+    "ping.offline": "The ping failed.",
+    "os.offline": "The memory could not be read.",
+    "unsupported": "This reading only exists on Windows."
+  }
 }
