@@ -47,7 +47,7 @@ test('a warning or a critical level adds a mark as well as color, so color is no
 
 test('text only ever selects glyphs, so nothing typed into a name can become markup', () => {
   const svg = faceSvg({ group: '<script>', sub: '"/><image href="x"/>', accent: 'cyan', state: 'normal', value: '<b>9</b>', unit: '&amp;' });
-  assert.doesNotMatch(svg, /<script|<image|<b>|&amp;/);
+  assert.doesNotMatch(svg, /<script|<image|<b>|&amp;/i);
 });
 
 test('an unknown color or state falls back to the default instead of breaking the face', () => {
