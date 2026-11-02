@@ -39,5 +39,5 @@ child=spawn(process.execPath,[join(dir,PLUGIN_FOLDER,manifest.CodePath),'127.0.0
 child.once('error',e=>{});
 await connected;
 console.log('Package verified: ZIP contents, dependencies, licensing, manifest, secrets and host connection');
-}finally{child?.kill();host?.close();rmSync(dir,{recursive:true,force:true});}
+}finally{if(child){const left=child.exitCode===null?once(child,'exit'):null;child.kill();await left;}host?.close();rmSync(dir,{recursive:true,force:true,maxRetries:10,retryDelay:200});}
 function requireSeparator(){return process.platform==='win32'?'\\':'/';}
