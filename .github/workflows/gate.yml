@@ -26,5 +26,8 @@ jobs:
       contents: read
       security-events: write
     uses: Weslley08/ulanzi-plugin-pipeline/.github/workflows/gate.yml@v1
+    with:
+      # The plugin runs on Windows and macOS only.
+      test-os: '["windows-latest","macos-latest"]'
     secrets:
       AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}

@@ -17,7 +17,7 @@
     "install": "Download `{zip}`, not the **Source code** archives, which will not start, and follow the [README]({blob}/README.md).",
     "aboutHeading": "About",
     "about": "Readings stay on this computer, and the plugin sends no telemetry. Every reading except ping and packet loss comes from LibreHardwareMonitor, which you run yourself, as administrator. It loads a driver that some game anti-cheats block, so close it before such a game. This project is not affiliated with Ulanzi or LibreHardwareMonitor.",
-    "checks": "The automated checks passed on Windows, macOS and Linux, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows and macOS against a fake host. No test ran against a real LibreHardwareMonitor or a real deck.",
+    "checks": "The automated tests passed on Windows and macOS, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows and macOS against a fake host. No test ran against a real LibreHardwareMonitor or a real deck.",
     "measuredAgainst": "a fake host and a fake LibreHardwareMonitor"
   }
 }

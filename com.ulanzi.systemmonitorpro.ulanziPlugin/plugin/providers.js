@@ -172,7 +172,8 @@ export function parsePing(output) {
 export async function pingOnce(host, timeout = 1400) {
   if (!/^[a-zA-Z0-9.:-]{1,253}$/.test(host)) throw new Error('invalid host');
   const windows = process.platform === 'win32';
-  const args = windows ? ['-n', '1', '-w', String(timeout), host] : ['-n', '-c', '1', '-W', '2', host];
+  // Windows waits in milliseconds with -w, and macOS with -W.
+  const args = windows ? ['-n', '1', '-w', String(timeout), host] : ['-n', '-c', '1', '-W', String(timeout), host];
   try {
     return parsePing(await execSafe(windows ? 'ping.exe' : 'ping', args, timeout + 1000));
   } catch {
