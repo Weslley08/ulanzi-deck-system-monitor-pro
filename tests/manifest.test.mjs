@@ -51,11 +51,11 @@ test('every text the keys or the panel show has a Portuguese version', () => {
   const html = readFileSync(join(pluginDir, 'property-inspector', 'metric', 'inspector.html'), 'utf8');
   const keys = new Set([...html.matchAll(/data-localize[^>]*>([^<]+)</g)].map(([, text]) => text.trim()));
   for (const metric of Object.values(METRICS)) keys.add(metric.label);
-  for (const note of ['LHM closed', 'Offline', 'Not set up', 'Windows only', 'No game', 'No sensor', 'No data', 'Measuring']) keys.add(note);
+  for (const note of ['LHM closed', 'No reading', 'Not set up', 'No sensor', 'No NVIDIA', 'No data', 'Measuring', 'Used']) keys.add(note);
   const portuguese = read('pt_BR.json').Localization;
   const missing = [...keys].filter((key) => !(key in portuguese));
   assert.deepEqual(missing, []);
-  for (const state of ['lhm.offline', 'fps.unconfigured', 'fps.idle', 'network.offline', 'unsupported']) {
+  for (const state of ['lhm.offline', 'lhm.unconfigured', 'nvidia.missing', 'nvidia.offline', 'windows.missing', 'windows.offline', 'node.offline', 'ping.offline']) {
     assert.ok(LOCALIZATION.en[state] && LOCALIZATION.pt[state], state);
   }
 });

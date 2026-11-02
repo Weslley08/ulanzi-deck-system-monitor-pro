@@ -31,6 +31,8 @@ jobs:
   delivery:
     uses: Weslley08/ulanzi-plugin-pipeline/.github/workflows/delivery.yml@v1
     with:
+      # The plugin is Windows only for now, so the zip has to start there.
+      smoke-os: '["windows-latest"]'
       # Provider contracts, without the local sensor hardware that docs/VERIFY.md covers by hand.
       integrations-scripts: test
       integrations-os: windows-latest

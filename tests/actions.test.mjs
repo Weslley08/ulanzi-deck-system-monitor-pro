@@ -31,17 +31,20 @@ const settle = () => new Promise((resolve) => setImmediate(resolve));
 
 test('an action UUID stands for one metric, and anything else for none', () => {
   assert.equal(metricOfAction(action('cpuusage')), 'cpu.usage');
-  assert.equal(metricOfAction(action('gpuvramused')), 'gpu.vram.used');
-  assert.equal(metricOfAction(action('networkdownload')), 'network.download');
+  assert.equal(metricOfAction(action('gpuvramusage')), 'gpu.vram.usage');
+  assert.equal(metricOfAction(action('diskusage')), 'disk.usage');
   assert.equal(metricOfAction(action('nothing')), null);
   assert.equal(metricOfAction('com.other.plugin.cpuusage'), null);
   assert.equal(metricOfAction(undefined), null);
 });
 
 test('settings from the panel are checked, with the graph on unless it was turned off', () => {
-  assert.deepEqual(normalizeSettings(undefined), { accent: 'auto', graph: true });
-  assert.deepEqual(normalizeSettings({ accent: 'pink', graph: 'false' }), { accent: 'pink', graph: false });
-  assert.deepEqual(normalizeSettings({ accent: 'url(#x)', graph: false }), { accent: 'auto', graph: false });
+  assert.deepEqual(normalizeSettings(undefined), { accent: 'auto', graph: true, gpu: 'auto', drive: 'auto' });
+  assert.deepEqual(normalizeSettings({ accent: 'pink', graph: 'false' }), { accent: 'pink', graph: false, gpu: 'auto', drive: 'auto' });
+  assert.deepEqual(normalizeSettings({ accent: 'url(#x)', graph: false }), { accent: 'auto', graph: false, gpu: 'auto', drive: 'auto' });
+  assert.equal(normalizeSettings({ gpu: 'NVIDIA GeForce RTX 3080', drive: 'd:' }).drive, 'D:');
+  assert.equal(normalizeSettings({ gpu: 'x'.repeat(200), drive: 'C:\Windows' }).gpu, 'auto', 'too long to be a name');
+  assert.equal(normalizeSettings({ drive: 'C:\Windows' }).drive, 'auto', 'a drive is a letter and nothing else');
 });
 
 test('a key is drawn at once, as N/D with the reason, and again when its reading arrives', async () => {
@@ -53,7 +56,7 @@ test('a key is drawn at once, as N/D with the reason, and again when its reading
   assert.equal(views[0].sub, 't:Usage');
   assert.match(sent[0].icon, /^data:image\/png;base64,/, 'a full data URI');
 
-  store.put([sample('cpu.usage', 42)]);
+  store.put([sample('cpu.usage', 42, 'node')]);
   actions.renderAll();
   await settle();
   assert.equal(views[1].value, '42%');
@@ -63,7 +66,7 @@ test('a key is drawn at once, as N/D with the reason, and again when its reading
 
 test('a face that did not change is not drawn or sent again', async () => {
   const { actions, store, sent } = setup();
-  store.put([sample('cpu.usage', 42)]);
+  store.put([sample('cpu.usage', 42, 'node')]);
   actions.upsert({ uuid: action('cpuusage'), context: 'a', param: {} });
   await settle();
   actions.renderAll();
@@ -74,10 +77,10 @@ test('a face that did not change is not drawn or sent again', async () => {
 
 test('no key is sent more often than the minimum, and the change is not lost', async () => {
   const { actions, store, sent } = setup({ minUpdateMs: 60_000 });
-  store.put([sample('cpu.usage', 10)]);
+  store.put([sample('cpu.usage', 10, 'node')]);
   actions.upsert({ uuid: action('cpuusage'), context: 'a', param: {} });
   await settle();
-  store.put([sample('cpu.usage', 11)]);
+  store.put([sample('cpu.usage', 11, 'node')]);
   actions.renderAll();
   await settle();
   assert.equal(sent.length, 1, 'too soon');
@@ -91,7 +94,7 @@ test('a key shows its warning and keeps it until the reading falls clear', async
   const { actions, store, views } = setup();
   actions.upsert({ uuid: action('cputemperature'), context: 'a', param: {} });
   const read = async (value) => {
-    store.put([sample('cpu.temperature', value)]);
+    store.put([sample('cpu.temperature', value, 'windows')]);
     actions.renderAll();
     await settle();
     return views.at(-1).state;
@@ -104,7 +107,7 @@ test('a key shows its warning and keeps it until the reading falls clear', async
 
 test('the graph follows the history, scaled to the metric, and can be turned off', async () => {
   const { actions, store, views } = setup();
-  for (const value of [0, 50, 100]) store.put([sample('cpu.usage', value)]);
+  for (const value of [0, 50, 100]) store.put([sample('cpu.usage', value, 'node')]);
   actions.upsert({ uuid: action('cpuusage'), context: 'a', param: {} });
   actions.upsert({ uuid: action('cpuusage'), context: 'b', param: { graph: false } });
   await settle();
@@ -112,13 +115,13 @@ test('the graph follows the history, scaled to the metric, and can be turned off
   assert.equal(views.filter((view) => !view.graph).length, 1);
 });
 
-test('a metric with no scale of its own graphs against its own highest point', async () => {
+test('the graph of a metric is scaled to the most it can reach', async () => {
   const { actions, store, views } = setup();
-  for (const value of [10, 20, 40]) store.put([sample('network.download', value)]);
-  actions.upsert({ uuid: action('networkdownload'), context: 'a', param: {} });
+  for (const value of [10, 20, 40]) store.put([sample('network.ping', value, 'ping')]);
+  actions.upsert({ uuid: action('networkping'), context: 'a', param: {} });
   await settle();
-  assert.equal(views[0].bar, null);
-  assert.deepEqual(views[0].graph, [5, 10, 20]);
+  assert.equal(views[0].bar, 10, '20 ms of 200');
+  assert.deepEqual(views[0].graph, [1, 2, 4]);
 });
 
 test('the sources in use follow the keys that are active', () => {
@@ -184,4 +187,35 @@ test('a render that fails is logged without the reading and tried again later', 
   actions.renderAll();
   await settle();
   assert.equal(sent.length, 1);
+});
+
+test('a graphics card key reads the card it was told to, or the discrete one when it was not told', async () => {
+  const { actions, store, views } = setup();
+  const now = Date.now();
+  store.put([
+    sample('gpu.usage', 5, 'lhm', now, 'Intel(R) Arc(TM) Graphics'),
+    sample('gpu.usage', 90, 'nvidia', now, 'NVIDIA GeForce RTX 3080'),
+  ]);
+  actions.upsert({ uuid: action('gpuusage'), context: 'auto', param: {} });
+  actions.upsert({ uuid: action('gpuusage'), context: 'integrated', param: { gpu: 'Intel(R) Arc(TM) Graphics' } });
+  await settle();
+  assert.deepEqual(views.map((view) => view.value).sort(), ['5%', '90%']);
+});
+
+test('a drive key reads the drive it was told to, or the one Windows runs from', async () => {
+  const { actions, store, views } = setup();
+  const now = Date.now();
+  store.put([sample('disk.usage', 43, 'node', now, 'C:'), sample('disk.usage', 91, 'node', now, 'D:')]);
+  actions.upsert({ uuid: action('diskusage'), context: 'system', param: {} });
+  actions.upsert({ uuid: action('diskusage'), context: 'data', param: { drive: 'D:' } });
+  actions.upsert({ uuid: action('diskusage'), context: 'gone', param: { drive: 'Z:' } });
+  await settle();
+  assert.deepEqual(views.map((view) => view.value).sort(), ['43%', '91%', 'N/D']);
+});
+
+test('the panel is told every card and drive there is', () => {
+  const { actions, store } = setup();
+  const now = Date.now();
+  store.put([sample('gpu.usage', 1, 'nvidia', now, 'RTX'), sample('disk.usage', 1, 'node', now, 'C:'), sample('disk.usage', 1, 'node', now, 'D:')]);
+  assert.deepEqual(actions.choices(), { gpus: ['RTX'], drives: ['C:', 'D:'] });
 });

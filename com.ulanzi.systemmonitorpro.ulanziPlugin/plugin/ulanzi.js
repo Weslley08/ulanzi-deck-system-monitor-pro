@@ -1,5 +1,5 @@
 // One object per key on the deck: what its metric reads right now, drawn only when it changed.
-import { GROUPS, METRICS, classify, format } from './core.js';
+import { GROUPS, METRICS, autoScope, classify, format } from './core.js';
 import { ACCENTS, BAR_STEPS, GROUP_ACCENT } from './render/face.js';
 import { renderFace } from './render/renderer.js';
 
@@ -10,7 +10,10 @@ const ACTION_PREFIX = `${PLUGIN_UUID}.`;
 /** The panel is a web page: whatever it saves is read as input, never trusted. */
 export function normalizeSettings(param) {
   const accent = Object.hasOwn(ACCENTS, param?.accent) ? param.accent : 'auto';
-  return { accent, graph: !(param?.graph === false || param?.graph === 'false') };
+  // A card is named by what the system calls it, and a drive by its letter. Anything else is the automatic choice.
+  const gpu = typeof param?.gpu === 'string' && param.gpu.length > 0 && param.gpu.length <= 80 ? param.gpu : 'auto';
+  const drive = typeof param?.drive === 'string' && /^[A-Za-z]:$|^\/$/.test(param.drive) ? param.drive.toUpperCase() : 'auto';
+  return { accent, graph: !(param?.graph === false || param?.graph === 'false'), gpu, drive };
 }
 
 /** The metric an action UUID stands for: "...cpuusage" is cpu.usage. */
@@ -72,6 +75,11 @@ export class MonitorActions {
     this.onChange();
   }
 
+  /** What the panel may choose from: every graphics card and every drive that has a reading now. */
+  choices() {
+    return { gpus: this.store.scopes('gpu.usage'), drives: this.store.scopes('disk.usage') };
+  }
+
   activeMetrics() {
     return [...this.instances.values()].filter((instance) => instance.active).map((instance) => instance.metric);
   }
@@ -80,9 +88,18 @@ export class MonitorActions {
     return this.activeMetrics().length > 0;
   }
 
+  /** Which graphics card or drive a key reads: the one it was told to, or the discrete card and the system drive. */
+  scopeOf(instance) {
+    const { group } = METRICS[instance.metric];
+    const chosen = group === 'gpu' ? instance.settings.gpu : group === 'disk' ? instance.settings.drive : '';
+    if (group !== 'gpu' && group !== 'disk') return '';
+    return chosen === 'auto' ? autoScope(group, this.store.scopes(instance.metric)) : chosen;
+  }
+
   buildView(instance) {
     const metric = METRICS[instance.metric];
-    const reading = this.store.get(instance.metric);
+    const scope = this.scopeOf(instance);
+    const reading = this.store.get(instance.metric, scope);
     const state = classify(reading, this.limits, instance.level, this.hysteresis);
     instance.level = state;
     const accent = instance.settings.accent === 'auto' ? GROUP_ACCENT[metric.group] : instance.settings.accent;
@@ -94,12 +111,12 @@ export class MonitorActions {
     view.value = text;
     view.unit = unit;
     view.bar = max ? Math.round(Math.min(1, Math.max(0, reading.value / max)) * BAR_STEPS) : null;
-    if (instance.settings.graph) view.graph = this.#graph(instance.metric, max);
+    if (instance.settings.graph) view.graph = this.#graph(instance.metric, scope, max);
     return view;
   }
 
-  #graph(metric, max) {
-    const history = this.store.history(metric);
+  #graph(metric, scope, max) {
+    const history = this.store.history(metric, scope);
     if (history.length < 2) return null;
     // With no fixed scale, the graph spans its own highest point, so a quiet line still moves.
     const scale = max ?? Math.max(1, ...history);

@@ -8,7 +8,7 @@ export const FONT = { title: 'outfit-700', small: 'outfit-500' };
 export const FONT_IDS = Object.values(FONT);
 
 export const ACCENTS = { cyan: '#4FD8FF', green: '#35E08C', violet: '#B79CFF', orange: '#FF9F43', pink: '#FF7AB6', blue: '#6AA6FF', white: '#FFFFFF' };
-export const GROUP_ACCENT = { cpu: 'cyan', gpu: 'green', ram: 'violet', fps: 'orange', network: 'blue' };
+export const GROUP_ACCENT = { cpu: 'cyan', gpu: 'green', ram: 'violet', network: 'blue', disk: 'orange' };
 export const STATE_COLORS = { warning: '#FFC83D', critical: '#FF4D4D', unavailable: '#6E7279' };
 
 const BACKGROUND = '#0B0D10';
