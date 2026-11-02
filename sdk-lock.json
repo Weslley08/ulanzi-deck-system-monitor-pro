@@ -1,0 +1,44 @@
+{
+  "copies": [
+    {
+      "path": "plugin/ulanzi-api",
+      "repo": "https://github.com/UlanziTechnology/plugin-common-node.git",
+      "commit": "9e478b2586a4ebdadbd590fc8f80519df18a8d32",
+      "files": {
+        "index.js": "8f9c1cbae57b5b93d8b188ea62c890d00bab2f64b415f1dadee1494b0dd674fb",
+        "libs/constants.js": "88441a151737f521fa4cc54401774abeafe25b30e77631a958679e6816319fe6",
+        "libs/randomPort.js": "08ec4db7efb9e4b5d45744c576344ff14240a61b3182b13039640fd1c88b805b",
+        "libs/ulanziApi.js": "c399d287ff82beb35671fee743771b9944b61a12a891718ac88e2fe43ff76e96",
+        "libs/utils.js": "37a9ba4fc1f1346c733dfc55ced35d29325cf1a7252a4d96fcfecd9958f8b8d1",
+        "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    },
+    {
+      "path": "libs",
+      "repo": "https://github.com/UlanziTechnology/plugin-common-html.git",
+      "commit": "0aeb6a26b43cd45b8a5426689ca6e59c1a36b43d",
+      "files": {
+        "assets/u_active.svg": "a96c394b8a175932b6509d6e7c48df13174d8d684b4b4ddaebfa047d9cd26110",
+        "assets/u_active_none.svg": "28682b245bdc74c674e9da73b0dce3efd2dc7b804d70fb72e8ee0d2f09b752d7",
+        "assets/u_check_checkbox.svg": "880fdd1f67c5a602e96533cfdbb76a92daa868f96cf4552b0392c225d5cc729e",
+        "assets/u_check_none.svg": "cc126d3957f27931a6e0b46c1ad4e762b3735548cde890a592fba0ef826e1560",
+        "assets/u_check_radio.svg": "2555d9f51a769a143b14aa9eec6035323499863eae3b1ba8a5dc5e3af5eab57f",
+        "assets/u_down.svg": "5441f01ec9073d0e19ee823ff9f1fea66fdcb74cd583ca998da36a86c7cd5740",
+        "assets/u_file.svg": "240ec4b92721589ca7238a7d6b5b497cd06fd6b3de8caa99b32060b9d463bcdf",
+        "assets/u_folder.svg": "64ac6d341b9d2981db245e4d281410bc938960f4acf09bf71fc03b974cbbe2e1",
+        "assets/u_refresh.svg": "af16c113d1101e5fcd73018fa7f008ad0cd3dd96678b47e237face67b43c5ed1",
+        "assets/u_tip_error.svg": "d551c95407b44d17c6c6546c625fe6de9202aed00ea5e52bad025c95743a8de2",
+        "assets/u_tip_info.svg": "b2a22809ce8e69bba12394a52a76690c8e632e7278a68230e76e55db0112e908",
+        "assets/u_tip_success.svg": "81107680e49add68ca6efe864c4a2bdbc7fb372f38029cfb4e7457960f48ef0d",
+        "assets/u_tip_warn.svg": "ff79b63f7deabffadd398ba5430d7a3ce649f2883fcaf0e46789936357a0962e",
+        "css/uspi.css": "b559dd379d2b616ee75c3d96a26264145f365139a42bdadd9d7bb816e6ae736f",
+        "js/constants.js": "44ac0acdd8b0105d589c470feb5b0711f5d959c134073381e6d1a49c6f060ff4",
+        "js/eventEmitter.js": "1167eaf1c4dce87942186bd35042851a3925ba8f19932dbd42e8050f991027c5",
+        "js/timers.js": "3b6948510c2136d8e58c9337682fbcd7d02aad8d67a5befa7bd1691e897aaae2",
+        "js/ulanziApi.js": "2712f856d28ba1b839974a222f5d10feaae01f9b89d026c55c30d52034cb67d5",
+        "js/utils.js": "6f13551f6e2d771401e2ddf8763d22d692b5ecfc0dd2ddcaa4ddde5e7274691e",
+        "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    }
+  ]
+}

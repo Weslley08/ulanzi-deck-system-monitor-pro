@@ -1,0 +1,28 @@
+{
+  "name": "ulanzi-deck-system-monitor-pro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.12.2"
+  },
+  "scripts": {
+    "setup": "npm ci && npm ci --prefix com.ulanzi.systemmonitorpro.ulanziPlugin",
+    "test": "node scripts/run-tests.mjs",
+    "test:coverage": "node scripts/run-tests.mjs --coverage",
+    "check": "node --check src/core.js && node --check src/providers.js && node --check src/ulanzi.js",
+    "typecheck": "npm run check",
+    "package": "node scripts/package.mjs",
+    "verify:package": "node scripts/verify-package.mjs",
+    "check:secrets": "node scripts/scan-secrets.mjs",
+    "check:sdk": "node scripts/check-sdk.mjs",
+    "measure": "node scripts/measure.mjs",
+    "bump": "node scripts/bump-version.mjs",
+    "setup:github": "node scripts/setup-github.mjs",
+    "audit": "npm audit --audit-level=low && npm audit --prefix com.ulanzi.systemmonitorpro.ulanziPlugin --audit-level=low"
+  },
+  "devDependencies": {
+    "ws": "8.22.1"
+  }
+}

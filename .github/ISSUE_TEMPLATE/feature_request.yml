@@ -1,0 +1,25 @@
+name: Feature request
+description: A new screen, a setting or a theme idea.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to do that you cannot do today?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: How do you imagine it working?
+      description: For a theme, a sketch or reference picture is ideal. CONTRIBUTING.md explains how to build one yourself.
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device you would use it on
+      options:
+        - D200
+        - D200H
+        - D200X
+        - Dial
+        - Any

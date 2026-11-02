@@ -1,0 +1,81 @@
+name: Bug report
+description: Something on the key or in the settings panel is not working.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste your WeatherAPI.com key here.** This is a public page. If a key was exposed, replace it in your WeatherAPI.com account.
+        For a security problem, use the [private report](https://github.com/Weslley08/ulanzi-deck-system-monitor-pro/security/advisories/new) instead.
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - D200
+        - D200H
+        - D200X
+        - Dial
+        - Other
+        - No device (simulator or tests)
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+    validations:
+      required: true
+  - type: input
+    id: studio
+    attributes:
+      label: Ulanzi Studio version
+      placeholder: "3.3.0"
+    validations:
+      required: true
+  - type: input
+    id: plugin
+    attributes:
+      label: Clima Pro version
+      description: Shown at the bottom of the key's settings panel.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options:
+        - All or not related
+        - Sky
+        - Minimal
+        - Thermal
+        - LCD
+        - Neon
+        - Almanac
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: A photo of the key helps a lot. Some problems only show on the device.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Put the action on a key
+        2. Choose ...
+        3. Press ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Start Studio with --log and paste the lines mentioning this plugin. Check them for your key first.
+      render: text

@@ -1,0 +1,86 @@
+{
+  "Name": "System Monitor Pro",
+  "Description": "System monitor for Ulanzi Studio",
+  "Actions": [
+    {
+      "Name": "cpu.usage",
+      "Tooltip": "Show cpu.usage"
+    },
+    {
+      "Name": "cpu.temperature",
+      "Tooltip": "Show cpu.temperature"
+    },
+    {
+      "Name": "cpu.clock",
+      "Tooltip": "Show cpu.clock"
+    },
+    {
+      "Name": "cpu.power",
+      "Tooltip": "Show cpu.power"
+    },
+    {
+      "Name": "gpu.usage",
+      "Tooltip": "Show gpu.usage"
+    },
+    {
+      "Name": "gpu.temperature",
+      "Tooltip": "Show gpu.temperature"
+    },
+    {
+      "Name": "gpu.clock",
+      "Tooltip": "Show gpu.clock"
+    },
+    {
+      "Name": "gpu.power",
+      "Tooltip": "Show gpu.power"
+    },
+    {
+      "Name": "gpu.vram.used",
+      "Tooltip": "Show gpu.vram.used"
+    },
+    {
+      "Name": "gpu.vram.total",
+      "Tooltip": "Show gpu.vram.total"
+    },
+    {
+      "Name": "ram.used",
+      "Tooltip": "Show ram.used"
+    },
+    {
+      "Name": "ram.total",
+      "Tooltip": "Show ram.total"
+    },
+    {
+      "Name": "ram.usage",
+      "Tooltip": "Show ram.usage"
+    },
+    {
+      "Name": "fps.current",
+      "Tooltip": "Show fps.current"
+    },
+    {
+      "Name": "fps.frametime",
+      "Tooltip": "Show fps.frametime"
+    },
+    {
+      "Name": "network.ping",
+      "Tooltip": "Show network.ping"
+    },
+    {
+      "Name": "network.jitter",
+      "Tooltip": "Show network.jitter"
+    },
+    {
+      "Name": "network.loss",
+      "Tooltip": "Show network.loss"
+    },
+    {
+      "Name": "network.download",
+      "Tooltip": "Show network.download"
+    },
+    {
+      "Name": "network.upload",
+      "Tooltip": "Show network.upload"
+    }
+  ]
+}

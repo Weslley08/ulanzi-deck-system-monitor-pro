@@ -1,0 +1,407 @@
+{
+  "Author": "Weslley08",
+  "Name": "System Monitor Pro",
+  "Description": "System monitor for Ulanzi Studio",
+  "Icon": "resources/plugin-icon.png",
+  "Version": "0.1.0",
+  "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin",
+  "Type": "JavaScript",
+  "CodePath": "plugin/app.js",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinVersion": "3.0.11"
+  },
+  "Actions": [
+    {
+      "Name": "cpu.usage",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cpuusage",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show cpu.usage",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "cpu.temperature",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cputemperature",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show cpu.temperature",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "cpu.clock",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cpuclock",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show cpu.clock",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "cpu.power",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cpupower",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show cpu.power",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "gpu.usage",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuusage",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show gpu.usage",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "gpu.temperature",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gputemperature",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show gpu.temperature",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "gpu.clock",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuclock",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show gpu.clock",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "gpu.power",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpupower",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show gpu.power",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "gpu.vram.used",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuvramused",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show gpu.vram.used",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "gpu.vram.total",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuvramtotal",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show gpu.vram.total",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "ram.used",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.ramused",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show ram.used",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "ram.total",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.ramtotal",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show ram.total",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "ram.usage",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.ramusage",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show ram.usage",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "fps.current",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.fpscurrent",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show fps.current",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "fps.frametime",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.fpsframetime",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show fps.frametime",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "network.ping",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkping",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show network.ping",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "network.jitter",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkjitter",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show network.jitter",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "network.loss",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkloss",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show network.loss",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "network.download",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkdownload",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show network.download",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "network.upload",
+      "Icon": "resources/action.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkupload",
+      "States": [
+        {
+          "Name": "Metric",
+          "Image": "resources/key-default.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Show network.upload",
+      "SupportedInMultiActions": false
+    }
+  ],
+  "Detail": "Local system metrics for CPU, GPU, RAM, frame performance and network. Requires external hardware and FPS providers for some metrics. No remote data collection.",
+  "Category": "Utilities",
+  "CategoryIcon": "resources/action.svg",
+  "Banner": [
+    "assets/banners/banner-1.png"
+  ]
+}
