@@ -8,6 +8,7 @@
     "node": ">=20.12.2"
   },
   "dependencies": {
+    "@resvg/resvg-wasm": "2.6.2",
     "ws": "8.22.1"
   }
 }

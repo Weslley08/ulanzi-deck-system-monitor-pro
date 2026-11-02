@@ -18,7 +18,9 @@ for(const [name] of zip){if(!name.startsWith(PLUGIN_FOLDER+'/')||name.includes('
 for(const p of ['manifest.json','package.json','THIRD_PARTY_NOTICES.md','plugin/app.js','plugin/ulanzi-api/LICENSE','libs/LICENSE','en.json'])must(p);
 const manifest=JSON.parse(get('manifest.json').toString('utf8'));
 if(manifest.UUID.split('.').length!==4)throw Error('manifest UUID not 4 segments');
-if(manifest.Version!=='0.1.0')throw Error('manifest/package version mismatch');
+if(manifest.Version!==JSON.parse(get('package.json').toString('utf8')).version)throw Error('manifest/package version mismatch');
+for(const p of ['licenses/OFL-outfit.txt','licenses/MIT-ws.txt','plugin/render/glyphs/outfit-700.js','plugin/render/glyphs/outfit-500.js','node_modules/@resvg/resvg-wasm/index_bg.wasm','pt_BR.json'])must(p);
+for(const language of [...zip.keys()].map(n=>n.slice(PLUGIN_FOLDER.length+1)).filter(n=>/^[a-z]{2}(_[A-Z]{2})?\.json$/.test(n))){const parsed=JSON.parse(get(language).toString('utf8'));if(parsed.Actions?.length!==manifest.Actions.length)throw Error(language+': Actions do not line up with the manifest');}
 const png=p=>{const data=get(p);return data?.subarray(1,4).toString()==='PNG'?[data.readUInt32BE(16),data.readUInt32BE(20)]:null;};
 for(const p of [manifest.Icon,manifest.CategoryIcon,manifest.CodePath])must(p);
 if((png(manifest.Icon)||[]).join('x')!=='196x196')throw Error('plugin icon not 196x196 PNG');

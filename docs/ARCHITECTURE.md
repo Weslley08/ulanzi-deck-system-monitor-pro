@@ -41,4 +41,4 @@ ICMP/TCP probes ───────┘
 
 ## Limitações atuais
 
-Este repositório contém apenas planejamento. Nenhum provider ou integração com o dispositivo foi implementado ou validado.
+As fases 1, 2 (com sensores lidos do código do LibreHardwareMonitor, não de uma máquina real), 4 e a parte do Property Inspector da fase 5 existem e têm testes. A fase 3 (FPS) lê um CSV do PresentMon e não foi testada com um jogo. Nada foi validado no Ulanzi Studio nem em um dispositivo. Veja `docs/IMPLEMENTATION.md` e `docs/VERIFY.md`.
