@@ -8,11 +8,12 @@ Referência: https://github.com/Weslley08/ulanzi-deck-clima-pro
 - Scripts do Clima Pro importados para versionamento, fluxo Git, empacotamento, segurança e medição.
 - Branch develop e PR em draft para revisão.
 - Checklist de verificação real em docs/VERIFY.md.
+- Gate e Delivery vêm de https://github.com/Weslley08/ulanzi-plugin-pipeline, a mesma pipeline do Clima Pro. O que é específico deste plugin fica em .github/pipeline.json.
 
 ## NÃO É PARIDADE FUNCIONAL
-Os scripts de Clima Pro trazem imports, fixtures, esquema de manifesto, dependências e convenções internas específicas de clima. O simples transporte dos arquivos NÃO os torna executáveis para System Monitor. Em particular, measure.mjs e verify-package.mjs requerem adaptação completa; package.mjs exige um plugin distribuível e SDK oficial local; scripts/flow.mjs requer versionamento, nota de release e GH_TOKEN.
+Os scripts de Clima Pro trazem imports, fixtures, esquema de manifesto, dependências e convenções internas específicas de clima. O simples transporte dos arquivos NÃO os torna executáveis para System Monitor. Em particular, measure.mjs e verify-package.mjs requerem adaptação completa; package.mjs exige um plugin distribuível e SDK oficial local.
 
-Gate, delivery e GitHub branch protection não são idênticos em execução: delivery está intencionalmente sem autopublicação. Não há validação funcional do SDK, LHM ou FPS em hardware real.
+A publicação automática fica desligada até a variável PUBLISHING_ENABLED do repositório ser true: até lá, o merge em main deixa o rascunho como está. Não há validação funcional do SDK, LHM ou FPS em hardware real.
 
 ## Bloqueadores de release (obrigatórios)
 1. Adaptar código, bibliotecas e scripts do Clima Pro para o plugin System Monitor.

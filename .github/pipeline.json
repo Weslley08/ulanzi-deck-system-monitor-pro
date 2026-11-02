@@ -1,0 +1,23 @@
+{
+  "name": "System Monitor Pro",
+  "pluginFolder": "com.ulanzi.systemmonitorpro.ulanziPlugin",
+  "merging": "Once published it cannot be taken back: from then on it is what people download.",
+  "validation": {
+    "steps": [
+      "The zip is built once, and it must start and connect to a fake host on Windows and macOS",
+      "The tests run again on Windows, with no real sensors",
+      "`npm run measure` runs, on synthetic data"
+    ],
+    "done": [
+      "Tests, coverage and the security checks",
+      "The zip started and connected to a fake host on Windows and macOS"
+    ]
+  },
+  "notes": {
+    "install": "Download `{zip}`, not the **Source code** archives, which will not start, and follow the [README]({blob}/README.md).",
+    "aboutHeading": "About",
+    "about": "Measurements stay on this computer, and the plugin sends no telemetry. This project is not affiliated with Ulanzi, LibreHardwareMonitor or PresentMon.",
+    "checks": "The automated checks passed on Windows, macOS and Linux, and found no known vulnerabilities in the dependencies and no secret patterns. These tools only find problems that are already known. This zip started on Windows and macOS against a fake host. No test ran against real sensors, a real game or a real deck.",
+    "measuredAgainst": "synthetic data, which says nothing about real hardware"
+  }
+}
