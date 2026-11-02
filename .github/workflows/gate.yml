@@ -1,148 +1,30 @@
 name: Gate
+
+# The jobs are in Weslley08/ulanzi-plugin-pipeline. This file says when they run and what differs for this plugin.
+# It also runs each week, because problems get found after the last pull request.
 on:
   pull_request:
+    # edited: changing the base or ticking a box has to run the branch rules again.
     types: [opened, edited, reopened, synchronize]
   push:
     branches: [main, develop]
   schedule:
     - cron: '23 4 * * 1'
   workflow_dispatch:
+
 permissions:
   contents: read
+
 concurrency:
   group: gate-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
 jobs:
-  rules:
-    name: Branch flow
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-      - run: node scripts/flow.mjs check-pull-request
-        env:
-          PR_BASE: ${{ github.base_ref }}
-          PR_HEAD: ${{ github.head_ref }}
-          PR_BODY: ${{ github.event.pull_request.body }}
-  workflows:
-    name: Workflows
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: docker://rhysd/actionlint@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9 # 1.7.7
-        with:
-          args: -color
-  test:
-    name: Test (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-      - run: npm run check
-      - run: npm test
-  security:
-    name: Security
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-      - run: npm run audit
-  analyze:
-    name: analyze
-    runs-on: ubuntu-latest
+  gate:
+    # A called workflow can only keep or lower these, so what its CodeQL job needs has to be granted here.
     permissions:
       contents: read
       security-events: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
-        with:
-          languages: javascript-typescript
-      - uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
-  review:
-    name: review
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
-        with:
-          fail-on-severity: low
-
-  release-readiness:
-    name: Release readiness
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Require real SDK and installable plugin before merging
-        run: |
-          test -f sdk-lock.json || { echo "::error::SDK lock absent; read docs/STANDARDIZATION.md"; exit 1; }
-          test -f com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/ulanzi-api/index.js || { echo "::error::Official SDK runtime missing"; exit 1; }
-          test -f com.ulanzi.systemmonitorpro.ulanziPlugin/package.json || { echo "::error::Plugin package manifest missing"; exit 1; }
-
-  coverage:
-    name: Coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-      - run: node scripts/run-tests.mjs --coverage
-  package:
-    name: Package
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-      - run: npm run setup
-      - run: npm run package
-      - run: npm run verify:package
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: plugin-zip
-          path: dist/*.zip
-          if-no-files-found: error
-  sdk-and-secrets:
-    name: SDK and Secrets
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-      - run: node scripts/check-sdk.mjs
-      - run: node scripts/scan-secrets.mjs
+    uses: Weslley08/ulanzi-plugin-pipeline/.github/workflows/gate.yml@v1
+    secrets:
+      AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
