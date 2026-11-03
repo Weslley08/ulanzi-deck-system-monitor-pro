@@ -25,7 +25,8 @@ const MESSAGES = {
   nvidia: 'nvidia-smi stopped; the NVIDIA card keys read N/D, and it is started again shortly.',
   windows: 'The thermal zone reader failed; the processor temperature key reads N/D.',
   lhm: 'LibreHardwareMonitor does not answer. It is only the reserve for AMD cards and for a PC with no thermal zone; open it as administrator and turn on Options > Remote Web Server > Run to use it.',
-  ping: 'Ping failed; the ping and loss keys read N/D.',
+  ping: 'Ping failed; the ping, jitter and loss keys read N/D.',
+  speed: 'The speed test failed; the speed key reads N/D until the next one.',
 };
 
 function report(source) {
@@ -49,6 +50,8 @@ const actions = new MonitorActions({
   minUpdateMs: config.display.minUpdateMs,
   t: (key) => api.t(key),
   noteFor: (metric) => monitor.noteFor(metric),
+  busyFor: (metric) => monitor.isBusy(METRICS[metric].sources[0]),
+  onPress: (source) => monitor.runNow(source),
   onChange: reconcile,
 });
 
@@ -58,7 +61,7 @@ let reconnectTimer = null;
 
 /** Providers run, and keys are checked for changes, only while a key on the deck needs them. */
 function reconcile() {
-  monitor.setDemand(actions.activeMetrics());
+  monitor.setDemand(actions.activeMetrics(), actions.intervals());
   if (actions.hasActive() && !ticker) ticker = setInterval(() => actions.renderAll(), TICK_MS);
   if (!actions.hasActive() && ticker) {
     clearInterval(ticker);
@@ -86,7 +89,7 @@ api.onClear((event) => actions.clear(event));
 // SDK raises both keydown and run for one press: handle only run.
 api.onRun((event) => {
   try {
-    void actions.render(event.context, true);
+    actions.press(event.context);
   } catch {
     api.showAlert(event.context);
   }

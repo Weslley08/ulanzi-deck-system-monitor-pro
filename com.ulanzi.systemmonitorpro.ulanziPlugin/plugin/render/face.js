@@ -46,8 +46,50 @@ function graphPaths(points) {
   return { line, area: `${line}L${num(right)} ${bottom}L${left} ${bottom}Z` };
 }
 
+const UPLOAD_ACCENT = ACCENTS.violet;
+
+/** An arc of a circle drawn from the top, `steps` of BAR_STEPS around. */
+function arc(cx, cy, r, width, steps, color) {
+  const length = 2 * Math.PI * r;
+  const filled = (Math.min(BAR_STEPS, Math.max(0, steps)) / BAR_STEPS) * length;
+  const track = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${TRACK}" stroke-width="${width}"/>`;
+  if (filled <= 0) return track;
+  return `${track}<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-dasharray="${num(filled)} ${num(length)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+}
+
+/**
+ * The speed test: the download on the outer ring and the top number, the upload on the inner ring and the
+ * bottom one. Each ring is a share of a log scale, so a slow line and a fast one both read.
+ * @param {FaceView & { upload?: string, down?: number | null, up?: number | null }} view
+ */
+function speedSvg(view) {
+  const unavailable = view.state === 'unavailable';
+  const accent = Object.hasOwn(ACCENTS, view.accent) ? ACCENTS[view.accent] : ACCENTS.blue;
+  const cx = SIZE / 2;
+  const cy = 88;
+  let out = `<rect width="${SIZE}" height="${SIZE}" fill="${BACKGROUND}"/>`;
+  out += `<rect x="4" y="4" width="${SIZE - 8}" height="${SIZE - 8}" rx="22" fill="none" stroke="${RING}" stroke-width="3"/>`;
+  const group = fit(FONT.title, view.group, 52, 20, 14);
+  out += text(FONT.title, group.text, 16, 30, group.size, { fill: accent });
+  const sub = fit(FONT.small, view.sub, 62, 13, 10);
+  out += text(FONT.small, sub.text, SIZE - 16, 30, sub.size, { anchor: 'end', fill: SUBTLE });
+  out += arc(cx, cy, 43, 7, unavailable ? 0 : view.down ?? 0, accent);
+  out += arc(cx, cy, 33, 7, unavailable ? 0 : view.up ?? 0, UPLOAD_ACCENT);
+  if (unavailable) {
+    const note = fit(FONT.small, view.note || 'N/D', 56, 15, 10);
+    out += text(FONT.small, note.text, cx, cy + 5, note.size, { anchor: 'middle', fill: STATE_COLORS.unavailable });
+  } else {
+    const down = fit(FONT.title, view.value, 52, 24, 13);
+    out += text(FONT.title, down.text, cx, cy - 2, down.size, { anchor: 'middle', fill: '#FFFFFF' });
+    const up = fit(FONT.title, view.upload || 'N/D', 44, 20, 12);
+    out += text(FONT.title, up.text, cx, cy + 19, up.size, { anchor: 'middle', fill: UPLOAD_ACCENT });
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SIZE} ${SIZE}" width="${SIZE}" height="${SIZE}">${out}</svg>`;
+}
+
 /** @param {FaceView} view */
 export function faceSvg(view) {
+  if (view.kind === 'speed') return speedSvg(view);
   const state = Object.hasOwn(STATE_COLORS, view.state) ? view.state : 'normal';
   const stateColor = STATE_COLORS[state];
   const accent = Object.hasOwn(ACCENTS, view.accent) ? ACCENTS[view.accent] : ACCENTS.cyan;
