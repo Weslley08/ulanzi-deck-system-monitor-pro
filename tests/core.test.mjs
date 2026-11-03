@@ -23,10 +23,10 @@ test('readings read the way a person would say them', () => {
   assert.deepEqual(format('cpu.usage', null), { text: 'N/D', unit: '' });
 });
 
-test('there are the nine readings that were asked for, and every usage is a percentage', () => {
+test('there are the readings that were asked for, and every usage is a percentage', () => {
   assert.deepEqual(Object.keys(METRICS), [
     'cpu.usage', 'cpu.temperature', 'gpu.usage', 'gpu.temperature', 'gpu.vram.usage',
-    'ram.usage', 'network.ping', 'network.loss', 'disk.usage',
+    'ram.usage', 'network.ping', 'network.loss', 'network.jitter', 'network.speed', 'disk.usage',
   ]);
   for (const [id, metric] of Object.entries(METRICS)) {
     if (id.endsWith('.usage')) assert.equal(metric.unit, '%', id);
@@ -34,7 +34,7 @@ test('there are the nine readings that were asked for, and every usage is a perc
 });
 
 test('every metric has a name, a unit, a scale and sources the monitor knows', () => {
-  const sources = new Set(['node', 'ping', 'nvidia', 'windows', 'lhm']);
+  const sources = new Set(['node', 'ping', 'speed', 'nvidia', 'windows', 'lhm']);
   for (const [id, metric] of Object.entries(METRICS)) {
     assert.ok(metric.label && metric.unit && metric.group, id);
     assert.ok(metric.sources.length > 0 && metric.sources.every((source) => sources.has(source)), id);

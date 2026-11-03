@@ -10,6 +10,8 @@ export const SAMPLE_FACES = [
   { group: 'RAM', sub: 'Usage', accent: 'violet', state: 'normal', value: '58%', bar: 29, graph: wave(11, 1) },
   { group: 'Net', sub: 'Ping', accent: 'blue', state: 'normal', value: '18', unit: 'ms', bar: 5, graph: wave(3, 1) },
   { group: 'Net', sub: 'Loss', accent: 'blue', state: 'critical', value: '9.5%', bar: 5, graph: wave(6, 4) },
+  { group: 'Net', sub: 'Jitter', accent: 'blue', state: 'normal', value: '2.4', unit: 'ms', bar: 2, graph: wave(2, 1) },
+  { kind: 'speed', group: 'Net', sub: 'Mbps', accent: 'blue', state: 'normal', value: '312', upload: '48', down: 33, up: 25 },
   { group: 'Disk', sub: 'C:', accent: 'orange', state: 'normal', value: '12%', bar: 6, graph: wave(3, 3) },
   { group: 'CPU', sub: 'Temp', accent: 'cyan', state: 'unavailable', value: 'N/D', note: 'Needs LHM' },
   { group: 'GPU', sub: 'Usage', accent: 'green', state: 'unavailable', value: 'N/D', note: 'No sensor' },

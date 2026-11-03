@@ -1,7 +1,7 @@
 // The SDK writes every message to the console, including the settings of the key.
 for (const method of ['log', 'info', 'debug', 'warn', 'error']) console[method] = () => {};
 
-const DEFAULTS = { accent: 'auto', graph: true, gpu: 'auto', drive: 'auto' };
+const DEFAULTS = { accent: 'auto', graph: true, gpu: 'auto', drive: 'auto', pingEvery: '15', speedEvery: '30' };
 const SAVE_DELAY_MS = 300;
 
 const $ = (selector) => document.querySelector(selector);
@@ -54,8 +54,12 @@ function showStatus({ source, state }) {
 /** The row this key needs is known from its own UUID, so it shows before the plugin answers with the choices. */
 function showRows() {
   const group = /.(gpu|disk)[a-z]*$/.exec($UD.uuid ?? '')?.[1];
+  const net = /\.network(ping|loss|jitter|speed)$/.exec($UD.uuid ?? '')?.[1];
   $('#gpuRow').classList.toggle('hidden', group !== 'gpu');
   $('#driveRow').classList.toggle('hidden', group !== 'disk');
+  $('#pingRow').classList.toggle('hidden', !net || net === 'speed');
+  $('#speedRow').classList.toggle('hidden', net !== 'speed');
+  $('#speedNote').classList.toggle('hidden', net !== 'speed');
 }
 
 $UD.onConnected(() => {
@@ -79,6 +83,7 @@ $UD.onSendToPropertyInspector((message) => {
   showStatus(payload);
   $('#gpuRow').classList.toggle('hidden', payload.group !== 'gpu');
   $('#driveRow').classList.toggle('hidden', payload.group !== 'disk');
+  showRows();
   if (payload.group === 'gpu') fillChoices($('#gpu'), payload.gpus ?? []);
   if (payload.group === 'disk') fillChoices($('#drive'), payload.drives ?? []);
   if (payload.version) $('#version').textContent = `System Monitor Pro v${payload.version}`;

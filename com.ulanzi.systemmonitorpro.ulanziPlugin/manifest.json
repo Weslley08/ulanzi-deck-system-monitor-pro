@@ -1,7 +1,7 @@
 {
   "Author": "Weslley08",
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys, and test your connection speed: a number, a bar and a graph for each. Windows only. Not affiliated with Ulanzi.",
   "Icon": "resources/plugin-icon.png",
   "Version": "0.1.0",
   "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin",
@@ -170,6 +170,44 @@
       "SupportedInMultiActions": false
     },
     {
+      "Name": "Jitter",
+      "Icon": "resources/action-network.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkjitter",
+      "States": [
+        {
+          "Name": "Jitter",
+          "Image": "resources/key-network.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows how much the ping varies from one reply to the next.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Speed test",
+      "Icon": "resources/action-network.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkspeed",
+      "States": [
+        {
+          "Name": "Speed test",
+          "Image": "resources/key-network.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows the download and the upload of your connection in one ring. The last test stays until the next.",
+      "SupportedInMultiActions": false
+    },
+    {
       "Name": "Disk usage",
       "Icon": "resources/action-disk.svg",
       "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.diskusage",
@@ -189,7 +227,7 @@
       "SupportedInMultiActions": false
     }
   ],
-  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, drive and network readings, and an NVIDIA card (read through nvidia-smi, which ships with its driver), need nothing else and load no driver. The processor temperature comes from the thermal zone Windows exposes, when the PC has one. An AMD card, and a PC with no thermal zone, need LibreHardwareMonitor, which you run yourself, as administrator, with its web server on: it loads a driver that some game anti-cheats block, so close it before such a game. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the plugin only talks to LibreHardwareMonitor on your own computer and pings the server you choose. Windows only. Not affiliated with Ulanzi, NVIDIA, AMD or LibreHardwareMonitor.",
+  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, drive and network readings, and an NVIDIA card (through nvidia-smi, which ships with its driver), load no driver. The processor temperature comes from the Windows thermal zone, when the PC has one. An AMD card, and a PC with no thermal zone, need LibreHardwareMonitor, which you run yourself as administrator: it loads a driver that some game anti-cheats block, so close it before such a game. A missing reading says why on the key and is never shown as zero. The ping goes to 1.1.1.1. The speed test key shows download and upload in one ring, as often as you choose or when you press it, using Cloudflare's public speed servers and up to about 240 MB each time. Windows only. Not affiliated with Ulanzi, NVIDIA, AMD, Cloudflare or LibreHardwareMonitor.",
   "Category": "System Monitor Pro",
   "CategoryIcon": "resources/category.svg",
   "Banner": [

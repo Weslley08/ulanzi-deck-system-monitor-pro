@@ -412,7 +412,7 @@ export function execSafe(bin, args, timeout = 2200) {
     });
     child.stderr.on('data', (data) => { err += data; });
     child.on('error', end);
-    child.on('close', (code) => end(code === 0 ? null : new Error(err.slice(0, 100) || `exit ${code}`), out));
+    child.on('close', (code) => end(code === 0 ? null : Object.assign(new Error(err.slice(0, 100) || `exit ${code}`), { stdout: out }), out));
   });
 }
 
@@ -422,31 +422,62 @@ export function parsePing(output) {
   return found ? Number(found[1].replace(',', '.')) : null;
 }
 
-export async function pingOnce(host, timeout = 1400) {
+/** One time for each ping that was sent, in order, and null for each one with no answer. */
+export function parsePingBurst(output, count) {
+  const times = [];
+  // Only a reply line carries a time: the summary at the end repeats it as "Minimum = 4ms" and must not count.
+  for (const line of String(output).split(/\r?\n/)) {
+    if (/\bttl\b/i.test(line) && !/inacess|unreachable|expired|expirou/i.test(line)) times.push(parsePing(line));
+  }
+  const replies = times.filter(Number.isFinite);
+  return Array.from({ length: count }, (_, i) => replies[i] ?? null);
+}
+
+/**
+ * Sends `count` pings in one program run, so a reading is a handful of pings and not one that may be
+ * unlucky. Windows waits a second between them.
+ */
+export async function pingBurst(host, count = 8, timeout = 1500) {
   if (!/^[a-zA-Z0-9.:-]{1,253}$/.test(host)) throw new Error('invalid host');
   const windows = process.platform === 'win32';
   // Windows waits in milliseconds with -w, and macOS with -W.
-  const args = windows ? ['-n', '1', '-w', String(timeout), host] : ['-n', '-c', '1', '-W', String(timeout), host];
+  const args = windows ? ['-n', String(count), '-w', String(timeout), host] : ['-n', '-c', String(count), '-W', String(timeout), host];
+  const limit = count * 1000 + timeout + 2000;
   try {
-    return parsePing(await execSafe(windows ? 'ping.exe' : 'ping', args, timeout + 1000));
-  } catch {
-    return null;
+    return parsePingBurst(await execSafe(windows ? 'ping.exe' : 'ping', args, limit), count);
+  } catch (error) {
+    // ping exits with an error when some or all of its pings got no answer, but what it did get is still good.
+    return parsePingBurst(error?.stdout ?? '', count);
   }
 }
 
-/** The ping and the share of pings with no answer, over the last few. */
+export async function pingOnce(host, timeout = 1400) {
+  return (await pingBurst(host, 1, timeout))[0];
+}
+
+const median = (values) => {
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = sorted.length >> 1;
+  return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+};
+
+/** The ping, how much it wobbles, and the share of pings with no answer, over the last few. */
 export class PingWindow {
   constructor(size = 20) {
     this.size = size;
     this.samples = [];
   }
 
+  /** @param {number | null | Array<number | null>} ms one ping, or the pings of one burst */
   update(ms) {
-    this.samples.push(ms);
-    if (this.samples.length > this.size) this.samples.shift();
+    this.samples.push(...[ms].flat());
+    if (this.samples.length > this.size) this.samples.splice(0, this.samples.length - this.size);
     const ok = this.samples.filter(Number.isFinite);
-    const average = ok.length ? ok.reduce((a, b) => a + b, 0) / ok.length : null;
+    // The middle ping, so that one slow reply does not drag the number, as it did an average.
+    const ping = ok.length ? median(ok) : null;
+    // Jitter is how far each reply is from the one before it, the way a call or a game feels it.
+    const jitter = ok.length > 1 ? ok.slice(1).reduce((sum, value, i) => sum + Math.abs(value - ok[i]), 0) / (ok.length - 1) : null;
     const loss = ((this.samples.length - ok.length) / this.samples.length) * 100;
-    return [sample('network.ping', average, 'ping'), sample('network.loss', loss, 'ping')];
+    return [sample('network.ping', ping, 'ping'), sample('network.loss', loss, 'ping'), sample('network.jitter', jitter, 'ping')];
   }
 }

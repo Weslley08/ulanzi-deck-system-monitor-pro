@@ -16,16 +16,25 @@ export const METRICS = Object.freeze({
   'ram.usage': def('ram', 'Usage', '%', ['node'], { max: 100 }),
   'network.ping': def('network', 'Ping', 'ms', ['ping'], { max: 200, auto: true }),
   'network.loss': def('network', 'Loss', '%', ['ping'], { max: 100, decimals: 1 }),
+  'network.jitter': def('network', 'Jitter', 'ms', ['ping'], { max: 50, auto: true }),
+  // The value is the download, and `upload` rides along on the same reading. A test is rare and costs data, so the
+  // last one stands until the next, however long that takes.
+  'network.speed': def('network', 'Speed', 'Mbps', ['speed'], { max: 1000, hold: true }),
   'disk.usage': def('disk', 'Used', '%', ['node'], { max: 100 }),
 });
 
 export const GROUPS = Object.freeze({ cpu: 'CPU', gpu: 'GPU', ram: 'RAM', network: 'Net', disk: 'Disk' });
-export const SOURCES = Object.freeze(['node', 'ping', 'nvidia', 'windows', 'lhm']);
+export const SOURCES = Object.freeze(['node', 'ping', 'speed', 'nvidia', 'windows', 'lhm']);
 
 /** @param {string} scope which graphics card or drive a reading is about, or '' when there is only one */
 export function sample(id, value, source = 'unknown', at = Date.now(), scope = '') {
   const ok = Number.isFinite(value);
   return { id, value: ok ? value : null, unit: METRICS[id]?.unit ?? '', source, scope, at, quality: ok ? 'ok' : 'unavailable' };
+}
+
+/** One speed test: the download is the value and the upload comes with it, both in megabits per second. */
+export function speedSample(download, upload, at = Date.now()) {
+  return { ...sample('network.speed', download, 'speed', at), upload: Number.isFinite(upload) ? upload : null };
 }
 
 /**
@@ -80,8 +89,19 @@ export class Store {
     this.histories = new Map();
     this.lastPushed = new Map();
     this.staleMs = staleMs;
+    /** @type {Map<string, number>} how long a source's readings stay good, when that is not the default */
+    this.staleBySource = new Map();
     this.historyEvery = historyEvery;
     this.historySize = historySize;
+  }
+
+  /** A source asked less often than the default must not read N/D between its readings. */
+  setStale(source, ms) {
+    this.staleBySource.set(source, ms);
+  }
+
+  #fresh(reading, now) {
+    return reading.quality === 'ok' && (METRICS[reading.id]?.hold || now - reading.at <= (this.staleBySource.get(reading.source) ?? this.staleMs));
   }
 
   put(items) {
@@ -107,7 +127,7 @@ export class Store {
   get(id, scope = '', now = Date.now()) {
     for (const source of METRICS[id]?.sources ?? []) {
       const found = this.values.get(id)?.get(`${source}|${scope}`);
-      if (found && found.quality === 'ok' && now - found.at <= this.staleMs) return found;
+      if (found && this.#fresh(found, now)) return found;
     }
     return sample(id, null, 'none', now, scope);
   }
@@ -121,7 +141,7 @@ export class Store {
     const found = [];
     for (const source of METRICS[id]?.sources ?? []) {
       for (const reading of this.values.get(id)?.values() ?? []) {
-        if (reading.source === source && reading.quality === 'ok' && now - reading.at <= this.staleMs && !found.includes(reading.scope)) found.push(reading.scope);
+        if (reading.source === source && this.#fresh(reading, now) && !found.includes(reading.scope)) found.push(reading.scope);
       }
     }
     return found;
