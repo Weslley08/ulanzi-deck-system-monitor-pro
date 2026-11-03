@@ -132,7 +132,7 @@ test('a PC with no thermal zone falls back on LibreHardwareMonitor, and says so 
   monitor.setDemand(['cpu.temperature']);
   await until(() => monitor.statusOf('lhm') === 'offline');
   assert.equal(monitor.statusOf('windows'), 'missing');
-  assert.equal(monitor.noteFor('cpu.temperature'), 'LHM closed');
+  assert.equal(monitor.noteFor('cpu.temperature'), 'Needs LHM');
   assert.deepEqual(monitor.describe('cpu.temperature'), { source: 'lhm', state: 'offline' });
   assert.equal(store.get('cpu.temperature').quality, 'unavailable');
   monitor.dispose();

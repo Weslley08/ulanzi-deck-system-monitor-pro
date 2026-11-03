@@ -39,7 +39,7 @@ export const LOCALIZATION = {
   },
   pt: {
     Usage: 'Uso', Used: 'Usado', Temp: 'Temp', VRAM: 'VRAM', Ping: 'Ping', Loss: 'Perda', 'Graphics card': 'Placa de vídeo', Drive: 'Unidade',
-    'LHM closed': 'LHM fechado', 'No reading': 'Sem leitura', 'Not set up': 'Não configurado',
+    'Needs LHM': 'Precisa do LHM', 'No reading': 'Sem leitura', 'Not set up': 'Não configurado',
     'No sensor': 'Sem sensor', 'No NVIDIA': 'Sem NVIDIA', 'No data': 'Sem dados', Measuring: 'Medindo',
     Appearance: 'Aparência', Status: 'Estado', Color: 'Cor', Automatic: 'Automática', Cyan: 'Ciano', Green: 'Verde', Violet: 'Violeta',
     Orange: 'Laranja', Pink: 'Rosa', Blue: 'Azul', White: 'Branco', 'Show the graph': 'Mostrar o gráfico',

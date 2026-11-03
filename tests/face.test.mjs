@@ -30,7 +30,7 @@ test('a face is the same each time, and a repeat costs nothing', async () => {
 });
 
 test('a missing reading says N/D and why, in gray, with no bar or graph', async () => {
-  const svg = faceSvg({ group: 'CPU', sub: 'Usage', accent: 'cyan', state: 'unavailable', value: 'N/D', note: 'LHM closed', bar: 30, graph: [1, 2, 3] });
+  const svg = faceSvg({ group: 'CPU', sub: 'Usage', accent: 'cyan', state: 'unavailable', value: 'N/D', note: 'Needs LHM', bar: 30, graph: [1, 2, 3] });
   assert.doesNotMatch(svg, /stroke-linejoin/, 'no graph');
   assert.doesNotMatch(svg, /height="8"/, 'no bar');
   assert.match(svg, /#6E7279/);

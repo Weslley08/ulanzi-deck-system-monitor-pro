@@ -51,13 +51,24 @@ function showStatus({ source, state }) {
   status.className = `tip ${state === 'ok' ? 'success' : state === 'starting' ? 'info' : 'error'}`;
 }
 
+/** The row this key needs is known from its own UUID, so it shows before the plugin answers with the choices. */
+function showRows() {
+  const group = /.(gpu|disk)[a-z]*$/.exec($UD.uuid ?? '')?.[1];
+  $('#gpuRow').classList.toggle('hidden', group !== 'gpu');
+  $('#driveRow').classList.toggle('hidden', group !== 'disk');
+}
+
 $UD.onConnected(() => {
+  // Without this the whole panel stays hidden: the page starts hidden so that text is not seen before it is translated.
+  document.querySelector('.uspi-wrapper').classList.remove('hidden');
+  showRows();
+  // onConnected can fire more than once, and the plugin has to be asked again each time.
+  $UD.sendToPlugin({ type: 'hello' });
   if (form.dataset.bound) return;
   form.dataset.bound = 'true';
   form.addEventListener('input', save);
   form.addEventListener('change', save);
   fillForm();
-  $UD.sendToPlugin({ type: 'hello' });
 });
 
 $UD.onAdd(load);
