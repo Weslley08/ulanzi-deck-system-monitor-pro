@@ -1,0 +1,198 @@
+{
+  "Author": "Weslley08",
+  "Name": "System Monitor Pro",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Icon": "resources/plugin-icon.png",
+  "Version": "0.1.0",
+  "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin",
+  "Type": "JavaScript",
+  "CodePath": "plugin/app.js",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinVersion": "3.0.11"
+  },
+  "Actions": [
+    {
+      "Name": "CPU usage",
+      "Icon": "resources/action-cpu.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cpuusage",
+      "States": [
+        {
+          "Name": "CPU usage",
+          "Image": "resources/key-cpu.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows how much of the processor is in use, in percent.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "CPU temperature",
+      "Icon": "resources/action-cpu.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.cputemperature",
+      "States": [
+        {
+          "Name": "CPU temperature",
+          "Image": "resources/key-cpu.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows the processor temperature.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "GPU usage",
+      "Icon": "resources/action-gpu.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuusage",
+      "States": [
+        {
+          "Name": "GPU usage",
+          "Image": "resources/key-gpu.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows how much of a graphics card is in use, in percent. NVIDIA or AMD.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "GPU temperature",
+      "Icon": "resources/action-gpu.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gputemperature",
+      "States": [
+        {
+          "Name": "GPU temperature",
+          "Image": "resources/key-gpu.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows the graphics card temperature.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Video memory usage",
+      "Icon": "resources/action-gpu.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.gpuvramusage",
+      "States": [
+        {
+          "Name": "Video memory usage",
+          "Image": "resources/key-gpu.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows how much video memory is in use, in percent.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Memory usage",
+      "Icon": "resources/action-ram.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.ramusage",
+      "States": [
+        {
+          "Name": "Memory usage",
+          "Image": "resources/key-ram.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows how much memory is in use, in percent.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Ping",
+      "Icon": "resources/action-network.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkping",
+      "States": [
+        {
+          "Name": "Ping",
+          "Image": "resources/key-network.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows the round trip to a server.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Packet loss",
+      "Icon": "resources/action-network.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.networkloss",
+      "States": [
+        {
+          "Name": "Packet loss",
+          "Image": "resources/key-network.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows the share of pings that got no answer.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Disk usage",
+      "Icon": "resources/action-disk.svg",
+      "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin.diskusage",
+      "States": [
+        {
+          "Name": "Disk usage",
+          "Image": "resources/key-disk.png"
+        }
+      ],
+      "DisableAutomaticStates": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": [],
+      "PropertyInspectorPath": "property-inspector/metric/inspector.html",
+      "Tooltip": "Shows how full a drive is, in percent.",
+      "SupportedInMultiActions": false
+    }
+  ],
+  "Detail": "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, drive and network readings, and an NVIDIA card (read through nvidia-smi, which ships with its driver), need nothing else and load no driver. The processor temperature comes from the thermal zone Windows exposes, when the PC has one. An AMD card, and a PC with no thermal zone, need LibreHardwareMonitor, which you run yourself, as administrator, with its web server on: it loads a driver that some game anti-cheats block, so close it before such a game. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the plugin only talks to LibreHardwareMonitor on your own computer and pings the server you choose. Windows only. Not affiliated with Ulanzi, NVIDIA, AMD or LibreHardwareMonitor.",
+  "Category": "System Monitor Pro",
+  "CategoryIcon": "resources/category.svg",
+  "Banner": [
+    "assets/banners/banner-1.png"
+  ]
+}
