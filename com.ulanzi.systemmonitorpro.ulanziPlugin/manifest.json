@@ -3,7 +3,7 @@
   "Name": "System Monitor Pro",
   "Description": "See your PC's CPU, GPU, memory, disk and network on the keys, and test your connection speed: a number, a bar and a graph for each. Windows only. Not affiliated with Ulanzi.",
   "Icon": "resources/plugin-icon.png",
-  "Version": "0.1.0",
+  "Version": "0.2.0",
   "UUID": "com.ulanzi.systemmonitorpro.ulanziPlugin",
   "Type": "JavaScript",
   "CodePath": "plugin/app.js",
