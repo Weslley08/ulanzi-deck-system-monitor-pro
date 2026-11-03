@@ -3,6 +3,12 @@ import { GROUPS, METRICS, autoScope, classify, format } from './core.js';
 import { ACCENTS, BAR_STEPS, GROUP_ACCENT } from './render/face.js';
 import { renderFace } from './render/renderer.js';
 
+// How often the ping and the speed test run, as a key chooses it. Zero speed minutes is only when the key is pressed.
+export const PING_SECONDS = Object.freeze([5, 10, 15, 30, 60, 300]);
+export const SPEED_MINUTES = Object.freeze([0, 1, 5, 10, 15, 30, 60, 180]);
+const DEFAULT_PING_SECONDS = 15;
+const DEFAULT_SPEED_MINUTES = 30;
+
 export const PLUGIN_UUID = 'com.ulanzi.systemmonitorpro.ulanziPlugin';
 const GRAPH_STEPS = 20;
 const ACTION_PREFIX = `${PLUGIN_UUID}.`;
@@ -13,7 +19,9 @@ export function normalizeSettings(param) {
   // A card is named by what the system calls it, and a drive by its letter. Anything else is the automatic choice.
   const gpu = typeof param?.gpu === 'string' && param.gpu.length > 0 && param.gpu.length <= 80 ? param.gpu : 'auto';
   const drive = typeof param?.drive === 'string' && /^[A-Za-z]:$|^\/$/.test(param.drive) ? param.drive.toUpperCase() : 'auto';
-  return { accent, graph: !(param?.graph === false || param?.graph === 'false'), gpu, drive };
+  const pingEvery = PING_SECONDS.find((n) => n === Number(param?.pingEvery)) ?? DEFAULT_PING_SECONDS;
+  const speedEvery = SPEED_MINUTES.find((n) => n === Number(param?.speedEvery) && param?.speedEvery !== '' && param?.speedEvery != null) ?? DEFAULT_SPEED_MINUTES;
+  return { accent, graph: !(param?.graph === false || param?.graph === 'false'), gpu, drive, pingEvery, speedEvery };
 }
 
 /** The metric an action UUID stands for: "...cpuusage" is cpu.usage. */
@@ -30,7 +38,7 @@ export class MonitorActions {
    *   hysteresis?: number, minUpdateMs?: number, t?: (key: string) => string, noteFor?: (metric: string) => string,
    *   onChange?: () => void, render?: (view: object) => Promise<string> }} options
    */
-  constructor({ host, store, thresholds = {}, hysteresis = 0, minUpdateMs = 1000, t = (key) => key, noteFor = () => '', onChange = () => {}, render = renderFace }) {
+  constructor({ host, store, thresholds = {}, hysteresis = 0, minUpdateMs = 1000, t = (key) => key, noteFor = () => '', onPress = () => {}, busyFor = () => false, onChange = () => {}, render = renderFace }) {
     this.host = host;
     this.store = store;
     this.limits = thresholds;
@@ -38,6 +46,8 @@ export class MonitorActions {
     this.minUpdateMs = minUpdateMs;
     this.t = t;
     this.noteFor = noteFor;
+    this.busyFor = busyFor;
+    this.onPress = onPress;
     this.onChange = onChange;
     this.renderImage = render;
     /** @type {Map<string, any>} */
@@ -84,6 +94,26 @@ export class MonitorActions {
     return [...this.instances.values()].filter((instance) => instance.active).map((instance) => instance.metric);
   }
 
+  /** How often each source should run: the shortest any active key asks for, in milliseconds, and 0 when all say only on a press. */
+  intervals() {
+    const active = [...this.instances.values()].filter((instance) => instance.active);
+    const pace = (metrics, read) => {
+      const asked = active.filter((instance) => metrics.includes(instance.metric)).map(read);
+      return asked.length ? Math.min(...asked.filter((n) => n > 0), Infinity) : undefined;
+    };
+    const ping = pace(['network.ping', 'network.loss', 'network.jitter'], (instance) => instance.settings.pingEvery * 1000);
+    const speedAsked = active.filter((instance) => instance.metric === 'network.speed').map((instance) => instance.settings.speedEvery);
+    const speed = speedAsked.length ? (speedAsked.every((n) => n === 0) ? 0 : Math.min(...speedAsked.filter((n) => n > 0)) * 60_000) : undefined;
+    return { ...(Number.isFinite(ping) ? { ping } : {}), ...(speed === undefined ? {} : { speed }) };
+  }
+
+  /** A key was pressed: a speed test starts now. Anything else only redraws. */
+  press(context) {
+    const instance = this.instances.get(context);
+    if (instance?.metric === 'network.speed') this.onPress('speed');
+    void this.render(context, true);
+  }
+
   hasActive() {
     return this.activeMetrics().length > 0;
   }
@@ -98,6 +128,7 @@ export class MonitorActions {
 
   buildView(instance) {
     const metric = METRICS[instance.metric];
+    if (instance.metric === 'network.speed') return this.#speedView(instance);
     const scope = this.scopeOf(instance);
     const reading = this.store.get(instance.metric, scope);
     const state = classify(reading, this.limits, instance.level, this.hysteresis);
@@ -115,6 +146,29 @@ export class MonitorActions {
     view.bar = max ? Math.round(Math.min(1, Math.max(0, reading.value / max)) * BAR_STEPS) : null;
     if (instance.settings.graph) view.graph = this.#graph(instance.metric, scope, max);
     return view;
+  }
+
+  /** Download and upload in one ring. The last test stays until the next one finishes. */
+  #speedView(instance) {
+    const metric = METRICS[instance.metric];
+    const reading = this.store.get(instance.metric);
+    const accent = instance.settings.accent === 'auto' ? GROUP_ACCENT[metric.group] : instance.settings.accent;
+    const busy = this.busyFor(instance.metric);
+    const view = { kind: 'speed', group: GROUPS[metric.group], sub: busy ? this.t('Testing') : metric.unit, accent, state: 'normal', value: 'N/D' };
+    if (reading.quality !== 'ok') {
+      instance.level = 'unavailable';
+      return { ...view, state: 'unavailable', note: this.t(this.noteFor(instance.metric)) };
+    }
+    instance.level = 'normal';
+    const share = (mbps) => Number.isFinite(mbps) ? Math.round(Math.min(1, Math.log10(1 + mbps) / Math.log10(1 + metric.max)) * BAR_STEPS) : null;
+    return {
+      ...view,
+      value: format(instance.metric, reading.value).text,
+      upload: Number.isFinite(reading.upload) ? format(instance.metric, reading.upload).text : 'N/D',
+      unit: metric.unit,
+      down: share(reading.value),
+      up: share(reading.upload),
+    };
   }
 
   #graph(metric, scope, max) {

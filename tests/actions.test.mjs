@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { Store, sample } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/core.js';
+import { Store, sample, speedSample } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/core.js';
 import { MonitorActions, PLUGIN_UUID, metricOfAction, normalizeSettings } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/ulanzi.js';
 
 const action = (name) => `${PLUGIN_UUID}.${name}`;
@@ -39,9 +39,9 @@ test('an action UUID stands for one metric, and anything else for none', () => {
 });
 
 test('settings from the panel are checked, with the graph on unless it was turned off', () => {
-  assert.deepEqual(normalizeSettings(undefined), { accent: 'auto', graph: true, gpu: 'auto', drive: 'auto' });
-  assert.deepEqual(normalizeSettings({ accent: 'pink', graph: 'false' }), { accent: 'pink', graph: false, gpu: 'auto', drive: 'auto' });
-  assert.deepEqual(normalizeSettings({ accent: 'url(#x)', graph: false }), { accent: 'auto', graph: false, gpu: 'auto', drive: 'auto' });
+  assert.deepEqual(normalizeSettings(undefined), { accent: 'auto', graph: true, gpu: 'auto', drive: 'auto', pingEvery: 15, speedEvery: 30 });
+  assert.deepEqual(normalizeSettings({ accent: 'pink', graph: 'false' }), { accent: 'pink', graph: false, gpu: 'auto', drive: 'auto', pingEvery: 15, speedEvery: 30 });
+  assert.deepEqual(normalizeSettings({ accent: 'url(#x)', graph: false }), { accent: 'auto', graph: false, gpu: 'auto', drive: 'auto', pingEvery: 15, speedEvery: 30 });
   assert.equal(normalizeSettings({ gpu: 'NVIDIA GeForce RTX 3080', drive: 'd:' }).drive, 'D:');
   assert.equal(normalizeSettings({ gpu: 'x'.repeat(200), drive: 'C:\Windows' }).gpu, 'auto', 'too long to be a name');
   assert.equal(normalizeSettings({ drive: 'C:\Windows' }).drive, 'auto', 'a drive is a letter and nothing else');
@@ -232,4 +232,69 @@ test('a drive key says which drive it reads, and a key with no reading yet still
   await settle();
   assert.deepEqual(views.slice(1).map((view) => view.sub).sort(), ['C:', 'D:']);
   assert.equal(views.find((view) => view.sub === 'D:').group, 'Disk');
+});
+
+test('the ping and the speed test are asked at one of the paces the panel offers, and nothing else', () => {
+  assert.equal(normalizeSettings({ pingEvery: '60', speedEvery: '5' }).pingEvery, 60);
+  assert.equal(normalizeSettings({ pingEvery: '60', speedEvery: '5' }).speedEvery, 5);
+  assert.equal(normalizeSettings({ speedEvery: '0' }).speedEvery, 0, 'only when pressed');
+  assert.equal(normalizeSettings({ pingEvery: 1, speedEvery: 7 }).pingEvery, 15);
+  assert.equal(normalizeSettings({ pingEvery: 1, speedEvery: 7 }).speedEvery, 30);
+  assert.equal(normalizeSettings({ speedEvery: '' }).speedEvery, 30, 'empty is not zero');
+});
+
+test('the shortest pace any active key asks for is the one that runs', () => {
+  const { actions } = setup();
+  assert.deepEqual(actions.intervals(), {});
+  actions.upsert({ uuid: action('networkping'), context: 'a', param: { pingEvery: '60' } });
+  actions.upsert({ uuid: action('networkjitter'), context: 'b', param: { pingEvery: '10' } });
+  actions.upsert({ uuid: action('networkspeed'), context: 'c', param: { speedEvery: '15' } });
+  actions.upsert({ uuid: action('networkspeed'), context: 'd', param: { speedEvery: '5' } });
+  assert.deepEqual(actions.intervals(), { ping: 10_000, speed: 300_000 });
+  actions.setActive({ context: 'b', active: false });
+  actions.setActive({ context: 'd', active: false });
+  assert.deepEqual(actions.intervals(), { ping: 60_000, speed: 900_000 });
+  actions.upsert({ uuid: action('networkspeed'), context: 'c', param: { speedEvery: '0' } });
+  assert.equal(actions.intervals().speed, 0, 'every key says only when pressed');
+});
+
+test('the speed key shows both numbers, keeps the last test, and says when it is testing or waiting', async () => {
+  let busy = false;
+  const { actions, store, views } = setup({ busyFor: () => busy, noteFor: () => 'Press to test', t: (key) => key });
+  actions.upsert({ uuid: action('networkspeed'), context: 'a', param: {} });
+  await settle();
+  assert.equal(views[0].kind, 'speed');
+  assert.equal(views[0].state, 'unavailable');
+  assert.equal(views[0].note, 'Press to test');
+
+  store.put([speedSample(312.4, 48.2, Date.now() - 3 * 60 * 60_000)]);
+  actions.renderAll();
+  await settle();
+  const view = views.at(-1);
+  assert.equal(view.state, 'normal', 'a test from hours ago still stands');
+  assert.deepEqual([view.value, view.upload, view.sub], ['312', '48', 'Mbps']);
+  assert.ok(view.down > 0 && view.up > 0 && view.down > view.up);
+
+  busy = true;
+  actions.renderAll();
+  await settle();
+  assert.equal(views.at(-1).sub, 'Testing');
+  assert.equal(views.at(-1).value, '312', 'the old numbers stay while the next test runs');
+
+  store.put([speedSample(95, null)]);
+  busy = false;
+  actions.renderAll();
+  await settle();
+  assert.equal(views.at(-1).upload, 'N/D', 'a download with no upload is still shown');
+});
+
+test('pressing the speed key asks for a test, and any other key does not', () => {
+  const pressed = [];
+  const { actions } = setup({ onPress: (source) => pressed.push(source) });
+  actions.upsert({ uuid: action('networkspeed'), context: 'a', param: {} });
+  actions.upsert({ uuid: action('networkping'), context: 'b', param: {} });
+  actions.press('b');
+  assert.deepEqual(pressed, []);
+  actions.press('a');
+  assert.deepEqual(pressed, ['speed']);
 });

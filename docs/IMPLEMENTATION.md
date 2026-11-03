@@ -2,7 +2,7 @@
 
 ## What a key is
 
-Nine readings, and only these. Every usage is a percentage of use. Each key shows one: the group and what it measures on top, the number big in the middle, a bar below it, and a faint graph of the last two minutes behind. At a warning or critical level (usage and temperatures, video memory, ping, loss) the ring and the number turn yellow or red and a mark appears, so color is never the only sign. A reading that is missing says N/D and why on the key ("Needs LHM", "No NVIDIA", "Measuring"), and is never drawn as zero. The panel lets a key choose its color, hide the graph, and, for the graphics card keys and the drive key, choose which card or drive it reads. It also says what the key is waiting for.
+Eleven readings, and only these. Every usage is a percentage of use. Each key shows one: the group and what it measures on top, the number big in the middle, a bar below it, and a faint graph of the last two minutes behind. At a warning or critical level (usage and temperatures, video memory, ping, loss) the ring and the number turn yellow or red and a mark appears, so color is never the only sign. A reading that is missing says N/D and why on the key ("Needs LHM", "No NVIDIA", "Measuring"), and is never drawn as zero. The panel lets a key choose its color, hide the graph, and, for the graphics card keys and the drive key, choose which card or drive it reads. It also says what the key is waiting for.
 
 The plugin is **Windows only** for now, by the maintainer's choice, and reads **NVIDIA and AMD** cards.
 
@@ -48,4 +48,10 @@ A provider runs only while a key on the deck reads it, and stops when the last o
 
 ## Not done
 
-AMD readings without a driver, frames per second, clock, power, network speed, disk temperature and everything else that is not in the list above were taken out or never added on purpose. macOS and Linux are out of scope for now. Nothing has run on a real deck or in the real Ulanzi Studio. See `docs/VERIFY.md`.
+AMD readings without a driver, frames per second, clock, power, disk temperature and everything else that is not in the list above were taken out or never added on purpose. macOS and Linux are out of scope for now. Nothing has run on a real deck or in the real Ulanzi Studio. See `docs/VERIFY.md`.
+
+## Network: ping, jitter, loss and the speed test
+
+- **Ping, jitter and loss** come from one burst of pings (8 by default, one `ping.exe` run, about 8 seconds) every N seconds, N chosen on each key (5 s to 5 min, 15 s by default). The ping is the middle reply of the last 24 pings, the jitter is the mean step between consecutive replies, and the loss is the share of the last 24 pings with no answer. The earlier single ping every 2 seconds and the average were the likely cause of readings that looked odd: one slow reply moved the average, and the loss could only be 0, 5, 10...
+- **Speed test** (`plugin/speedtest.js`): 4 connections download for 4 seconds after a 1.5 second warm-up, then upload the same way, against `speed.cloudflare.com` (`__down` and `__up`). Each direction stops at 120 MB, so a test costs up to about 240 MB. The upload counts a request only after the server answers it. The test runs every N minutes chosen on the key (1 min to 3 h, 30 min by default) or only when the key is pressed, and a press is ignored for 20 seconds after a test. The result holds until the next test, and survives a page change on the deck. A failed test reads N/D until the next one.
+- **Not verified:** the numbers were never compared with another speed test, so they may differ from one, since the server and route are different. A local run on 2026-11-03 gave 609 Mbps down, 500 Mbps up, 2 ms ping, 0 % loss and 0.9 ms jitter, which is only one connection on one day. Cloudflare's terms were not read for this use. It was not run in Studio or on a deck.
