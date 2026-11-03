@@ -10,6 +10,6 @@ Use Node 20.12.2. Install dependencies using lockfiles. Run `npm test`, `npm run
 Keep the SDK as pinned verbatim upstream code; verify hashes. Never expose keys or run third-party binaries silently. Do not collect user browsing data or transmit telemetry externally. Do not treat zero values as valid missing readings.
 
 ## Release
-Before release, execute `docs/VERIFY.md` in Ulanzi Studio and physical D200, confirm CPU/RAM overhead and dependencies/licenses, and validate the distributable ZIP. No release is approved from a green CI alone. Automatic publishing is disabled until all release gates are functional.
+Before release, execute `docs/VERIFY.md` in Ulanzi Studio and physical D200, confirm CPU/RAM overhead and dependencies/licenses, and validate the distributable ZIP. No release is approved from a green CI alone. Publishing is on (the `PUBLISHING_ENABLED` repository variable is `true`), so merging a release into `main` publishes it. That checklist is the last check, and a green CI never replaces it.
 
 Read `docs/STANDARDIZATION.md` for the open migration blockers.

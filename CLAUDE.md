@@ -6,7 +6,7 @@ Follow the Ulanzi plugin skill and treat `Weslley08/ulanzi-deck-clima-pro` as au
 
 **Project-specific:** exactly nine readings, chosen by the maintainer, and every usage is a percentage: CPU, GPU and video memory, memory, ping, packet loss, disk usage, and the CPU and GPU temperatures. No frame rate, clock, power or network speed. The plugin is Windows only for now, by the maintainer's choice, and reads NVIDIA and AMD cards. The maintainer plays with kernel anti-cheats, so nothing may load a driver by default: LibreHardwareMonitor, which does, is only the reserve for an AMD card and for a PC with no thermal zone, and the panel and the store text say to close it before such a game. Never claim anti-cheat compatibility without evidence. Missing data must render N/D with the reason.
 
-**Current state:** working prototype, never run in Studio or on a deck. See docs/STANDARDIZATION.md, docs/IMPLEMENTATION.md and docs/VERIFY.md. NEVER claim package or CI readiness just because files exist. Auto-release disabled.
+**Current state:** working prototype, never run in Studio or on a deck. See docs/STANDARDIZATION.md, docs/IMPLEMENTATION.md and docs/VERIFY.md. NEVER claim package or CI readiness just because files exist. Publishing is ON since 2026-11-03 (the `PUBLISHING_ENABLED` repository variable is `true`), so merging a release into `main` publishes it and cannot be taken back. This plugin has never run in Studio or on a deck, so say so in the release notes and check the boxes of the pull request for real.
 
 **Easy to break:**
 - The plugin folder is the only source: there is no `src/`. Tests import from `com.ulanzi.systemmonitorpro.ulanziPlugin/plugin`.
