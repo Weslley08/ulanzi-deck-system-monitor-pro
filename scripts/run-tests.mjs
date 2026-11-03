@@ -21,7 +21,10 @@ const options = coverage
   ? ['--experimental-test-coverage', '--test-reporter=lcov', `--test-reporter-destination=${lcov}`, '--test-reporter=spec', '--test-reporter-destination=stdout']
   : [];
 
-const { status } = spawnSync(process.execPath, [...options, '--test', ...files], { cwd: root, stdio: 'inherit' });
+// One file at a time: some tests start PowerShell, nvidia-smi stand-ins or a browser, and run side by side on a CI
+// machine with two cores they starve each other, which made a reader that answers in milliseconds miss its limit.
+// A test that hangs fails with its name after two minutes, instead of holding CI until its own limit.
+const { status } = spawnSync(process.execPath, [...options, '--test-concurrency=1', '--test-timeout=120000', '--test', ...files], { cwd: root, stdio: 'inherit' });
 if (!coverage || status !== 0) process.exit(status ?? 1);
 
 const own = ownFiles(parseLcov(readFileSync(lcov, 'utf8')));

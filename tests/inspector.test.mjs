@@ -104,10 +104,11 @@ async function openPanel(action, payload, { param = {} } = {}) {
     const page = await pageSocket(started.port);
     const url = `${pathToFileURL(PAGE).href}?address=127.0.0.1&port=${server.address().port}&language=en&uuid=${uuid}&key=0_0&actionid=k0`;
     await page.call('Page.navigate', { url });
-    await until(() => answered, 15_000, 'the panel to ask the plugin for its status');
-    // The page needs a moment to act on the answer.
-    await sleep(600);
+    await until(() => answered, 30_000, 'the panel to ask the plugin for its status');
     const read = async (expression) => (await page.call('Runtime.evaluate', { expression, returnByValue: true })).result.result.value;
+    // The panel writes its version last when it acts on the answer, so that is the sign it is done. A fixed wait
+    // was not enough on a slow CI machine, where the page had not yet built its lists when it was read.
+    await until(async () => (await read("document.querySelector('#version').textContent")) !== '', 30_000, 'the panel to act on the answer');
     const dom = await read('document.documentElement.outerHTML');
     const chosen = JSON.parse(await read("JSON.stringify({ drive: document.querySelector('#drive').value, gpu: document.querySelector('#gpu').value, accent: document.querySelector('#accent').value, graph: document.querySelector('#graph').checked })"));
     page.close();

@@ -204,12 +204,13 @@ export class PowerShellReader {
     const first = !this.#child;
     if (first) this.#start();
     return new Promise((resolve, reject) => {
-      // The first answer waits for PowerShell to start.
+      // The first answer waits for PowerShell to start, which on a slow or busy PC takes far longer than an answer does.
+      // Giving up early would start it all over again, and such a PC would never get an answer.
       const timer = setTimeout(() => {
         this.#waiting = null;
         this.stop();
         reject(new Error('the reader did not answer'));
-      }, first ? Math.max(timeout, 10_000) : timeout);
+      }, first ? Math.max(timeout, FIRST_ANSWER_MS) : timeout);
       this.#waiting = { resolve, reject, timer };
       this.#child.stdin.write('\n');
     });
@@ -256,6 +257,8 @@ export class PowerShellReader {
     child.kill();
   }
 }
+
+const FIRST_ANSWER_MS = 30_000;
 
 export const thermalReader = () => new PowerShellReader(THERMAL_SCRIPT);
 
