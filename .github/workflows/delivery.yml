@@ -29,7 +29,7 @@ concurrency:
 
 jobs:
   delivery:
-    uses: Weslley08/ulanzi-plugin-pipeline/.github/workflows/delivery.yml@v1
+    uses: Weslley08/ulanzi-plugin-pipeline/.github/workflows/delivery.yml@feat/maintainer-approval
     with:
       # The plugin is Windows only for now, so the zip has to start there.
       smoke-os: '["windows-latest"]'
@@ -39,4 +39,5 @@ jobs:
       # Publishing stays off until the maintainer sets this repository variable to true.
       publishing: ${{ vars.PUBLISHING_ENABLED }}
     secrets:
-      AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
+      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}

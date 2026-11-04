@@ -26,6 +26,25 @@
         <label class="uspi-item-label" for="drive" data-localize>Drive</label>
         <select class="uspi-item-value select" id="drive" data-field="drive"><option value="auto" data-localize>Automatic</option></select>
       </div>
+      <div class="uspi-item hidden" id="pingRow">
+        <label class="uspi-item-label" for="pingEvery" data-localize>Ping every</label>
+        <select class="uspi-item-value select" id="pingEvery" data-field="pingEvery">
+          <option value="5">5 s</option><option value="10">10 s</option><option value="15">15 s</option>
+          <option value="30">30 s</option><option value="60">1 min</option><option value="300">5 min</option>
+        </select>
+      </div>
+      <div class="uspi-item hidden" id="speedRow">
+        <label class="uspi-item-label" for="speedEvery" data-localize>Test every</label>
+        <select class="uspi-item-value select" id="speedEvery" data-field="speedEvery">
+          <option value="0" data-localize>Only when pressed</option>
+          <option value="1">1 min</option><option value="5">5 min</option><option value="10">10 min</option>
+          <option value="15">15 min</option><option value="30">30 min</option><option value="60">1 h</option><option value="180">3 h</option>
+        </select>
+      </div>
+      <div class="uspi-item field-note hidden" id="speedNote">
+        <div class="uspi-item-label empty"></div>
+        <div class="field-note-body"><p class="tip info" data-localize>Each test uses up to about 240 MB of data. Press the key to test now. The outer ring and the top number are the download, the inner ring and the bottom number are the upload.</p></div>
+      </div>
       <div class="uspi-heading" data-localize>Appearance</div>
       <div class="uspi-item">
         <label class="uspi-item-label" for="accent" data-localize>Color</label>
@@ -46,7 +65,7 @@
       </div>
     </form>
 
-    <p class="note" data-localize>The readings stay on this computer. Nothing is sent over the internet.</p>
+    <p class="note" data-localize>The readings stay on this computer. Only the ping and the speed test reach the internet.</p>
     <p class="note" id="version"></p>
   </div>
   <script src="../../libs/js/constants.js"></script>

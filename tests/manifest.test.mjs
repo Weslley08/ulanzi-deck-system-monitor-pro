@@ -51,11 +51,11 @@ test('every text the keys or the panel show has a Portuguese version', () => {
   const html = readFileSync(join(pluginDir, 'property-inspector', 'metric', 'inspector.html'), 'utf8');
   const keys = new Set([...html.matchAll(/data-localize[^>]*>([^<]+)</g)].map(([, text]) => text.trim()));
   for (const metric of Object.values(METRICS)) keys.add(metric.label);
-  for (const note of ['Needs LHM', 'No reading', 'Not set up', 'No sensor', 'No NVIDIA', 'No data', 'Measuring', 'Used']) keys.add(note);
+  for (const note of ['Needs LHM', 'No reading', 'Not set up', 'No sensor', 'No NVIDIA', 'No data', 'Measuring', 'Used', 'Testing', 'Press to test']) keys.add(note);
   const portuguese = read('pt_BR.json').Localization;
   const missing = [...keys].filter((key) => !(key in portuguese));
   assert.deepEqual(missing, []);
-  for (const state of ['lhm.offline', 'lhm.unconfigured', 'nvidia.missing', 'nvidia.offline', 'windows.missing', 'windows.offline', 'node.offline', 'ping.offline']) {
+  for (const state of ['lhm.offline', 'lhm.unconfigured', 'nvidia.missing', 'nvidia.offline', 'windows.missing', 'windows.offline', 'node.offline', 'ping.offline', 'speed.offline']) {
     assert.ok(LOCALIZATION.en[state] && LOCALIZATION.pt[state], state);
   }
 });
@@ -64,4 +64,20 @@ test('the plugin and the panel use only the SDK files that ship', () => {
   for (const file of ['plugin/ulanzi-api/index.js', 'libs/js/ulanziApi.js', 'libs/css/uspi.css', manifest.Icon, manifest.CategoryIcon, ...manifest.Banner]) {
     assert.ok(existsSync(join(pluginDir, file)), file);
   }
+});
+
+test('store.json passes the checks of the Community Store, and carries what its readers must see', () => {
+  const store = JSON.parse(readFileSync(join(pluginDir, '..', 'store.json'), 'utf8'));
+  const isTextList = (value) => Array.isArray(value) && value.every((item) => typeof item === 'string');
+  // As in packages/catalog/bin/validate-pr.mjs of narlei/ulanzicommunitystore: a missing image rejects the listing.
+  assert.equal(typeof store.cover, 'string');
+  assert.ok(isTextList(store.screenshots));
+  assert.ok(isTextList(store.tags));
+  assert.equal(typeof store.longDescription, 'string');
+  for (const image of [store.cover, ...store.screenshots]) assert.ok(existsSync(join(pluginDir, '..', image)), image);
+  assert.deepEqual(store.deviceTypes, ['deck']);
+  for (const pattern of [/anti-cheats/, /anticheats/, /LibreHardwareMonitor/, /240 MB/, /Not affiliated with Ulanzi/, /Sem vínculo com a Ulanzi/, /Windows/]) {
+    assert.match(store.longDescription, pattern);
+  }
+  assert.ok(!store.longDescription.includes('**'), 'the store shows this as plain text');
 });

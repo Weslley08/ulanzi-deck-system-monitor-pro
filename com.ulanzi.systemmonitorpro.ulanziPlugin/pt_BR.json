@@ -1,6 +1,6 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "Veja CPU, GPU, memória, disco e rede do seu PC nas teclas: um número, uma barra e um gráfico dos últimos dois minutos em cada uma. Só Windows. Sem vínculo com a Ulanzi.",
+  "Description": "Veja CPU, GPU, memória, disco e rede do seu PC nas teclas e teste a velocidade da conexão: um número, uma barra e um gráfico em cada uma. Só Windows. Sem vínculo com a Ulanzi.",
   "Actions": [
     {
       "Name": "Uso da CPU",
@@ -33,6 +33,14 @@
     {
       "Name": "Perda de pacotes",
       "Tooltip": "Mostra a parte dos pings sem resposta."
+    },
+    {
+      "Name": "Jitter",
+      "Tooltip": "Mostra o quanto o ping varia de uma resposta para a outra."
+    },
+    {
+      "Name": "Teste de velocidade",
+      "Tooltip": "Mostra o download e o upload da sua conexão em um anel. O último teste fica até o próximo."
     },
     {
       "Name": "Uso do disco",
@@ -77,6 +85,16 @@
     "node.offline": "Não foi possível ler o processador, a memória ou a unidade.",
     "lhm.unconfigured": "O endereço do LibreHardwareMonitor está desligado nas variáveis de ambiente do plugin.",
     "ping.offline": "O ping falhou.",
-    "The readings stay on this computer. Nothing is sent over the internet.": "As leituras ficam neste computador. Nada é enviado pela internet."
+    "speed.offline": "O teste de velocidade falhou. Verifique a conexão; ele tenta de novo no próximo intervalo, ou quando você apertar a tecla.",
+    "Jitter": "Jitter",
+    "Speed": "Velocidade",
+    "Testing": "Testando",
+    "Press to test": "Aperte p/ testar",
+    "Ping every": "Ping a cada",
+    "Test every": "Testar a cada",
+    "Only when pressed": "Só ao apertar",
+    "Each test uses up to about 240 MB of data. Press the key to test now. The outer ring and the top number are the download, the inner ring and the bottom number are the upload.": "Cada teste usa até cerca de 240 MB de dados. Aperte a tecla para testar agora. O anel de fora e o número de cima são o download; o anel de dentro e o número de baixo são o upload.",
+    "Only the ping and the speed test reach the internet.": "Só o ping e o teste de velocidade acessam a internet.",
+    "The readings stay on this computer. Only the ping and the speed test reach the internet.": "As leituras ficam neste computador. Só o ping e o teste de velocidade acessam a internet."
   }
 }

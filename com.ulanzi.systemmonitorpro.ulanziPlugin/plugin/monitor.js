@@ -1,6 +1,7 @@
 // Runs each provider only while a key on the deck needs it, and says what state each one is in.
-import { METRICS, SOURCES } from './core.js';
-import { CpuMeter, NvidiaReader, PingWindow, listDrives, pingOnce, readDisks, readLhm, readRam, thermalReader, thermalSamples } from './providers.js';
+import { METRICS, SOURCES, speedSample } from './core.js';
+import { CpuMeter, NvidiaReader, PingWindow, listDrives, pingBurst, readDisks, readLhm, readRam, thermalReader, thermalSamples } from './providers.js';
+import { runSpeedTest } from './speedtest.js';
 
 const MIN_EVERY_MS = 250;
 const DEFAULT_LHM_URL = 'http://127.0.0.1:8085/data.json';
@@ -11,6 +12,8 @@ const RESTART_MAX_MS = 30_000;
 // How full a drive is changes slowly, and a drive that is slow to answer should not be asked every second.
 const DISK_EVERY_MS = 10_000;
 const DRIVES_EVERY_MS = 60_000;
+// A speed test moves a lot of data, so a key pressed again right after one does not start another.
+const SPEED_NUDGE_GAP_MS = 20_000;
 
 /** For tests and measurements, which stand in for nvidia-smi with another program. Anything unreadable is ignored. */
 function extraArgs(text) {
@@ -22,50 +25,103 @@ function extraArgs(text) {
   }
 }
 
-/** One task on a timer that never overlaps itself, and slows down while it keeps failing. */
+/**
+ * One task on a timer that never overlaps itself, and slows down while it keeps failing.
+ * An `every` of 0 means it runs only when asked to, with `nudge`.
+ */
 export class Poller {
   #timer = null;
   #stopped = true;
+  #running = false;
+  #lastRun = 0;
   #delay;
 
-  constructor({ task, every, maxEvery = every, onResult, onError }) {
+  constructor({ task, every, maxEvery = every, firstDelay = 0, nudgeGapMs = 0, onResult, onError, onBusy = () => {} }) {
     this.task = task;
-    this.every = Math.max(MIN_EVERY_MS, every);
+    this.every = every === 0 ? 0 : Math.max(MIN_EVERY_MS, every);
     this.maxEvery = Math.max(this.every, maxEvery);
+    this.firstDelay = firstDelay;
+    this.nudgeGapMs = nudgeGapMs;
     this.onResult = onResult;
     this.onError = onError;
+    this.onBusy = onBusy;
     this.#delay = this.every;
   }
 
   start() {
-    if (!this.#stopped) return;
     this.#stopped = false;
     this.#delay = this.every;
-    void this.#run();
+    // A run that was on its way when the poller was stopped carries on, and schedules the next one itself.
+    if (this.#running) return;
+    if (this.every === 0) return;
+    if (this.firstDelay > 0) this.#timer = setTimeout(() => void this.#run(), this.firstDelay);
+    else void this.#run();
   }
 
   async #run() {
+    this.#timer = null;
+    if (this.#running) return;
+    this.#running = true;
+    this.#lastRun = Date.now();
+    this.onBusy(true);
+    let again = true;
     try {
       const result = await this.task();
-      if (this.#stopped) return;
-      this.#delay = this.every;
-      this.onResult(result);
-    } catch (error) {
-      if (this.#stopped) return;
-      this.#delay = Math.min(this.maxEvery, this.#delay * 2);
-      this.onError(error);
-      // A reading this PC cannot give is not asked for again.
-      if (error?.code === 'MISSING') {
-        this.#stopped = true;
-        return;
+      if (this.#stopped) again = false;
+      else {
+        this.#delay = this.every;
+        this.onResult(result);
       }
+    } catch (error) {
+      if (this.#stopped) again = false;
+      else {
+        this.#delay = Math.min(this.maxEvery, this.#delay * 2);
+        this.onError(error);
+        // A reading this PC cannot give is not asked for again.
+        if (error?.code === 'MISSING') {
+          this.#stopped = true;
+          again = false;
+        }
+      }
+    } finally {
+      this.#running = false;
+      this.onBusy(false);
     }
-    if (!this.#stopped) this.#timer = setTimeout(() => void this.#run(), this.#delay);
+    if (again && !this.#stopped && this.every > 0) this.#timer = setTimeout(() => void this.#run(), this.#delay);
+  }
+
+  /** Runs now instead of when it is due, unless it is already running or ran a moment ago. */
+  nudge() {
+    if (this.#stopped || this.#running || Date.now() - this.#lastRun < this.nudgeGapMs) return false;
+    clearTimeout(this.#timer);
+    void this.#run();
+    return true;
+  }
+
+  /** A new pace takes effect from now, unless the poller is in the middle of a run. */
+  setEvery(every) {
+    const next = every === 0 ? 0 : Math.max(MIN_EVERY_MS, every);
+    if (next === this.every) return;
+    this.every = next;
+    this.maxEvery = next;
+    this.#delay = next;
+    if (this.#stopped || this.#running) return;
+    if (next === 0) {
+      clearTimeout(this.#timer);
+      this.#timer = null;
+      return;
+    }
+    // Still waiting for its first run: that wait stands, unless there was none because it was manual.
+    if (this.#lastRun === 0 && this.#timer) return;
+    clearTimeout(this.#timer);
+    const wait = this.#lastRun === 0 ? this.firstDelay : Math.max(0, next - (Date.now() - this.#lastRun));
+    this.#timer = setTimeout(() => void this.#run(), wait);
   }
 
   stop() {
     this.#stopped = true;
     clearTimeout(this.#timer);
+    this.#timer = null;
   }
 }
 
@@ -75,6 +131,8 @@ export class Monitor {
   #status = new Map();
   #wanted = [];
   #reconciling = false;
+  #busy = new Set();
+  #intervals = {};
 
   /**
    * @param {{ store: import('./core.js').Store, config: any, env?: Record<string, string | undefined>,
@@ -113,7 +171,11 @@ export class Monitor {
         return [...cpu.update(), ...readRam(), ...disks.map((disk) => ({ ...disk, at: now }))];
       },
       lhm: () => readLhm(this.lhmUrl),
-      ping: async () => window.update(await pingOnce(pingTarget, config.ping.timeoutMs)),
+      ping: async () => window.update(await pingBurst(pingTarget, config.ping.count ?? 1, config.ping.timeoutMs)),
+      speed: async () => {
+        const { download, upload } = await runSpeedTest({ ...config.speed, baseUrl: env.SPEED_BASE_URL || config.speed?.baseUrl });
+        return [speedSample(download, upload)];
+      },
       windows: async () => thermalSamples(await this.thermal.ask()),
     };
   }
@@ -122,9 +184,22 @@ export class Monitor {
    * @param {Iterable<string>} metrics the metrics the keys on the deck read. Each one is read from its first source,
    *   and from the next only while the first cannot answer.
    */
-  setDemand(metrics) {
+  setDemand(metrics, intervals = {}) {
     this.#wanted = [...metrics];
+    this.#intervals = intervals;
     this.#reconcile();
+    // A source asked less often must not read N/D in between, so its readings stay good for longer.
+    this.store.setStale('ping', this.#every('ping') * 2 + (this.config.ping.count ?? 1) * 1000 + this.config.ping.timeoutMs + 2000);
+    for (const source of ['ping', 'speed']) this.#pollers.get(source)?.setEvery(this.#every(source));
+  }
+
+  isBusy(source) {
+    return this.#busy.has(source);
+  }
+
+  /** Runs a source's task now, as when a key is pressed. */
+  runNow(source) {
+    return this.#pollers.get(source)?.nudge() ?? false;
   }
 
   #needed() {
@@ -189,7 +264,9 @@ export class Monitor {
       case 'missing': return source === 'nvidia' ? 'No NVIDIA' : 'No sensor';
       case 'unconfigured': return 'Not set up';
       case 'ok': return 'No data';
-      default: return 'Measuring';
+      default:
+        if (metric === 'network.speed') return this.#busy.has('speed') ? 'Testing' : 'Press to test';
+        return 'Measuring';
     }
   }
 
@@ -202,7 +279,9 @@ export class Monitor {
 
   #every(source) {
     const { sampleIntervalsMs: every } = this.config;
-    return { node: every.hardware, lhm: every.hardware, ping: every.ping, windows: every.hardware }[source];
+    const chosen = this.#intervals[source];
+    const fallback = { node: every.hardware, lhm: every.hardware, ping: every.ping, speed: every.speed ?? 30 * 60_000, windows: every.hardware }[source];
+    return Number.isFinite(chosen) && chosen >= 0 ? chosen : fallback;
   }
 
   #start(source) {
@@ -223,10 +302,16 @@ export class Monitor {
       return;
     }
     const every = this.#every(source);
+    // A speed test costs data, so one that is already held is not repeated each time the deck changes page.
+    const last = source === 'speed' ? this.store.get('network.speed') : null;
+    const firstDelay = last?.quality === 'ok' ? Math.max(0, last.at + every - Date.now()) : 0;
     const poller = new Poller({
       task: this.tasks[source],
       every,
       maxEvery: source === 'lhm' ? LHM_MAX_EVERY_MS : every,
+      firstDelay,
+      nudgeGapMs: source === 'speed' ? SPEED_NUDGE_GAP_MS : 0,
+      onBusy: (busy) => { if (busy) this.#busy.add(source); else this.#busy.delete(source); },
       onResult: (values) => {
         if (values.length) this.store.put(values);
         this.#setStatus(source, 'ok');
@@ -272,7 +357,9 @@ export class Monitor {
     clearTimeout(this.#restarts.get(source));
     this.#restarts.delete(source);
     this.#status.delete(source);
-    this.store.invalidate(source);
+    this.#busy.delete(source);
+    // The last speed test is still what the line did, and a new one costs data.
+    if (source !== 'speed') this.store.invalidate(source);
     if (source === 'nvidia') this.nvidia.stop();
     if (source === 'windows') this.thermal.stop();
     this.onStatus(source, 'unused');

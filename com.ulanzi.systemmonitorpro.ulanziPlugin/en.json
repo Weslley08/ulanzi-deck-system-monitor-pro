@@ -1,6 +1,6 @@
 {
   "Name": "System Monitor Pro",
-  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
+  "Description": "See your PC's CPU, GPU, memory, disk and network on the keys, and test your connection speed: a number, a bar and a graph for each. Windows only. Not affiliated with Ulanzi.",
   "Actions": [
     {
       "Name": "CPU usage",
@@ -35,6 +35,14 @@
       "Tooltip": "Shows the share of pings that got no answer."
     },
     {
+      "Name": "Jitter",
+      "Tooltip": "Shows how much the ping varies from one reply to the next."
+    },
+    {
+      "Name": "Speed test",
+      "Tooltip": "Shows the download and the upload of your connection in one ring. The last test stays until the next."
+    },
+    {
       "Name": "Disk usage",
       "Tooltip": "Shows how full a drive is, in percent."
     }
@@ -48,6 +56,7 @@
     "windows.offline": "The thermal zone could not be read.",
     "node.offline": "The processor, memory or drive could not be read.",
     "lhm.unconfigured": "The LibreHardwareMonitor address is turned off in the plugin's environment variables.",
-    "ping.offline": "The ping failed."
+    "ping.offline": "The ping failed.",
+    "speed.offline": "The speed test failed. Check the connection; it tries again at the next interval, or when you press the key."
   }
 }

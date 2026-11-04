@@ -1,0 +1,17 @@
+{
+  "cover": "store/cover-2x1.png",
+  "screenshots": [
+    "docs/keys.png"
+  ],
+  "longDescription": "Mostra a saúde do seu PC nas teclas do deck Ulanzi, no Windows. Cada tecla traz uma leitura em número grande, com barra e gráfico, e fica amarela ou vermelha, com um sinal, quando esquenta ou fica ocupada.\n\nLeituras: uso da CPU, da GPU, da memória de vídeo, da memória e do disco, temperatura da CPU e da GPU, ping, perda de pacotes, jitter e teste de velocidade. Todo uso é em porcentagem. Uma leitura que falta diz o motivo na própria tecla e nunca aparece como zero.\n\nCPU, memória, disco e rede não carregam nenhum driver. Uma placa NVIDIA é lida pelo nvidia-smi, que vem com o driver dela. A temperatura da CPU vem da zona térmica do Windows, quando o PC tem uma. Uma placa AMD, ou um PC sem zona térmica, precisa do LibreHardwareMonitor, que você abre como administrador: ele carrega um driver que alguns anticheats bloqueiam, então feche-o antes de jogar um desses.\n\nO ping vai para 1.1.1.1. O teste de velocidade mostra download e upload num anel só, no ritmo que você escolher ou quando você aperta a tecla, usando os servidores públicos de velocidade da Cloudflare e até cerca de 240 MB por vez.\n\nCódigo aberto, Apache-2.0. Sem vínculo com a Ulanzi, a NVIDIA, a AMD, a Cloudflare nem o LibreHardwareMonitor.\n\n— English —\n\nPuts the health of your PC on your Ulanzi deck, on Windows. Every key shows one reading as a big number with a bar and a graph, and turns yellow or red, with a mark, when it gets hot or busy.\n\nReadings: CPU, GPU, video memory, memory and disk usage, CPU and GPU temperature, ping, packet loss, jitter and a speed test. Usage is always a percentage. A missing reading says why on the key and is never shown as zero.\n\nCPU, memory, drive and network readings load no driver. An NVIDIA card is read through nvidia-smi, which ships with its driver. The processor temperature comes from the Windows thermal zone, when the PC has one. An AMD card, or a PC with no thermal zone, needs LibreHardwareMonitor, which you run yourself as administrator: it loads a driver that some game anti-cheats block, so close it before such a game.\n\nThe ping goes to 1.1.1.1. The speed test shows download and upload in one ring, as often as you choose or when you press the key, using Cloudflare's public speed servers and up to about 240 MB each time.\n\nOpen source, Apache-2.0. Not affiliated with Ulanzi, NVIDIA, AMD, Cloudflare or LibreHardwareMonitor.",
+  "deviceTypes": [
+    "deck"
+  ],
+  "tags": [
+    "system-monitor",
+    "cpu",
+    "gpu",
+    "network",
+    "windows"
+  ]
+}

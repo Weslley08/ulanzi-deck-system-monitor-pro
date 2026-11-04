@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { Store, sample } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/core.js';
+import { Store, sample, speedSample } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/core.js';
 import { Monitor, Poller } from '../com.ulanzi.systemmonitorpro.ulanziPlugin/plugin/monitor.js';
 
 const CONFIG = {
@@ -239,6 +239,45 @@ test('a source with data but no reading for a metric says so', async () => {
   monitor.setDemand(['cpu.usage']);
   await until(() => monitor.statusOf('node') === 'ok');
   assert.equal(monitor.noteFor('cpu.usage'), 'No data');
-  assert.deepEqual(monitor.snapshot(), { node: 'ok', ping: 'unused', nvidia: 'unused', windows: 'unused', lhm: 'unused' });
+  assert.deepEqual(monitor.snapshot(), { node: 'ok', ping: 'unused', speed: 'unused', nvidia: 'unused', windows: 'unused', lhm: 'unused' });
+  monitor.dispose();
+});
+
+test('the speed test keeps its last result when the keys leave, and is not repeated when they come back', async () => {
+  let runs = 0;
+  const { monitor, store } = make({ speed: async () => { runs += 1; return [speedSample(200, 40)]; } });
+  monitor.setDemand(['network.speed'], { speed: 60_000 });
+  await until(() => monitor.statusOf('speed') === 'ok');
+  assert.equal(runs, 1);
+  monitor.setDemand([]);
+  assert.equal(store.get('network.speed').value, 200, 'a page change does not throw the result away');
+  monitor.setDemand(['network.speed'], { speed: 60_000 });
+  await sleep(150);
+  assert.equal(runs, 1, 'the next test waits for its time');
+  monitor.dispose();
+});
+
+test('a key press runs the speed test now, and a pace of zero means only then', async () => {
+  let runs = 0;
+  const { monitor } = make({ speed: async () => { runs += 1; return [speedSample(100, 20)]; } });
+  monitor.setDemand(['network.speed'], { speed: 0 });
+  await sleep(100);
+  assert.equal(runs, 0, 'nothing until it is pressed');
+  assert.equal(monitor.noteFor('network.speed'), 'Press to test');
+  assert.equal(monitor.runNow('speed'), true);
+  await until(() => monitor.statusOf('speed') === 'ok');
+  assert.equal(runs, 1);
+  assert.equal(monitor.runNow('speed'), false, 'not again right after');
+  monitor.dispose();
+});
+
+test('the speed test reads as busy while it runs', async () => {
+  let release;
+  const { monitor } = make({ speed: () => new Promise((resolve) => { release = () => resolve([speedSample(50, 10)]); }) });
+  monitor.setDemand(['network.speed'], { speed: 60_000 });
+  await until(() => monitor.isBusy('speed'));
+  assert.equal(monitor.noteFor('network.speed'), 'Testing');
+  release();
+  await until(() => !monitor.isBusy('speed'));
   monitor.dispose();
 });

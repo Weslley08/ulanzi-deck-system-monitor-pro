@@ -1,27 +1,61 @@
 {
   "sampleIntervalsMs": {
     "hardware": 1000,
-    "ping": 2000
+    "ping": 15000,
+    "speed": 1800000
   },
   "ping": {
     "targets": [
       "1.1.1.1"
     ],
+    "count": 8,
     "timeoutMs": 1500,
-    "windowSize": 20
+    "windowSize": 24
   },
   "thresholds": {
-    "cpu.usage": { "warning": 85, "critical": 95 },
-    "cpu.temperature": { "warning": 80, "critical": 90 },
-    "gpu.temperature": { "warning": 80, "critical": 88 },
-    "gpu.vram.usage": { "warning": 90, "critical": 97 },
-    "ram.usage": { "warning": 85, "critical": 95 },
-    "network.ping": { "warning": 80, "critical": 150 },
-    "network.loss": { "warning": 2, "critical": 5 }
+    "cpu.usage": {
+      "warning": 85,
+      "critical": 95
+    },
+    "cpu.temperature": {
+      "warning": 80,
+      "critical": 90
+    },
+    "gpu.temperature": {
+      "warning": 80,
+      "critical": 88
+    },
+    "gpu.vram.usage": {
+      "warning": 90,
+      "critical": 97
+    },
+    "ram.usage": {
+      "warning": 85,
+      "critical": 95
+    },
+    "network.ping": {
+      "warning": 80,
+      "critical": 150
+    },
+    "network.loss": {
+      "warning": 2,
+      "critical": 5
+    },
+    "network.jitter": {
+      "warning": 30,
+      "critical": 60
+    }
   },
   "display": {
     "staleAfterMs": 5000,
     "minUpdateMs": 1000,
     "hysteresisPercent": 3
+  },
+  "speed": {
+    "baseUrl": "https://speed.cloudflare.com",
+    "streams": 4,
+    "warmupMs": 1500,
+    "measureMs": 4000,
+    "maxBytes": 120000000
   }
 }

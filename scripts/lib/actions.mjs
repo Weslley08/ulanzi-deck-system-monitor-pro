@@ -10,17 +10,19 @@ export const ACTIONS = [
   { id: 'ram.usage', en: ['Memory usage', 'Shows how much memory is in use, in percent.'], pt: ['Uso da memória', 'Mostra quanta memória está em uso, em porcentagem.'] },
   { id: 'network.ping', en: ['Ping', 'Shows the round trip to a server.'], pt: ['Ping', 'Mostra o tempo de ida e volta até um servidor.'] },
   { id: 'network.loss', en: ['Packet loss', 'Shows the share of pings that got no answer.'], pt: ['Perda de pacotes', 'Mostra a parte dos pings sem resposta.'] },
+  { id: 'network.jitter', en: ['Jitter', 'Shows how much the ping varies from one reply to the next.'], pt: ['Jitter', 'Mostra o quanto o ping varia de uma resposta para a outra.'] },
+  { id: 'network.speed', en: ['Speed test', 'Shows the download and the upload of your connection in one ring. The last test stays until the next.'], pt: ['Teste de velocidade', 'Mostra o download e o upload da sua conexão em um anel. O último teste fica até o próximo.'] },
   { id: 'disk.usage', en: ['Disk usage', 'Shows how full a drive is, in percent.'], pt: ['Uso do disco', 'Mostra o quanto de uma unidade está ocupado, em porcentagem.'] },
 ];
 
 export const PLUGIN_TEXT = {
   en: {
-    Description: "See your PC's CPU, GPU, memory, disk and network on the keys: a number, a bar and a two-minute graph for each. Windows only. Not affiliated with Ulanzi.",
-    Detail: "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph of the last two minutes, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, drive and network readings, and an NVIDIA card (read through nvidia-smi, which ships with its driver), need nothing else and load no driver. The processor temperature comes from the thermal zone Windows exposes, when the PC has one. An AMD card, and a PC with no thermal zone, need LibreHardwareMonitor, which you run yourself, as administrator, with its web server on: it loads a driver that some game anti-cheats block, so close it before such a game. A reading that is missing says why on the key and is never shown as zero. Nothing is sent over the internet: the plugin only talks to LibreHardwareMonitor on your own computer and pings the server you choose. Windows only. Not affiliated with Ulanzi, NVIDIA, AMD or LibreHardwareMonitor.",
+    Description: "See your PC's CPU, GPU, memory, disk and network on the keys, and test your connection speed: a number, a bar and a graph for each. Windows only. Not affiliated with Ulanzi.",
+    Detail: "Puts the health of your PC on your Ulanzi deck. Every key shows one reading as a big number with a bar and a graph, and turns yellow or red, with a mark, when it gets hot or busy. Usage is always a percentage. Processor, memory, drive and network readings, and an NVIDIA card (through nvidia-smi, which ships with its driver), load no driver. The processor temperature comes from the Windows thermal zone, when the PC has one. An AMD card, and a PC with no thermal zone, need LibreHardwareMonitor, which you run yourself as administrator: it loads a driver that some game anti-cheats block, so close it before such a game. A missing reading says why on the key and is never shown as zero. The ping goes to 1.1.1.1. The speed test key shows download and upload in one ring, as often as you choose or when you press it, using Cloudflare's public speed servers and up to about 240 MB each time. Windows only. Not affiliated with Ulanzi, NVIDIA, AMD, Cloudflare or LibreHardwareMonitor.",
   },
   pt: {
-    Description: 'Veja CPU, GPU, memória, disco e rede do seu PC nas teclas: um número, uma barra e um gráfico dos últimos dois minutos em cada uma. Só Windows. Sem vínculo com a Ulanzi.',
-    Detail: 'Coloca a saúde do seu PC no deck Ulanzi. Cada tecla mostra uma leitura em número grande, com uma barra e o gráfico dos últimos dois minutos, e fica amarela ou vermelha, com uma marca, quando esquenta ou fica ocupada. O uso é sempre em porcentagem. As leituras de processador, memória, unidades e rede, e de uma placa NVIDIA (pelo nvidia-smi, que acompanha o driver), não precisam de mais nada e não carregam driver. A temperatura do processador vem da zona térmica que o Windows expõe, quando o PC tem uma. Uma placa AMD, e um PC sem zona térmica, precisam do LibreHardwareMonitor, que você abre por conta própria, como administrador, com o servidor web ligado: ele carrega um driver que alguns anticheats de jogos bloqueiam, então feche-o antes de jogar um desses. Uma leitura que falta diz o motivo na tecla e nunca aparece como zero. Nada é enviado pela internet: o plugin só fala com o LibreHardwareMonitor no seu próprio computador e dá ping no servidor escolhido. Só Windows. Sem vínculo com a Ulanzi, a NVIDIA, a AMD nem o LibreHardwareMonitor.',
+    Description: 'Veja CPU, GPU, memória, disco e rede do seu PC nas teclas e teste a velocidade da conexão: um número, uma barra e um gráfico em cada uma. Só Windows. Sem vínculo com a Ulanzi.',
+    Detail: 'Coloca a saúde do seu PC no deck Ulanzi. Cada tecla mostra uma leitura em número grande, com uma barra e um gráfico, e fica amarela ou vermelha, com uma marca, quando esquenta ou fica ocupada. O uso é sempre em porcentagem. Processador, memória, unidades e rede, e uma placa NVIDIA (pelo nvidia-smi), não carregam driver. A temperatura do processador vem da zona térmica do Windows, quando o PC tem uma. Uma placa AMD, e um PC sem zona térmica, precisam do LibreHardwareMonitor, que você abre como administrador: ele carrega um driver que alguns anticheats bloqueiam, então feche-o antes de jogar um desses. Uma leitura que falta diz o motivo na tecla e nunca aparece como zero. O ping vai para 1.1.1.1. A tecla de teste de velocidade mostra download e upload em um anel, na frequência que você escolher ou ao apertá-la, usando os servidores públicos de velocidade da Cloudflare e até cerca de 240 MB por vez. Só Windows. Sem vínculo com a Ulanzi, NVIDIA, AMD, Cloudflare nem LibreHardwareMonitor.',
   },
 };
 
@@ -36,6 +38,7 @@ export const LOCALIZATION = {
     'node.offline': 'The processor, memory or drive could not be read.',
     'lhm.unconfigured': 'The LibreHardwareMonitor address is turned off in the plugin\'s environment variables.',
     'ping.offline': 'The ping failed.',
+    'speed.offline': 'The speed test failed. Check the connection; it tries again at the next interval, or when you press the key.',
   },
   pt: {
     Usage: 'Uso', Used: 'Usado', Temp: 'Temp', VRAM: 'VRAM', Ping: 'Ping', Loss: 'Perda', 'Graphics card': 'Placa de vídeo', Drive: 'Unidade',
@@ -52,6 +55,11 @@ export const LOCALIZATION = {
     'node.offline': 'Não foi possível ler o processador, a memória ou a unidade.',
     'lhm.unconfigured': 'O endereço do LibreHardwareMonitor está desligado nas variáveis de ambiente do plugin.',
     'ping.offline': 'O ping falhou.',
-    'The readings stay on this computer. Nothing is sent over the internet.': 'As leituras ficam neste computador. Nada é enviado pela internet.',
+    'speed.offline': 'O teste de velocidade falhou. Verifique a conexão; ele tenta de novo no próximo intervalo, ou quando você apertar a tecla.',
+    Jitter: 'Jitter', Speed: 'Velocidade', Testing: 'Testando', 'Press to test': 'Aperte p/ testar',
+    'Ping every': 'Ping a cada', 'Test every': 'Testar a cada', 'Only when pressed': 'Só ao apertar',
+    'Each test uses up to about 240 MB of data. Press the key to test now. The outer ring and the top number are the download, the inner ring and the bottom number are the upload.': 'Cada teste usa até cerca de 240 MB de dados. Aperte a tecla para testar agora. O anel de fora e o número de cima são o download; o anel de dentro e o número de baixo são o upload.',
+    'Only the ping and the speed test reach the internet.': 'Só o ping e o teste de velocidade acessam a internet.',
+    'The readings stay on this computer. Only the ping and the speed test reach the internet.': 'As leituras ficam neste computador. Só o ping e o teste de velocidade acessam a internet.',
   },
 };

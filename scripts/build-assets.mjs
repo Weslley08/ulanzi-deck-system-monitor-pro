@@ -67,7 +67,7 @@ const LIST_ICONS = {
 const listIcon = (path, color) => `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg>\n`;
 
 const KEY_FACE = {
-  cpu: SAMPLE_FACES[0], gpu: SAMPLE_FACES[2], ram: SAMPLE_FACES[5], network: SAMPLE_FACES[6], disk: SAMPLE_FACES[8],
+  cpu: SAMPLE_FACES[0], gpu: SAMPLE_FACES[2], ram: SAMPLE_FACES[5], network: SAMPLE_FACES[6], disk: SAMPLE_FACES[10],
 };
 
 async function icons() {
@@ -143,6 +143,8 @@ function names() {
 
 await icons();
 save(plugin('assets/banners/banner-1.png'), await storeArt(1098, 732, 4, SAMPLE_FACES.slice(0, 8)));
+save('store/cover-2x1.png', await storeArt(1200, 600, 6, SAMPLE_FACES.slice(0, 6)));
+save('store/cover-1x1.png', await svgToPng(brandSvg(800), 800));
 save('docs/keys.png', await sheet(SAMPLE_FACES, 6));
 names();
 console.log('assets written');
