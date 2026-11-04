@@ -65,3 +65,19 @@ test('the plugin and the panel use only the SDK files that ship', () => {
     assert.ok(existsSync(join(pluginDir, file)), file);
   }
 });
+
+test('store.json passes the checks of the Community Store, and carries what its readers must see', () => {
+  const store = JSON.parse(readFileSync(join(pluginDir, '..', 'store.json'), 'utf8'));
+  const isTextList = (value) => Array.isArray(value) && value.every((item) => typeof item === 'string');
+  // As in packages/catalog/bin/validate-pr.mjs of narlei/ulanzicommunitystore: a missing image rejects the listing.
+  assert.equal(typeof store.cover, 'string');
+  assert.ok(isTextList(store.screenshots));
+  assert.ok(isTextList(store.tags));
+  assert.equal(typeof store.longDescription, 'string');
+  for (const image of [store.cover, ...store.screenshots]) assert.ok(existsSync(join(pluginDir, '..', image)), image);
+  assert.deepEqual(store.deviceTypes, ['deck']);
+  for (const pattern of [/anti-cheats/, /anticheats/, /LibreHardwareMonitor/, /240 MB/, /Not affiliated with Ulanzi/, /Sem vínculo com a Ulanzi/, /Windows/]) {
+    assert.match(store.longDescription, pattern);
+  }
+  assert.ok(!store.longDescription.includes('**'), 'the store shows this as plain text');
+});

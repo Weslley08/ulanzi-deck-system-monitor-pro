@@ -143,6 +143,8 @@ function names() {
 
 await icons();
 save(plugin('assets/banners/banner-1.png'), await storeArt(1098, 732, 4, SAMPLE_FACES.slice(0, 8)));
+save('store/cover-2x1.png', await storeArt(1200, 600, 6, SAMPLE_FACES.slice(0, 6)));
+save('store/cover-1x1.png', await svgToPng(brandSvg(800), 800));
 save('docs/keys.png', await sheet(SAMPLE_FACES, 6));
 names();
 console.log('assets written');
