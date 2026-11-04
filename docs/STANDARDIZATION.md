@@ -13,7 +13,7 @@ Referência: https://github.com/Weslley08/ulanzi-deck-clima-pro
 ## NÃO É PARIDADE FUNCIONAL
 Os scripts de Clima Pro trazem imports, fixtures, esquema de manifesto, dependências e convenções internas específicas de clima. O simples transporte dos arquivos NÃO os torna executáveis para System Monitor. Em particular, measure.mjs e verify-package.mjs requerem adaptação completa; package.mjs exige um plugin distribuível e SDK oficial local.
 
-A publicação automática está ligada desde 2026-11-03 (variável PUBLISHING_ENABLED do repositório = true): o merge em main publica o rascunho, e não dá para desfazer. Não há validação funcional do SDK, LHM ou FPS em hardware real.
+A publicação automática está sempre ligada (não há mais variável para desligá-la): o merge em main publica o rascunho, e não dá para desfazer. Não há validação funcional do SDK, LHM ou FPS em hardware real.
 
 ## Bloqueadores de release (obrigatórios)
 1. Adaptar código, bibliotecas e scripts do Clima Pro para o plugin System Monitor.
