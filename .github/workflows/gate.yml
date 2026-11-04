@@ -6,8 +6,7 @@ on:
   pull_request:
     # edited: changing the base or ticking a box has to run the branch rules again.
     types: [opened, edited, reopened, synchronize]
-  push:
-    branches: [main, develop]
+  # No push trigger: each commit on a pull request already runs the Gate, and a merge adds nothing the pull request did not check.
   schedule:
     - cron: '23 4 * * 1'
   workflow_dispatch:
